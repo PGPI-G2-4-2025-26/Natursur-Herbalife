@@ -1,0 +1,21 @@
+# --- Directorios del Proyecto ---
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.venv/
+
+# --- Django Files ---
+db.sqlite3
+/media/
+/static_root/
+
+# --- Archivos Sensibles ---
+# Proteger el archivo de settings, o la clave si se extrae a un archivo local
+local_settings.py
+.env
+SECRET_KEY.txt
+
+# Si has extraído la clave a una variable de entorno,
+# la línea a proteger es la variable de entorno, pero si no, 
+# la clave SECRET_KEY debe ser removida manualmente de settings.py antes del commit.

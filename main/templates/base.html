@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang='es'>
+<head>
+  <meta charset='utf-8'>
+  <style>
+   /* Estilo simple para el banner de navegación */
+   .nav-banner a { padding: 10px 15px; background-color: #eee; border: 1px solid #ccc; text-decoration: none; margin-right: 5px; }
+   .auth-links a { margin-left: 10px; }
+  </style>
+</head>
+<body>
+  <header> 
+  	{% block encabezado %}{% endblock %}
+    
+    <nav class="nav-banner">
+        <a href="{% url 'home' %}">INICIO</a>
+        <a href="{% url 'list_products' %}">PRODUCTOS</a>
+        <a href="{% url 'services' %}">SERVICIOS</a>
+    </nav>
+
+    <div class="auth-links">
+        {% if user.is_authenticated %}
+            <a href="{% url 'my_solicitations' %}">Mis Solicitudes</a>
+            {% if user.is_staff %}
+                <a href="{% url 'admin_solicitations_list' %}">Batería (ADMIN)</a>
+            {% endif %}
+            | Hola, {{ user.username }}! (<a href="{% url 'logout' %}">Logout</a>)
+        {% else %}
+            <a href="{% url 'login' %}">Acceder</a>
+            <a href="{% url 'registration' %}">Registrarse</a>
+        {% endif %}
+        | <a href="{% url 'view_cart' %}">Carrito</a>
+    </div>
+
+  </header>
+  <section>
+    {% block contenido %}{% endblock %}
+  </section>
+  {% block pie %}{% endblock %} 
+</body>
+</html>

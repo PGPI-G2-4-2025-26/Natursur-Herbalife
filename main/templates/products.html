@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block encabezado %}
+<h1>Catálogo de Productos Herbalife</h1>
+{% endblock %}
+
+{% block contenido %}
+    <p>Aquí se listarán los productos del modelo 'Product'.</p>
+    <p style="color: blue;">(Cuando esté el scrapping se vienen cosas).</p>
+    
+    <p>Ejemplo de producto:</p>
+    <ul>
+        <li>Producto X - <a href="{% url 'add_to_cart' product_id=1 %}">Añadir al Carrito (ID 1)</a></li>
+        <li>Producto Y - <a href="{% url 'add_to_cart' product_id=2 %}">Añadir al Carrito (ID 2)</a></li>
+    </ul>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block encabezado %}
+<h1>Finalizar Solicitud de Pedido</h1>
+{% endblock %}
+
+{% block contenido %}
+    <p>Aquí va el formulario 'ProductSolicitationForm' con los datos de contacto.</p>
+    <p>El proceso creará el/los registro/s 'ProductSolicitation' en la base de datos.</p>
+    <a href="{% url 'view_cart' %}">Volver al Carrito</a>
+{% endblock %}

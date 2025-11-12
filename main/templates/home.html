@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block encabezado %}
+<h1>Página Principal de Natursur</h1>
+{% endblock %}
+
+{% block contenido %}
+    <div style="display: flex;">
+        <div style="width: 70%; padding: 10px;">
+            <h2>Centro: Redes Sociales (Contenido Estático)</h2>
+            <p>Aquí irá el feed de Instagram, Facebook o mensajes clave.</p>
+            <p>El botón "PRODUCTOS" y "SERVICIOS" está en el banner de arriba.</p>
+        </div>
+
+        <div style="width: 30%; padding: 10px; background-color: #f0f0f0;">
+            <h3>Lateral: Testimonios Recientes (Nutrición)</h3>
+            {% for t in testimonials %}
+                <p><strong>{{ t.client_name }} dice:</strong> "{{ t.testimonial_text|truncatechars:50 }}"</p>
+                <hr>
+            {% empty %}
+                <p>No hay testimonios para mostrar.</p>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
