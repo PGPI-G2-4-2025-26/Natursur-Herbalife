@@ -20,25 +20,6 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
-
-
-class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    
-    phone = models.CharField(max_length=20, blank=True, null=True, verbose_name="Phone")
-    photo = models.ImageField(upload_to='user_photos/', blank=True, null=True, verbose_name="Photo")
-    
-    # Si es Admin,  User.is_staff = True
-
-    class Meta:
-        verbose_name = "User Profile"
-        verbose_name_plural = "User Profiles"
-    
-    def __str__(self):
-        return f"Profile for {self.user.username}"
-
-
-
 class ProductSolicitation(models.Model):
     
     STATUS_CHOICES = [
@@ -72,18 +53,3 @@ class ProductSolicitation(models.Model):
 
     def __str__(self):
         return f"{self.quantity} x {self.product.name} - Status: {self.get_status_display()}"
-    
-
-
-class Testimonial(models.Model):
-    author = models.CharField(max_length=500, verbose_name="Author")
-    text = models.TextField(verbose_name="Testimonial Text")
-    photo = models.ImageField(upload_to='testimonials/', blank=True, null=True, verbose_name="Client Photo")
-    date_published = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        verbose_name = "Testimonial"
-        verbose_name_plural = "Testimonials"
-
-    def __str__(self):
-        return f"Testimonial from {self.client_name}"

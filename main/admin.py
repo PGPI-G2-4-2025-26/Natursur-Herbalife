@@ -1,6 +1,8 @@
 from django.contrib import admin
-# Importamos los modelos recién creados
-from main.models import Product, ProductSolicitation, Testimonial 
+
+from .testimonial.models import Testimonial
+from .products.models import Product, ProductSolicitation
+
 
 
 class ProductSolicitationAdmin(admin.ModelAdmin):    
