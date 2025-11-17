@@ -1,0 +1,128 @@
+.footer {
+    /* Mantenemos el fondo del footer (que era var(--color-tertiary) en nuestro diseño) */
+    background-color: var(--color-tertiary); /* Fondo verde muy claro para coincidir con la imagen */
+    padding: 60px 50px;
+    color: var(--color-text-dark);
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1.5fr; 
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-col h3 {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: var(--color-text-dark);
+    margin-bottom: 25px;
+}
+
+/* --- COLUMNA 1: BRANDING Y CITA --- */
+.footer-branding {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.footer-card {
+    width: 80px;
+    height: 120px;
+    background-color: var(--color-white);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.footer-card .material-icons {
+    font-size: 30px;
+    color: var(--color-primary);
+}
+
+.footer-quote {
+    font-size: 1.1em;
+    line-height: 1.4;
+    font-style: italic;
+    color: var(--color-text-light);
+    max-width: 250px;
+}
+
+/* --- COLUMNA 2: MENÚ --- */
+.footer-links {
+    list-style: none;
+}
+
+.footer-links li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.footer-links li:last-child {
+    border-bottom: none;
+}
+
+.footer-links a {
+    color: var(--color-text-dark);
+    font-weight: 500;
+}
+
+.footer-links .material-icons {
+    color: var(--color-text-light);
+    font-size: 18px;
+}
+
+/* --- COLUMNA 3: DATOS Y SOCIAL --- */
+.contact-info .info-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 15px;
+    color: var(--color-text-dark);
+}
+
+.contact-info .material-icons {
+    color: var(--color-primary);
+    font-size: 20px;
+    margin-right: 10px;
+    /* Ajuste para alinear con la primera línea de texto */
+    padding-top: 2px; 
+}
+
+.social-icons {
+    display: flex;
+    margin-top: 25px;
+}
+
+.social-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 35px;
+    height: 35px;
+    border: 1px solid var(--color-text-light);
+    border-radius: 50%;
+    margin-right: 10px;
+    transition: background-color 0.3s;
+}
+
+.social-icon .material-icons {
+    color: var(--color-text-light);
+    font-size: 20px;
+    margin: 0; /* Anulamos el margen de .contact-info */
+}
+
+.social-icon:hover {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.social-icon:hover .material-icons {
+    color: var(--color-white);
+}
