@@ -1,13 +1,13 @@
 .footer {
-    /* Mantenemos el fondo del footer (que era var(--color-tertiary) en nuestro diseño) */
-    background-color: var(--color-tertiary); /* Fondo verde muy claro para coincidir con la imagen */
-    padding: 60px 50px;
+    background-color: var(--color-tertiary); 
+    padding: 30px 50px;
     color: var(--color-text-dark);
+    z-index: 100;
 }
 
 .footer-grid {
     display: grid;
-    grid-template-columns: 1.5fr 1fr 1.5fr; 
+    grid-template-columns: 1fr 1fr 1fr; 
     gap: 40px;
     max-width: 1200px;
     margin: 0 auto;
@@ -20,7 +20,6 @@
     margin-bottom: 25px;
 }
 
-/* --- COLUMNA 1: BRANDING Y CITA --- */
 .footer-branding {
     display: flex;
     flex-direction: column;
@@ -52,7 +51,6 @@
     max-width: 250px;
 }
 
-/* --- COLUMNA 2: MENÚ --- */
 .footer-links {
     list-style: none;
 }
@@ -79,7 +77,6 @@
     font-size: 18px;
 }
 
-/* --- COLUMNA 3: DATOS Y SOCIAL --- */
 .contact-info .info-item {
     display: flex;
     align-items: flex-start;

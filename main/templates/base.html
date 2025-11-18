@@ -21,72 +21,48 @@
   <header>
     {% block header %}{% endblock header %}
 
-    <div class="navbar-top">
+    <div class="navbar">
       <div class="navbar-logo">
         <span class="material-icons">eco</span> Natursur
       </div>
 
-      <div class="navbar-top-links">
+      <nav class="navbar-button-container">
+        <a href="{% url 'home' %}" class="btn-nav {% if request.path == '/' %}active{% endif %}">
+          <span>INICIO</span> <span class="material-icons">home</span>
+        </a>
+        <a href="{% url 'list_products' %}" class="btn-nav {% if request.path == '/productos/' %}active{% endif %}">
+          <span>PRODUCTOS</span> <span class="material-symbols">nutrition</span>
+        </a>
+        <a href="{% url 'services' %}" class="btn-nav {% if request.path == '/servicios/' %}active{% endif %}">
+          <span>SERVICIOS</span> <span class="material-symbols">massage</span>
+        </a>
+      </nav>
+
+      <div class="navbar-links">
         <nav class="navbar-static-links">
-          <a href="#">Sobre Natursur</a>
-          <a href="#">Contacto</a>
           <a href="{% url 'login' %}">Iniciar sesión</a>
         </nav>
 
-        <a href="{% url 'view_cart' %}" class="btn-cesta">
-          <span class="material-icons">shopping_basket</span>
-          Carrito
-          <span class="cesta-count">X</span>
-        </a>
       </div>
     </div>
-
-    <nav class="navbar-bottom">
-      <a href="{% url 'home' %}" class="btn-nav {% if request.path == '/' %}active{% endif %}">
-        <span>INICIO</span> <span class="material-icons">home</span>
-      </a>
-      <a href="{% url 'list_products' %}" class="btn-nav {% if request.path == '/productos/' %}active{% endif %}">
-        <span>PRODUCTOS</span> <span class="material-symbols">nutrition</span>
-      </a>
-      <a href="{% url 'services' %}" class="btn-nav {% if request.path == '/servicios/' %}active{% endif %}">
-        <span>SERVICIOS</span> <span class="material-symbols">massage</span>
-      </a>
-      {% block auth_links %}{% endblock auth_links %}
-    </nav>
   </header>
 
   <section class="main-content-section">
     {% block contenido %}{% endblock contenido %}
+    <a href="{% url 'view_cart' %}" class="btn-cesta">
+      <span class="material-icons">shopping_basket</span>
+      Carrito
+      <span class="cesta-count">X</span>
+    </a>
   </section>
 
   <footer class="footer">
     <div class="footer-grid">
 
       <div class="footer-col footer-branding">
-        <div class="footer-card">
-          <span class="material-icons">nature_sharp</span>
-        </div>
         <p class="footer-quote">
           "Cuerpo, mente y alimentación: cuando los tres están en equilibrio, todo cambia."
         </p>
-      </div>
-
-      <div class="footer-col footer-menu">
-        <h3>Menú</h3>
-        <ul class="footer-links">
-          <li>
-            <a href="{% url 'home' %}">Inicio</a>
-            <span class="material-icons">chevron_right</span>
-          </li>
-          <li>
-            <a href="{% url 'list_products' %}">Productos</a>
-            <span class="material-icons">chevron_right</span>
-          </li>
-          <li>
-            <a href="{% url 'services' %}">Servicios</a>
-            <span class="material-icons">chevron_right</span>
-          </li>
-        </ul>
       </div>
 
       <div class="footer-col footer-data">
@@ -94,7 +70,8 @@
         <div class="contact-info">
           <div class="info-item location">
             <span class="material-icons">location_on</span>
-            Av. Santa Lucía, 6241500 Alcalá de Guadaíra, Sevilla
+            Av. Santa Lucía, 62
+            41500 Alcalá de Guadaíra, Sevilla
           </div>
           <div class="info-item phone">
             <span class="material-icons">phone</span>
@@ -106,6 +83,13 @@
           <a href="#" class="social-icon"><span class="material-icons">facebook</span></a>
           <a href="#" class="social-icon"><span class="material-icons">photo_camera</span></a>
           <a href="#" class="social-icon"><span class="material-icons">play_arrow</span></a>
+        </div>
+      </div>
+
+      <div class="footer-col footer-address">
+        <div class="map-container">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d793.117098013868!2d-5.833778724429618!3d37.33141829376026!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd126538e8b2399b%3A0x74d565631c7ffd9b!2sOste%C3%B3pata%20en%20Alcala%20de%20Guadaira.%20Natursur%3A%20Masajes%20y%20Nutrici%C3%B3n!5e0!3m2!1ses!2ses!4v1763457427432!5m2!1ses!2ses" 
+                        width="100%" height="180" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
       </div>
 

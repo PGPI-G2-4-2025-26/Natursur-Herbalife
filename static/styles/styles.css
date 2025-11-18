@@ -1,9 +1,9 @@
 :root {
     /* Variables de Color */
-    --color-primary: #588943; 
-    --color-secondary: #EDFAF3; 
-    --color-tertiary: #d6eee1;
-    --color-text-dark: #333;
+    --color-primary: #11522B; 
+    --color-secondary: #F7FFFB;
+    --color-tertiary: #e2ede7;
+    --color-text-dark: #103402;
     --color-text-light: #666;
     --color-white: #fff;
     --color-input-bg: #f7f7f7;
@@ -38,14 +38,20 @@ a:hover {
 
 
 header {
-    background-color: var(--color-secondary);
+    position: fixed;
+    top: 0;
+    left: 0; 
+    width: 100%; 
+    z-index: 1000; 
+    background-color: var(--color-tertiary);
 }
 
-.navbar-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 30px;
+.navbar {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;     
+    align-items: center; 
+    width: 100%; 
+    padding: 0 30px; 
 }
 
 .navbar-logo {
@@ -54,6 +60,7 @@ header {
     color: var(--color-primary);
     display: flex;
     align-items: center;
+    justify-self: start;
 }
 
 .logo-icon {
@@ -61,9 +68,8 @@ header {
     margin-right: 5px;
 }
 
-.navbar-top-links {
-    display: flex;
-    align-items: center;
+.navbar-links {
+    justify-self:end
 }
 
 .navbar-static-links a {
@@ -78,48 +84,12 @@ header {
     color: var(--color-primary);
 }
 
-.btn-cesta {
-    background-color: var(--color-primary);
-    color: var(--color-white);
-    padding: 5px 15px;
-    border-radius: 5px 0 0 5px; 
-    display: flex;
-    align-items: center;
-    margin-left: 30px;
-    position: relative;
-    font-weight: bold;
-    font-size: 1em;
-    transition: background-color 0.3s;
-}
 
-.btn-cesta:hover {
-    background-color: #2e5a17; 
-}
-
-.btn-cesta .material-icons {
-    font-size: 15px;
-    margin-right: 10px;
-}
-
-.cesta-count {
-    position: absolute;
-    top: -5px;
-    right: -10px;
-    background-color: var(--color-tertiary);
-    color: var(--color-primary);
-    border-radius: 50%;
-    padding: 2px 6px;
-    font-size: 0.7em;
-    line-height: 1;
-    border: 1px solid var(--color-primary);
-}
-
-
-.navbar-bottom {
-    display: flex;
-    justify-content: center; /* Centra los botones horizontalmente */
-    align-items: center;
-    padding: 0px 25px; 
+.navbar-button-container {
+    margin: 0;    
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
     background-color: var(--color-tertiary);
     border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
@@ -129,7 +99,7 @@ header {
     border: 1px solid var(--color-white);
     background-color:transparent; 
     color: var(--color-text-dark); 
-    padding: 20px 100px; 
+    padding: 20px 70px; 
     margin: 0;
     text-decoration: none;
     font-weight: bold;
@@ -157,7 +127,7 @@ header {
     
     transition: transform 0.3s ease-out; 
     
-    color: var(--color-text-dark); 
+    color: var(--color-primary); 
 }
 
 .btn-nav span:first-child {
@@ -201,8 +171,49 @@ header {
     color: var(--color-white);
 }
 
+.btn-cesta {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    padding: 5px 15px;
+    border-radius: 5px 0 0 5px; 
+    display: flex;
+    align-items: center;
+    margin-left: 30px;
+    font-weight: bold;
+    font-size: 1em;
+    transition: background-color 0.3s;
+    position: fixed;
+    right: 20px; 
+    bottom: 300px; 
+    z-index: 99; 
+    
+    font-size: 1.1em;
+    font-weight: bold;
+    border-radius: 8px; /* Borde completo para un botón fijo */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
 
+.btn-cesta:hover {
+    background-color: #2e5a17; 
+}
 
+.btn-cesta .material-icons {
+    font-size: 15px;
+    margin-right: 10px;
+}
+
+.cesta-count {
+    position: absolute;
+    top: -5px;
+    right: -10px;
+    background-color: var(--color-tertiary);
+    color: var(--color-primary);
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 0.7em;
+    line-height: 1;
+    border: 1px solid var(--color-primary);
+}
 
 .main-content-section {
     flex-grow: 1; 
