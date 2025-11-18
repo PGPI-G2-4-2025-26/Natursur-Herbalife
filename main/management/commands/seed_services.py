@@ -61,12 +61,15 @@ DEFAULT_SERVICES = [
 
 
 class Command(BaseCommand):
-    help = 'Seed default services into Servicie model'
+    help = 'Seed default services into Service model'
 
     def handle(self, *args, **options):
         from django.apps import apps
 
-        Service = apps.get_model('main', 'Service')
+        # The app is registered in INSTALLED_APPS as 'main.service',
+        # but the AppConfig.label for that package is 'service'.
+        # Use that label when retrieving the model.
+        Service = apps.get_model('service', 'Service')
         created_cnt = 0
         updated_cnt = 0
 

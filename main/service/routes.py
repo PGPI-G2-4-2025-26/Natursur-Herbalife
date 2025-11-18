@@ -1,6 +1,7 @@
 from django.urls import path
 from django.conf import settings
-from main import views 
+
+from main.service import views
 from django.conf.urls.static import static
 
 
