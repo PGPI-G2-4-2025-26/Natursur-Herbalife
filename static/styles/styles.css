@@ -50,13 +50,13 @@ header {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;     
     align-items: center; 
-    width: 100%; 
-    padding: 0 30px; 
+    width: 100%;  
 }
 
 .navbar-logo {
     font-size: 1.2em;
     font-weight: bold;
+    padding: 10px 20px;
     color: var(--color-primary);
     display: flex;
     align-items: center;
@@ -68,22 +68,6 @@ header {
     margin-right: 5px;
 }
 
-.navbar-links {
-    justify-self:end
-}
-
-.navbar-static-links a {
-    margin-left: 20px;
-    color: var(--color-text-dark);
-    font-size: 0.95em;
-    padding: 5px;
-}
-
-.navbar-static-links a.active {
-    font-weight: bold;
-    color: var(--color-primary);
-}
-
 
 .navbar-button-container {
     margin: 0;    
@@ -91,12 +75,11 @@ header {
     justify-content: center; 
     align-items: center; 
     background-color: var(--color-tertiary);
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-
 .btn-nav {
-    border: 1px solid var(--color-white);
+    border-left: 1px solid var(--color-white); 
+    border-right: 1px solid var(--color-white);    
     background-color:transparent; 
     color: var(--color-text-dark); 
     padding: 20px 70px; 
@@ -169,6 +152,41 @@ header {
     font-size: 2em;
     background-color: var(--color-primary);
     color: var(--color-white);
+}
+
+.navbar-profile-button-container {
+    padding: 0px 5px;
+    display: flex; 
+    justify-self: end;
+    background-color: var(--color-tertiary);
+}
+
+.btn-profile {
+    background-color: transparent; 
+    color: var(--color-primary); 
+    padding: 10px 10px; 
+    margin: 0;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.7em;
+    position: relative; 
+    display:  flex; 
+    overflow: hidden; 
+    justify-content: center; 
+    align-items: center;
+    
+    transition: background-color 0.2s; 
+    transform: none; 
+    line-height: 1.2; 
+}
+
+.btn-profile i,
+.btn-profile span {
+    margin-right: 4px; 
+}
+
+.btn-profile:hover {
+    background-color: rgba(104, 107, 0, 0.1); 
 }
 
 .btn-cesta {
