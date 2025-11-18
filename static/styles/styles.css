@@ -184,7 +184,7 @@ header {
     transition: background-color 0.3s;
     position: fixed;
     right: 20px; 
-    bottom: 300px; 
+    bottom: 170px; 
     z-index: 99; 
     
     font-size: 1.1em;
@@ -217,6 +217,7 @@ header {
 
 .main-content-section {
     flex-grow: 1; 
+    margin-top: 40px;
 }
 
 .footer {

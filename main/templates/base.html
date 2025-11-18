@@ -10,6 +10,8 @@
 
   <link rel="stylesheet" href="{% static 'styles/styles.css' %}">
   <link rel="stylesheet" href="{% static 'styles/footer.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Symbols" rel="stylesheet">
 
@@ -60,36 +62,63 @@
     <div class="footer-grid">
 
       <div class="footer-col footer-branding">
-        <p class="footer-quote">
-          "Cuerpo, mente y alimentación: cuando los tres están en equilibrio, todo cambia."
-        </p>
+
+        <div class="branding-media-text">
+
+          <figure class="branding-figure">
+            <div class="footer-card">
+              <img src="{% static 'media/logo-footer.png' %}" alt="Logo de NaturSur" class="branding-image">
+            </div>
+          </figure>
+
+          <p class="footer-quote">
+            "Cuerpo, mente y alimentación: cuando los tres están en equilibrio, todo cambia."
+          </p>
+        </div>
       </div>
 
       <div class="footer-col footer-data">
-        <h3>Datos</h3>
         <div class="contact-info">
-          <div class="info-item location">
+          <div class="info-item">
             <span class="material-icons">location_on</span>
-            Av. Santa Lucía, 62
-            41500 Alcalá de Guadaíra, Sevilla
+            <span>Av. Santa Lucía, 62</span>
           </div>
-          <div class="info-item phone">
+          <div class="info-item">
+            <span class="material-symbols address-spacer">map</span>
+            <span>41500 Alcalá de Guadaíra, Sevilla</span>
+          </div>
+          <div class="info-item">
             <span class="material-icons">phone</span>
             691 355 682
           </div>
         </div>
 
-        <div class="social-icons">
-          <a href="#" class="social-icon"><span class="material-icons">facebook</span></a>
-          <a href="#" class="social-icon"><span class="material-icons">photo_camera</span></a>
-          <a href="#" class="social-icon"><span class="material-icons">play_arrow</span></a>
+
+        <div class="social-icon-container">
+          <a href="https://www.facebook.com/natursur" class="social-icon" target="_blank">
+            <i class="fa-brands fa-facebook-f"></i>
+          </a>
+
+          <a href="https://www.instagram.com/yosoyescalona/?hl=es" class="social-icon" target="_blank">
+            <i class="fa-brands fa-instagram"></i>
+          </a>
+
+          <a href="https://api.whatsapp.com/send/?phone=34691355682" class="social-icon" target="_blank">
+            <i class="fa-brands fa-whatsapp"></i>
+          </a>
+
+          <a href="https://www.youtube.com/@natursur" class="social-icon" target="_blank">
+            <i class="fa-brands fa-youtube"></i>
+          </a>
         </div>
       </div>
 
-      <div class="footer-col footer-address">
+      <div class="footer-col footer-map">
         <div class="map-container">
-          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d793.117098013868!2d-5.833778724429618!3d37.33141829376026!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd126538e8b2399b%3A0x74d565631c7ffd9b!2sOste%C3%B3pata%20en%20Alcala%20de%20Guadaira.%20Natursur%3A%20Masajes%20y%20Nutrici%C3%B3n!5e0!3m2!1ses!2ses!4v1763457427432!5m2!1ses!2ses" 
-                        width="100%" height="180" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d793.117098013868!2d-5.833778724429618!3d37.33141829376026!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd126538e8b2399b%3A0x74d565631c7ffd9b!2sOste%C3%B3pata%20en%20Alcala%20de%20Guadaira.%20Natursur%3A%20Masajes%20y%20Nutrici%C3%B3n!5e0!3m2!1ses!2ses!4v1763457427432!5m2!1ses!2ses"
+            width="75%" height="135" style="border:0;" allowfullscreen="" loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
       </div>
 
