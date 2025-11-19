@@ -123,14 +123,22 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# Directorios adicionales donde buscar archivos estáticos (Nuestra carpeta 'static' en la raíz)
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
+
+# Directorio donde Django recolectará los archivos estáticos para producción (python manage.py collectstatic)
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-#directorio donde se guardan los objetos multimedia (imagenes, etc...) de la BD
-#Importante: este directorio hay que crearlo manualmente
-MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+# directorio donde se guardan los objetos multimedia (imagenes, etc...) de la BD
+MEDIA_ROOT = BASE_DIR / 'media'
 
 MEDIA_URL = '/media/'
 
