@@ -23,11 +23,13 @@
             <a href="{% url 'my_solicitations' %}">Mis Solicitudes</a>
             {% if user.is_staff %}
                 <a href="{% url 'admin_solicitations_list' %}">Batería (ADMIN)</a>
+                
             {% endif %}
             | Hola, {{ user.username }}! (<a href="{% url 'logout' %}">Logout</a>)
         {% else %}
             <a href="{% url 'login' %}">Acceder</a>
             <a href="{% url 'registration' %}">Registrarse</a>
+            <a href="/carga">Cargar BD (ADMIN)</a> <!-- Editar acceso solo a admin -->
         {% endif %}
         | <a href="{% url 'view_cart' %}">Carrito</a>
     </div>

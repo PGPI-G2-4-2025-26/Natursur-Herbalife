@@ -5,12 +5,23 @@
 {% endblock %}
 
 {% block contenido %}
-    <p>Aquí se listarán los productos del modelo 'Product'.</p>
-    <p style="color: blue;">(Cuando esté el scrapping se vienen cosas).</p>
     
-    <p>Ejemplo de producto:</p>
-    <ul>
-        <li>Producto X - <a href="{% url 'add_to_cart' product_id=1 %}">Añadir al Carrito (ID 1)</a></li>
-        <li>Producto Y - <a href="{% url 'add_to_cart' product_id=2 %}">Añadir al Carrito (ID 2)</a></li>
-    </ul>
+    {% for product in products %}
+        <div style="border: 1px solid #ccc; padding: 10px; margin: 10px;">
+            <h3>{{ product.name }}</h3>
+            <p>Referencia: {{ product.ref }}</p>
+            <p>Precio: {{ product.price }}</p>
+            <p>Sabor: {{ product.flavor }}</p>
+            <p>Tamaño: {{ product.size }}</p>
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-width: 200px;">
+            {% else %}
+                <p>No hay imagen disponible.</p>
+            {% endif %}
+            <a href="{% url 'add_to_cart' product_id=product.id %}">Añadir al Carrito</a>
+        </div>
+    {% empty %}
+        <p>No hay productos disponibles en este momento.</p>
+    {% endfor %}
+
 {% endblock %}
