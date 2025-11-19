@@ -2,7 +2,7 @@ from django.core.management.base import BaseCommand
 from decimal import Decimal
 
 
-DEFAULT_SERVICES = [
+DEFAULT_APPOINTMENTS = [
     {
         'name': "Sesión 40'",
         'price': Decimal('28.00'),
@@ -59,22 +59,68 @@ DEFAULT_SERVICES = [
     },
 ]
 
+DEFAULT_USERS = [
+    {
+        'username': 'admin',
+        'email': 'admin@example.com',
+        'first_name': 'Admin',
+        'last_name': 'User',
+        'password': 'adminpass',
+        'is_staff': True,
+        'is_superuser': False,
+    },
+    {
+        'username': 'superadmin',
+        'email': 'superadmin@example.com',
+        'first_name': 'Super',
+        'last_name': 'Admin',
+        'password': 'superadminpass',
+        'is_staff': True,
+        'is_superuser': True,
+    },
+    {    'username': 'client',
+        'email': 'client@example.com',
+        'first_name': 'Client',
+        'last_name': 'User',
+        'password': 'clientpass',
+        'is_staff': False,
+        'is_superuser': False,
+    },
+]
 
 class Command(BaseCommand):
-    help = 'Seed default services into Service model'
+    help = 'Seed default appointments into Appointment model'
 
     def handle(self, *args, **options):
         from django.apps import apps
 
-        # The app is registered in INSTALLED_APPS as 'main.service',
-        # but the AppConfig.label for that package is 'service'.
-        # Use that label when retrieving the model.
-        Service = apps.get_model('service', 'Service')
+        Appointment = apps.get_model('appointments', 'Appointment')
+        User = apps.get_model('auth', 'User')
         created_cnt = 0
         updated_cnt = 0
 
-        for s in DEFAULT_SERVICES:
-            obj, created = Service.objects.update_or_create(
+        for u in DEFAULT_USERS:
+            obj, created = User.objects.update_or_create(
+                username=u['username'],
+                defaults={
+                    'email': u['email'],
+                    'first_name': u['first_name'],
+                    'last_name': u['last_name'],
+                    'is_staff': u['is_staff'],
+                    'is_superuser': u['is_superuser'],
+                }
+            )
+            if created:
+                obj.set_password(u['password'])
+                obj.save()
+                created_cnt += 1
+                self.stdout.write(self.style.SUCCESS(f"Created user: {obj.username}"))
+            else:
+                updated_cnt += 1
+                self.stdout.write(self.style.NOTICE(f"Updated user: {obj.username}"))
+
+        for s in DEFAULT_APPOINTMENTS:
+            obj, created = Appointment.objects.update_or_create(
                 name=s['name'],
                 defaults={
                     'price': s['price'],
@@ -86,9 +132,9 @@ class Command(BaseCommand):
             )
             if created:
                 created_cnt += 1
-                self.stdout.write(self.style.SUCCESS(f"Created service: {obj.name}"))
+                self.stdout.write(self.style.SUCCESS(f"Created appointment: {obj.name}"))
             else:
                 updated_cnt += 1
-                self.stdout.write(self.style.NOTICE(f"Updated service: {obj.name}"))
+                self.stdout.write(self.style.NOTICE(f"Updated appointment: {obj.name}"))
 
         self.stdout.write(self.style.SUCCESS(f"Seeding finished. Created: {created_cnt}, Updated: {updated_cnt}"))

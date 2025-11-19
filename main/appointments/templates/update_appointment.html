@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Actualizar sesión</title>
+</head>
+<body>
+    <h1>Actualizar sesión</h1>
+
+    <form method="post" action="{% url 'update_appointment' appointment.id %}">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        {{ form.as_p }}
+
+        <button type="submit">Guardar cambios</button>
+        <a href="{% url 'appointments' %}">Cancelar</a>
+    </form>
+
+</body>
+</html>

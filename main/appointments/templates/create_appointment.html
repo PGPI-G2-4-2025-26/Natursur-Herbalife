@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Crear sesión</title>
+</head>
+<body>
+    <h1>Crear sesión</h1>
+    <form method="post" action ="{% url 'create_appointment' %}">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        {{ form.as_p }}
+        <div class="actions">
+            <button type="submit" class="btn btn-primary">Crear</button>
+            <a href="{% url 'appointments' %}" class="btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</body>
+</html>

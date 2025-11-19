@@ -14,7 +14,7 @@ urlpatterns = [
     path('media/<path:path>', serve, {'document_root': settings.MEDIA_ROOT}),
 
     path('', include('main.user.routes')),
-    path('', include('main.service.routes')),
+    path('', include('main.appointments.routes')),
     path('', include('main.products.routes')),
 ]
 
