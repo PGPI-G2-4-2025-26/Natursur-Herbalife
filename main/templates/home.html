@@ -1,25 +1,374 @@
 {% extends 'base.html' %}
 
+
+{% load static %}
+
+
 {% block encabezado %}
 <h1>Página Principal de Natursur</h1>
 {% endblock %}
 
 {% block contenido %}
-    <div style="display: flex;">
-        <div style="width: 70%; padding: 10px;">
-            <h2>Centro: Redes Sociales (Contenido Estático)</h2>
-            <p>Aquí irá el feed de Instagram, Facebook o mensajes clave.</p>
-            <p>El botón "PRODUCTOS" y "SESIONES" está en el banner de arriba.</p>
+
+    <div class="page">
+
+  <!-- HERO -->
+  <main class="hero">
+    <img
+      class="bg"
+      src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=2000&auto=format&fit=crop"
+      alt="Oficina de Natursur"
+    />
+    <div class="overlay">
+      <div class="center-wrap">
+        <div class="logo-circle">
+          <div class="logo-mark">
+            <div class="icon-wrap">
+              <img src="{% static 'images/logoNatursur.png' %}" alt="Natursur logo" class="logo-img" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+
+  <section class="wellness-container">
+
+        <div class="left-column">
+            <h2>¿Qué es Natursur?</h2>
+            <p class="pre-heading">Un Enfoque Integral para tu Bienestar Total</p>
+            <p class="description">
+            Natursur es un centro de bienestar integral cuyo objetivo es acompañarte 
+            en una transformación real y sostenible de tu salud. Liderado por Fernando 
+            Escalona —profesional con más de 25 años de experiencia— Natursur trabaja 
+            con un enfoque holístico que integra cuerpo, mente y alimentación para 
+            aliviar dolencias, mejorar la movilidad, gestionar el estrés y optimizar 
+            hábitos de vida.
+            <br><br>
+            Ofrecemos tratamientos personalizados basados en técnicas manuales y terapias 
+            naturales, adaptadas a las necesidades de cada persona: osteopatía y masajes 
+            holísticos para liberar tensiones y recuperar movilidad; asesoramiento nutricional 
+            para diseñar hábitos alimentarios sostenibles; terapias de biomagnetismo para 
+            equilibrar la energía; y técnicas emocionales para desbloquear limitaciones 
+            psico-emocionales.
+            </p>
+            <a href="#" class="cta-button">CONOCE NUESTROS SERVICIOS</a>
         </div>
 
-        <div style="width: 30%; padding: 10px; background-color: #f0f0f0;">
-            <h3>Lateral: Testimonios Recientes (Nutrición)</h3>
-            {% for t in testimonials %}
-                <p><strong>{{ t.client_name }} dice:</strong> "{{ t.testimonial_text|truncatechars:50 }}"</p>
-                <hr>
-            {% empty %}
-                <p>No hay testimonios para mostrar.</p>
-            {% endfor %}
+        <div class="info-card center-expert">
+            <div class="info-card-content">
+                <div class="info-text">
+                    <h3>Experto en Bienestar Integral</h3>
+                    <p>
+                      Fernando Escalona es experto en bienestar integral con más de 25 años de experiencia y fundador de Natursur.
+                      Ha dedicado su carrera al desarrollo de un enfoque profundo y humanizado, combinando
+                      técnicas manuales (como quiromasaje y movilizaciones articulares), nutrición deportiva y
+                      terapias energéticas. Además de su práctica clínica en Alcalá de Guadaíra (Sevilla),
+                      comparte su conocimiento a través de la formación y divulgación, reforzando su
+                      compromiso con una salud consciente y sostenible.
+                    </p>
+                </div>
+                <div class="info-image">
+                    <img src="{% static 'images/fernandoEscalonaFoto.png' %}" alt="Fernando Escalona">
+                </div>
+            </div>
         </div>
+    </section>
+
+
+  <!-- WHY -->
+  <section class="why-section">
+    <div class="why-container">
+      <div class="why-title">¿Por qué Natursur?</div>
+      <div class="why-content">
+        <div class="why-left">
+          <div class="circle-photo">
+            <img
+              alt="Persona dando un masaje"
+              src="{% static 'images/imagenMenuFernando.png' %}"
+            />
+          </div>
+        </div>
+        <div class="why-right">
+          <div class="why-paragraph">
+            En Natursur combinamos profesionalidad, cercanía y técnicas
+            basadas en la evidencia para ofrecer bienestar real. <br>
+            Elegirnos significa atención personalizada, espacios pensados
+            para tu confort y resultados medibles. <br>
+            Más de 300 valoraciones positivas avalan nuestro compromiso.
+          </div>
+
+          <ul class="company-index">
+            <li>
+              <strong>Profesionalidad</strong>
+              Atención especializada por personal cualificado.
+            </li>
+            <li>
+              <strong>Cercanía</strong>
+              Trato personalizado y orientación al paciente.
+            </li>
+            <li>
+              <strong>Calidad</strong>
+              Espacios e instrumental adaptados para tu confort.
+            </li>
+            <li>
+              <strong>Resultados</strong>
+              Enfoque basado en técnicas con evidencia y seguimiento.
+            </li>
+            <li>
+              <strong>Confianza</strong>
+              Más de 300 valoraciones positivas y verificadas.
+            </li>
+            <li>
+              <strong>Transparencia</strong>
+              Información clara sobre tratamientos y precios.
+            </li>
+          </ul>
+
+          
+        </div>
+      </div>
     </div>
+  </section>
+
+  <!-- TESTIMONIOS -->
+  <section class="testimonials-section">
+        <h2>Testimonios</h2>
+
+        <div class="testimonials-grid">
+            
+            <article class="testimonial-card">
+                <div class="card-images">
+                    <figure>
+                        <img src="{% static 'images/perroFlaco.png' %}" alt="Foto de Manuel antes">
+                        <figcaption>Antes</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="{% static 'images/perroFuerte.png' %}" alt="Foto de Manuel después">
+                        <figcaption>Después</figcaption>
+                    </figure>
+                </div>
+                <h3>Manuel</h3>
+                <div class="star-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <blockquote>
+                    <p>Hola soy Manuel, de Isla Cristina y después de 3 años siguiendo este método, puedo decir que es lo mejor que me ha pasado. Pesaba 83 kilos, tenía dolores de cabeza, mucho cansancio y problemas de estómago. A día de hoy mantengo los 13 kilos que perdí y estoy fantástico de esos problemas de salud. Actualmente hago 3 o 4 días de deporte a la semana y me encuentro mejor que nunca.</p>
+                </blockquote>
+            </article>
+
+            <article class="testimonial-card">
+                <div class="card-images">
+                    <figure>
+                        <img src="{% static 'images/perroFlaco.png' %}" alt="Foto de Federico antes">
+                        <figcaption>Antes</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="{% static 'images/perroFuerte.png' %}" alt="Foto de Federico después">
+                        <figcaption>Después</figcaption>
+                    </figure>
+                </div>
+                <h3>Federico</h3>
+                <div class="star-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <blockquote>
+                    <p>Hace 3 meses y pico conocí a Fernando y gracias a él inicié una vida sana y empecé esta nutrición. Sinceramente creo que nunca me imaginaba este cambio. No es solo peso, sino también mucho volumen.</p>
+                </blockquote>
+            </article>
+
+            <article class="testimonial-card">
+                <div class="card-images">
+                    <figure>
+                        <img src="{% static 'images/perroFlaco.png' %}" alt="Foto de Charo antes">
+                        <figcaption>Antes</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="{% static 'images/perroFuerte.png' %}" alt="Foto de Charo después">
+                        <figcaption>Después</figcaption>
+                    </figure>
+                </div>
+                <h3>Charo</h3>
+                <div class="star-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <blockquote>
+                    <p>Empecé con Fernando en febrero y ¡en menos de 3 meses he perdido 8,1 kilos! Era reacia a los cambios de hábitos, pero gracias a la ayuda de Fernando y su paciencia, ahora estoy encantada. Después de más de 20 años con anemia ferropénica crónica, ¡mi última analítica está perfecta! Sé que por delante tengo un camino muy largo, y a veces será empedrado, pero con la ayuda de él y de su comunidad, lo lograré.</p>
+                </blockquote>
+            </article>
+
+        </div>
+    </section>
+
+  <!-- TESTIMONIOS CARRUSEL -->
+  <section class="testimonials-wrap">
+    <div class="testimonials">
+      <div class="testi-title">Opiniones de nuestros clientes</div>
+      <div class="testi-sub">
+        <div class="stars">
+          <div class="icon-wrap"><iconify-icon icon="lucide:star"></iconify-icon></div>
+          <div class="icon-wrap"><iconify-icon icon="lucide:star"></iconify-icon></div>
+          <div class="icon-wrap"><iconify-icon icon="lucide:star"></iconify-icon></div>
+          <div class="icon-wrap"><iconify-icon icon="lucide:star"></iconify-icon></div>
+          <div class="icon-wrap"><iconify-icon icon="lucide:star"></iconify-icon></div>
+        </div>
+        <div>Reseñas verificadas en Google</div>
+      </div>
+
+      <div class="carousel-arrows">
+        <div class="arrow">
+          <div class="icon-wrap">
+            <iconify-icon icon="lucide:chevron-left"></iconify-icon>
+          </div>
+        </div>
+        <div class="arrow">
+          <div class="icon-wrap">
+            <iconify-icon icon="lucide:chevron-right"></iconify-icon>
+          </div>
+        </div>
+      </div>
+
+      <div class="carousel">
+
+        <div class="review-card">
+          <div class="review-header">
+            <div class="review-user">
+              <div class="avatar">
+                <img src="https://app.banani.co/avatar1.jpeg" alt="avatar 1" />
+              </div>
+              <div class="user-info">
+                <div class="user-name">Elvira Muela Lopez</div>
+                <div class="user-date">2025-02-19</div>
+              </div>
+            </div>
+            <div class="icon-wrap"><iconify-icon icon="lucide:circle-dot"></iconify-icon></div>
+          </div>
+          <div class="review-stars">
+            <div class="stars">
+              <div class="icon-wrap"><iconify-icon icon="lucide:star"></iconify-icon></div>
+              <div class="icon-wrap"><iconify-icon icon="lucide:star"></iconify-icon></div>
+              <div class="icon-wrap"><iconify-icon icon="lucide:star"></iconify-icon></div>
+              <div class="icon-wrap"><iconify-icon icon="lucide:star"></iconify-icon></div>
+              <div class="icon-wrap"><iconify-icon icon="lucide:star"></iconify-icon></div>
+            </div>
+            <div class="verified">
+              <div class="icon-wrap"><iconify-icon icon="lucide:badge-check"></iconify-icon></div>
+              Verificado
+            </div>
+          </div>
+          <div class="review-text">
+            La verdad que me ha gustado mucho, lo recomiendo.
+          </div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-header">
+            <div class="review-user">
+              <div class="avatar">
+                <img src="https://app.banani.co/avatar2.jpg" alt="avatar 2" />
+              </div>
+              <div class="user-info">
+                <div class="user-name">Jonathan Carrasco</div>
+                <div class="user-date">2025-02-07</div>
+              </div>
+            </div>
+            <div class="icon-wrap"><iconify-icon icon="lucide:circle-dot"></iconify-icon></div>
+          </div>
+          <div class="review-stars">
+            <div class="stars">
+              <div class="icon-wrap"><iconify-icon icon="lucide:star"></iconify-icon></div>
+              <div class="icon-wrap"><iconify-icon icon="lucide:star"></iconify-icon></div>
+              <div class="icon-wrap"><iconify-icon icon="lucide:star"></iconify-icon></div>
+              <div class="icon-wrap"><iconify-icon icon="lucide:star"></iconify-icon></div>
+              <div class="icon-wrap"><iconify-icon icon="lucide:star"></iconify-icon></div>
+            </div>
+            <div class="verified">
+              <div class="icon-wrap"><iconify-icon icon="lucide:badge-check"></iconify-icon></div>
+              Verificado
+            </div>
+          </div>
+          <div class="review-text">
+            Buen profesional, para repetir.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Social media section -->
+  <section class="social-feed-section">
+        <h2>Inspírate cada día</h2>
+        <p class="section-description">
+            En cada una de mis redes sociales subo contenido más personal y motivador frecuentemente. ¡Únete a la comunidad y no te pierdas nada!
+        </p>
+
+        <div class="social-grid">
+            
+            <article class="social-card instagram">
+                <div class="card-header">
+                    <i class="fa-brands fa-instagram"></i>
+                    <span>@yosoyescalona</span>
+                </div>
+                <div class="card-content">
+                    <img src="{% static 'images/igNatursur.png' %}" alt="Contenido de Instagram">
+                </div>
+                <div class="card-footer">
+                    <a href="https://www.instagram.com/yosoyescalona/" class="social-button" target="_blank" rel="noopener noreferrer">
+                        Ver en Instagram
+                    </a>
+                </div>
+            </article>
+
+            <article class="social-card youtube">
+                <div class="card-header">
+                    <i class="fa-brands fa-youtube"></i>
+                    <span>@Fernando Escolona Cuaresma</span>
+                </div>
+                <div class="card-content">
+                    <img src="{% static 'images/ytNatursur.png' %}" alt="Contenido de YouTube">
+                </div>
+                <div class="card-footer">
+                    <a href="https://www.youtube.com/@natursur/featured" class="social-button" target="_blank" rel="noopener noreferrer">
+                        Suscribirse en YouTube
+                    </a>
+                </div>
+            </article>
+
+            <article class="social-card facebook">
+                <div class="card-header">
+                    <i class="fa-brands fa-facebook-f"></i>
+                    <span>@Fernando Escolona Cuaresma</span>
+                </div>
+                <div class="card-content">
+                    <img src="{% static 'images/fbNatursur.png' %}" alt="Contenido de Facebook">
+                </div>
+                <div class="card-footer">
+                    <a href="https://www.facebook.com/natursur" class="social-button" target="_blank" rel="noopener noreferrer">
+                        Seguir en Facebook
+                    </a>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+</div>
+
+<script src="https://code.iconify.design/iconify-icon/3.0.0/iconify-icon.min.js"></script>
+
 {% endblock %}
+

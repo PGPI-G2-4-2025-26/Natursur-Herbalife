@@ -8,7 +8,30 @@
     <div style="display: flex;">
         <div style="width: 70%; padding: 10px;">
             <h2>Carrito de Compras</h2>
-            
+            {% if cart_items %}
+                <ul>
+                    {% for item in cart_items %}
+                        <li>
+                            {{ item.product.name }} - Cantidad: {{ item.quantity }} - Precio: {{ item.product.price }}
+                            <form method="post" action="{% url 'remove_from_cart' item.id %}" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit">Eliminar</button>
+                            </form>
+                            <form method="post" action="{% url 'add_to_cart' item.product.id %}" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit">Añadir</button>
+                            </form>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <p>Total: {{ total_price }}</p>
+                <form method="post" action="{% url 'checkout' %}">
+                    {% csrf_token %}
+                    <button type="submit">Proceder al Pago</button>
+                </form>
+            {% else %}
+                <p>Tu carrito está vacío.</p>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

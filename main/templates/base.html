@@ -1,41 +1,161 @@
-<!DOCTYPE html>
-<html lang='es'>
-<head>
-  <meta charset='utf-8'>
-  <style>
-   /* Estilo simple para el banner de navegación */
-   .nav-banner a { padding: 10px 15px; background-color: #eee; border: 1px solid #ccc; text-decoration: none; margin-right: 5px; }
-   .auth-links a { margin-left: 10px; }
-  </style>
-</head>
-<body>
-  <header> 
-  	{% block encabezado %}{% endblock %}
-    
-    <nav class="nav-banner">
-        <a href="{% url 'home' %}">INICIO</a>
-        <a href="{% url 'list_products' %}">PRODUCTOS</a>
-        <a href="{% url 'appointments' %}">SESIONES</a>
-    </nav>
+{% load static %}
 
-    <div class="auth-links">
-        {% if user.is_authenticated %}
-            <a href="{% url 'my_solicitations' %}">Mis Solicitudes</a>
-            {% if user.is_staff %}
-                <a href="{% url 'admin_solicitations_list' %}">Batería (ADMIN)</a>
-            {% endif %}
-            | Hola, {{ user.username }}! (<a href="{% url 'logout' %}">Logout</a>)
-        {% else %}
-            <a href="{% url 'login' %}">Acceder</a>
-            <a href="{% url 'registration' %}">Registrarse</a>
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}NaturSur{% endblock title %}</title>
+
+  <link rel="stylesheet" href="{% static 'styles/styles.css' %}">
+  <link rel="stylesheet" href="{% static 'styles/footer.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'styles/home.css' %}">
+
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Symbols" rel="stylesheet">
+
+
+  {% block extra_head %}{% endblock extra_head %}
+</head>
+
+<body>
+  <header>
+    {% block header %}{% endblock header %}
+
+    <div class="navbar">
+      <div class="navbar-logo">
+        <span class="material-icons">eco</span> Natursur
+      </div>
+
+      <nav class="navbar-button-container">
+        <a href="{% url 'home' %}" class="btn-nav {% if request.path == '/' %}active{% endif %}">
+          <span>INICIO</span> <span class="material-icons">home</span>
+        </a>
+        <a href="{% url 'list_products' %}" class="btn-nav {% if request.path == '/productos/' %}active{% endif %}">
+          <span>PRODUCTOS</span> <span class="material-symbols">nutrition</span>
+        </a>
+        <a href="{% url 'services' %}" class="btn-nav {% if request.path == '/servicios/' %}active{% endif %}">
+          <span>SERVICIOS</span> <span class="material-symbols">massage</span>
+        </a>
+      </nav>
+      
+
+      <nav class="navbar-profile-button-container">
+        
+
+        {% if user.is_staff %}
+        <a a href="{% url 'admin_solicitations_list' %}" class="btn-profile">
+          <span class="material-symbols">person raised hand</span><span>SOLICITUDES</span>
+        </a>
+        <a a href="/carga" class="btn-profile">
+          <span class="material-icons">download</span><span>CARGAR PRODUCTOS</span>
+        </a>
         {% endif %}
-        | <a href="{% url 'view_cart' %}">Carrito</a>
+          
+        {% if user.is_authenticated %} 
+          {% if not user.is_authenticated %} 
+          <a a href="{% url 'my_solicitations' %}" class="btn-profile">
+            <span class="material-icons">inventory</span><span>MIS SOLICITUDES</span>
+          </a>
+          {% endif %}
+        <a a href="{% url 'home' %}" class="btn-profile">
+          <span class="material-icons">person</span><span>PERFIL</span>
+        </a>
+        <a a href="{% url 'home' %}" class="btn-profile">
+          <span class="material-icons">logout</span><span>CERRAR SESIÓN</span> 
+        {% else %}
+        <a a href="{% url 'login' %}" class="btn-profile">
+          <span class="material-symbols">login</span><span>INICIAR SESIÓN</span>
+        </a>
+        <a a href="{% url 'registration' %}" class="btn-profile">
+          <span class="material-symbols">person_add</span><span>REGISTRARSE</span>
+        </a>
+
+        {% endif %}
+        
+        </a>
+    </div>
+  </header>
+
+  <section class="main-content-section">
+    {% block contenido %}{% endblock contenido %}
+    <a href="{% url 'view_cart' %}" class="btn-cesta">
+      <span class="material-icons">shopping_basket</span>
+      Carrito
+      <span class="cesta-count">X</span>
+    </a>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-grid">
+
+      <div class="footer-col footer-branding">
+
+        <div class="branding-media-text">
+
+          <figure class="branding-figure">
+            <div class="footer-card">
+              <img src="{% static 'media/logo-footer.png' %}" alt="Logo de NaturSur" class="branding-image">
+            </div>
+          </figure>
+
+          <p class="footer-quote">
+            "Cuerpo, mente y alimentación: cuando los tres están en equilibrio, todo cambia."
+          </p>
+        </div>
+      </div>
+
+      <div class="footer-col footer-data">
+        <div class="contact-info">
+          <div class="info-item">
+            <span class="material-icons">location_on</span>
+            <span>Av. Santa Lucía, 62</span>
+          </div>
+          <div class="info-item">
+            <span class="material-symbols address-spacer">map</span>
+            <span>41500 Alcalá de Guadaíra, Sevilla</span>
+          </div>
+          <div class="info-item">
+            <span class="material-icons">phone</span>
+            691 355 682
+          </div>
+        </div>
+
+
+        <div class="social-icon-container">
+          <a href="https://www.facebook.com/natursur" class="social-icon" target="_blank">
+            <i class="fa-brands fa-facebook-f"></i>
+          </a>
+
+          <a href="https://www.instagram.com/yosoyescalona/?hl=es" class="social-icon" target="_blank">
+            <i class="fa-brands fa-instagram"></i>
+          </a>
+
+          <a href="https://api.whatsapp.com/send/?phone=34691355682" class="social-icon" target="_blank">
+            <i class="fa-brands fa-whatsapp"></i>
+          </a>
+
+          <a href="https://www.youtube.com/@natursur" class="social-icon" target="_blank">
+            <i class="fa-brands fa-youtube"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-col footer-map">
+        <div class="map-container">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d793.117098013868!2d-5.833778724429618!3d37.33141829376026!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd126538e8b2399b%3A0x74d565631c7ffd9b!2sOste%C3%B3pata%20en%20Alcala%20de%20Guadaira.%20Natursur%3A%20Masajes%20y%20Nutrici%C3%B3n!5e0!3m2!1ses!2ses!4v1763457427432!5m2!1ses!2ses"
+            width="75%" height="135" style="border:0;" allowfullscreen="" loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+      </div>
+
     </div>
 
-  </header>
-  <section>
-    {% block contenido %}{% endblock %}
-  </section>
-  {% block pie %}{% endblock %} 
+    {% block pie %}{% endblock pie %}
+  </footer>
 </body>
+
 </html>
