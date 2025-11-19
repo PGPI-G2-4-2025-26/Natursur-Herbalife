@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from .forms import ClientCreationForm
+from django.contrib.auth import logout
 
 
 def registration(request):
@@ -16,3 +17,11 @@ def registration(request):
 
 def login(request):
     return render(request, 'login.html')
+
+
+def logout_view(request):
+    """Renderiza la plantilla de confirmación en GET y realiza logout en POST."""
+    if request.method == 'POST':
+        logout(request)
+        return redirect('login')
+    return render(request, 'logout.html')

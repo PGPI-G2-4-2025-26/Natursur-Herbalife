@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from .testimonial.models import Testimonial
 from .products.models import Product, ProductSolicitation
-from .service.models import Service
+from .appointments.models import Appointment
 
 
 class ProductSolicitationAdmin(admin.ModelAdmin):    
@@ -44,4 +44,4 @@ admin.site.register(Testimonial)
 
 admin.site.register(ProductSolicitation, ProductSolicitationAdmin)
 
-admin.site.register(Service)
+admin.site.register(Appointment)
