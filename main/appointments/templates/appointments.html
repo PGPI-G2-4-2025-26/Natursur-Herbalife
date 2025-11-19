@@ -73,7 +73,6 @@
   async
 ></script>
 <script>
-<<<<<<< HEAD
   (function () {
     function parseDateYMD(s) {
       if (!s) return null;
@@ -134,60 +133,4 @@
     });
   })();
 </script>
-=======
-  (function () {
-    function parseDateYMD(s) {
-      if (!s) return null;
-      var parts = String(s).split('-');
-      if (parts.length < 3) return null;
-      var y = parseInt(parts[0], 10);
-      var m = parseInt(parts[1], 10) - 1;
-      var d = parseInt(parts[2], 10);
-      if (isNaN(y) || isNaN(m) || isNaN(d)) return null;
-      return new Date(y, m, d);
-    }
-
-    var today = new Date();
-
-    document.querySelectorAll('.price').forEach(function (el) {
-      var rawPrice = el.dataset.price || '';
-      var rawDiscount = el.dataset.discount || '';
-      var rawEnd = el.dataset.enddiscount || '';
-
-      function toNumber(s) {
-        if (!s && s !== 0) return NaN;
-        var t = String(s).trim().replace(/\s+/g, '').replace(/,/g, '.').replace(/[^0-9.\-]/g, '');
-        return t === '' ? NaN : parseFloat(t);
-      }
-
-      var price = toNumber(rawPrice);
-      var discount = toNumber(rawDiscount);
-      var endDate = parseDateYMD(rawEnd);
-
-      var active = false;
-      if (endDate && !isNaN(endDate.getTime()) && endDate >= today && !isNaN(discount)) {
-        active = true;
-      }
-
-      if (active) {
-        if (!isNaN(price) && !isNaN(discount)) {
-          el.innerHTML = '<del>' + price.toFixed(2) + ' €</del> ' + discount.toFixed(2) + ' €';
-        } else if (!isNaN(discount)) {
-          el.textContent = discount.toFixed(2) + ' €';
-        }
-      } else {
-        
-        if (!isNaN(price)) {
-          el.textContent = price.toFixed(2) + ' €';
-        } else {
-          
-          el.textContent = rawPrice;
-        }
-      }
-    });
-  })();
-</script>
-
-el script este no tiene en cuenta los minutos y horas actuales solo los dias
->>>>>>> 93ceee7087a20c8720309161c4b29bda2325fb44
 {% endblock %}

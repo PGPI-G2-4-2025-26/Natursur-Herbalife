@@ -15,10 +15,7 @@ class Appointment(models.Model):
     premium = models.BooleanField(default=False, verbose_name="Premium")
     discount = models.DecimalField(
         max_digits=8,
-<<<<<<< HEAD
         null=True,
-=======
->>>>>>> 93ceee7087a20c8720309161c4b29bda2325fb44
         decimal_places=2,
         verbose_name="Discount",
         validators=[MinValueValidator(0)],

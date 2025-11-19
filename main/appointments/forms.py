@@ -4,7 +4,7 @@ class CreateAppointmentForm(forms.Form):
     name = forms.CharField(
         max_length=255,
         widget=forms.TextInput(attrs={
-            'placeholder': 'Appointment Name',
+            'placeholder': 'Nombre de la sesión',
             'class': 'form-control',
         })
     )
@@ -12,20 +12,20 @@ class CreateAppointmentForm(forms.Form):
         max_digits=8,
         decimal_places=2,
         widget=forms.NumberInput(attrs={
-            'placeholder': 'Price',
+            'placeholder': 'precio',
             'class': 'form-control',
         })
     )
     duration = forms.IntegerField(
         widget=forms.NumberInput(attrs={
-            'placeholder': 'Duration in minutes',
+            'placeholder': 'Duración en minutos',
             'class': 'form-control',
         })
     )
     description = forms.CharField(
         required=False,
         widget=forms.Textarea(attrs={
-            'placeholder': 'Description',
+            'placeholder': 'Descripción',
             'class': 'form-control',
         })
     )
@@ -41,7 +41,7 @@ class CreateDiscountForm(forms.Form):
         max_digits=5,
         decimal_places=2,
         widget=forms.NumberInput(attrs={
-            'placeholder': 'Discount price',
+            'placeholder': 'Precio del descuento',
             'class': 'form-control',
         })
     )
