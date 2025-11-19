@@ -23,6 +23,7 @@ class Product(models.Model):
 class ProductSolicitation(models.Model):
     
     STATUS_CHOICES = [
+        ('EN_CARRITO', _('IN CART')),
         ('SOLICITADO', _('SOLICITED')),
         ('ENCARGADO', _('ORDERED')),
         ('RECIBIDO_NATURSUR', _('RECEIVED BY NATURSUR')),

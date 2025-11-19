@@ -43,7 +43,23 @@
       
 
       <nav class="navbar-profile-button-container">
-        {% if user.is_authenticated %}
+        
+
+        {% if user.is_staff %}
+        <a a href="{% url 'admin_solicitations_list' %}" class="btn-profile">
+          <span class="material-symbols">person raised hand</span><span>SOLICITUDES</span>
+        </a>
+        <a a href="/carga" class="btn-profile">
+          <span class="material-icons">download</span><span>CARGAR PRODUCTOS</span>
+        </a>
+        {% endif %}
+          
+        {% if user.is_authenticated %} 
+          {% if not user.is_authenticated %} 
+          <a a href="{% url 'my_solicitations' %}" class="btn-profile">
+            <span class="material-icons">inventory</span><span>MIS SOLICITUDES</span>
+          </a>
+          {% endif %}
         <a a href="{% url 'home' %}" class="btn-profile">
           <span class="material-icons">person</span><span>PERFIL</span>
         </a>
@@ -56,6 +72,7 @@
         <a a href="{% url 'registration' %}" class="btn-profile">
           <span class="material-symbols">person_add</span><span>REGISTRARSE</span>
         </a>
+
         {% endif %}
         
         </a>
