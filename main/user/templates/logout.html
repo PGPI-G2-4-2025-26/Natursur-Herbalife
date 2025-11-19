@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block encabezado %}
+<h1>Cerrar sesión</h1>
+{% endblock %}
+
+{% block contenido %}
+<p>¿Estás seguro que quieres cerrar sesión{% if user.is_authenticated %} como {{ user.username }}{% endif %}?</p>
+
+<form method="post" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <button type="submit">Cerrar sesión</button>
+    <a href="{% url 'login' %}">Cancelar</a>
+</form>
+{% endblock %}

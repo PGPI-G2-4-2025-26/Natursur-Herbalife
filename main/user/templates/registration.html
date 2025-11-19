@@ -5,5 +5,20 @@
 {% endblock %}
 
 {% block contenido %}
-    <p>Formulario de registro (usará ClientCreationForm).</p>
+    <form method="post" action="{% url 'registration' %}">
+        {% csrf_token %}
+        {% if form.errors %}
+            <div class="error">Por favor corrige los errores indicados abajo.</div>
+        {% endif %}
+
+        <div>
+            {{ form.as_p }}
+        </div>
+
+        <div>
+            <button type="submit">Crear cuenta</button>
+        </div>
+
+        <p><a href="{% url 'login' %}">¿Ya tienes cuenta? Accede aquí.</a></p>
+    </form>
 {% endblock %}

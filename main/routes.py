@@ -10,11 +10,11 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     
     path('', views.home, name='home'), 
-    path('servicios/', views.services, name='services'), 
     
     path('media/<path:path>', serve, {'document_root': settings.MEDIA_ROOT}),
 
     path('', include('main.user.routes')),
+    path('', include('main.appointments.routes')),
     path('', include('main.products.routes')),
 ]
 
