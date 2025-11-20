@@ -8,6 +8,7 @@ from django.views.static import serve
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('servicios/', views.services, name='services'), 
     
     path('', views.home, name='home'), 
     

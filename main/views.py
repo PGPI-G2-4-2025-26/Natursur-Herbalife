@@ -10,3 +10,6 @@ def home(request):
         'MEDIA_URL': settings.MEDIA_URL 
     }
     return render(request, 'home.html', context)
+
+def services(request):
+    return render(request, 'services.html') 
