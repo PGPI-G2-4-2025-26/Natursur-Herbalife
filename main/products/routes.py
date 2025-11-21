@@ -11,9 +11,8 @@ urlpatterns = [
     path('carrito/', views.view_cart, name='view_cart'),
     path('solicitud/finalizar/', views.finalize_solicitation, name='finalize_solicitation'),
     
-    path('solicitudes/mis/', views.my_solicitations, name='my_solicitations'), 
-    path('admin/solicitudes/', views.admin_solicitations_list, name='admin_solicitations_list'), 
-    path('carga/', views.carga),
+    path('solicitudes/<int:user_id>/', views.my_solicitations, name='my_solicitations'), 
+    path('productos/solicitudes/', views.admin_solicitations_list, name='admin_solicitations_list'), 
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

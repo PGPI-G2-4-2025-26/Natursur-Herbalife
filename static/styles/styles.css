@@ -202,7 +202,7 @@ header {
     transition: background-color 0.3s;
     position: fixed;
     right: 20px; 
-    bottom: 170px; 
+    bottom: 70px; 
     z-index: 99; 
     
     font-size: 1.1em;
@@ -212,7 +212,7 @@ header {
 }
 
 .btn-cesta:hover {
-    background-color: #2e5a17; 
+    background-color: var(--color-tertiary); 
 }
 
 .btn-cesta .material-icons {
@@ -234,8 +234,8 @@ header {
 }
 
 .main-content-section {
-    flex-grow: 1; 
-    margin-top: 40px;
+    flex-grow: 1;
+    margin-top: 60px;
 }
 
 .footer {

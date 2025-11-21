@@ -31,7 +31,7 @@ def finalize_solicitation(request):
 
 
 @login_required
-def my_solicitations(request):
+def my_solicitations(request, user_id):
     solicitations = ProductSolicitation.objects.none()
     return render(request, 'my_solicitations.html', {'solicitations': solicitations})
 

@@ -6,6 +6,7 @@
 /* ---------------- HERO ---------------- */
 
 .hero {
+  margin-top: -40px;
   position: relative;
   height: 100vh;
   width: 100%;

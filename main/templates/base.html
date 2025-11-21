@@ -40,52 +40,53 @@
           <span>SERVICIOS</span> <span class="material-symbols">massage</span>
         </a>
       </nav>
-      
+
 
       <nav class="navbar-profile-button-container">
-        
+
 
         {% if user.is_staff %}
         <a a href="{% url 'admin_solicitations_list' %}" class="btn-profile">
-          <span class="material-symbols">person raised hand</span><span>SOLICITUDES</span>
-        </a>
-        <a a href="/carga" class="btn-profile">
-          <span class="material-icons">download</span><span>CARGAR PRODUCTOS</span>
+          <span class="material-icons">inventory</span><span>SOLICITUDES</span>
         </a>
         {% endif %}
-          
-        {% if user.is_authenticated %} 
-          {% if not user.is_authenticated %} 
-          <a a href="{% url 'my_solicitations' %}" class="btn-profile">
-            <span class="material-icons">inventory</span><span>MIS SOLICITUDES</span>
-          </a>
-          {% endif %}
-        <a a href="{% url 'home' %}" class="btn-profile">
+
+        {% if user.is_authenticated %}
+        {% if not user.is_staff %}
+        <a a href="{% url 'my_solicitations' user.id %}" class="btn-profile">
+          <span class="material-icons">inventory</span><span>MIS SOLICITUDES</span>
+        </a>
+        {% endif %}
+        <a a href="{% url 'profile' %}" class="btn-profile">
           <span class="material-icons">person</span><span>PERFIL</span>
         </a>
         <a a href="{% url 'logout' %}" class="btn-profile">
-          <span class="material-icons">logout</span><span>CERRAR SESIÓN</span> 
-        {% else %}
-        <a a href="{% url 'login' %}" class="btn-profile">
-          <span class="material-symbols">login</span><span>INICIAR SESIÓN</span>
-        </a>
-        <a a href="{% url 'registration' %}" class="btn-profile">
-          <span class="material-symbols">person_add</span><span>REGISTRARSE</span>
-        </a>
+          <span class="material-icons">logout</span><span>CERRAR SESIÓN</span>
+          {% else %}
+          <a a href="{% url 'login' %}" class="btn-profile">
+            <span class="material-symbols">login</span><span>INICIAR SESIÓN</span>
+          </a>
+          <a a href="{% url 'registration' %}" class="btn-profile">
+            <span class="material-symbols">person_add</span><span>REGISTRARSE</span>
+          </a>
 
-        {% endif %}
-        
+          {% endif %}
+
         </a>
     </div>
   </header>
 
   <section class="main-content-section">
     {% block contenido %}{% endblock contenido %}
+    {% if user.is_authenticated %}
+    {% if not user.is_staff %}
     <a href="{% url 'view_cart' %}" class="btn-cesta">
       <span class="material-icons">shopping_basket</span>
       Carrito
       <span class="cesta-count">X</span>
     </a>
+    {% endif %}
+    {% endif %}
   </section>
 
   <footer class="footer">
