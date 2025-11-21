@@ -1,136 +1,92 @@
-{% extends 'base.html' %} {% block encabezado %}
-<h1>Nuestras sesiones y Citas</h1>
-{% endblock %} {% block contenido %}
-<h2>Información de Masajes</h2>
-{% if appointments %} {% if user.is_staff %}
-<p>
-  <a href="/appointments/create/" class="btn btn-primary">Crear sesion</a>
-</p>
-{% endif %}
-<ul class="appointments-list">
-  {% for appointment in appointments %}
-  <li>
-    <h3>{{ appointment.nombre|default:appointment.name }}</h3>
-    {% if appointment.descripcion or appointment.description %}
-    <p>{{ appointment.descripcion|default:appointment.description }}</p>
-    {% endif %} {% if appointment.duracion or appointment.duration %}
-    <p>Duración: {{ appointment.duracion|default:appointment.duration }} min</p>
-    {% endif %} {% if appointment.precio or appointment.price %}
-    <p>
-      Precio:
-      <span
-        class="price"
-        data-price="{{ appointment.precio|default:appointment.price }}"
-        data-discount="{{ appointment.discount }}"
-        data-enddiscount="{% if appointment.endDiscount %}{{ appointment.endDiscount|date:'Y-m-d-H-i' }}{% endif %}"
-        >{{ appointment.precio|default:appointment.price }} €</span
-      >
-    </p>
-    {% endif %} {% if user.is_staff %}
-    <p>
-      <a
-        href="/appointments/update/{{ appointment.id }}/"
-        class="btn btn-primary"
-      >
-        Editar sesión
-      </a>
-    </p>
-    <p>
-      <a
-        href="/appointments/create_discount/{{ appointment.id }}/"
-        class="btn btn-secondary"
-      >
-        Crear descuento
-      </a>
-    </p>
-    <p>
-      <a
-        href="/appointments/delete/{{ appointment.id }}/"
-        class="btn btn-danger"
-      >
-        Borrar sesión
-      </a>
-    </p>
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Servicios y Tarifas | NaturSur{% endblock title %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'styles/appointments.css' %}">
+{% endblock extra_head %}
+
+{% block contenido %}
+<div class="services-page">
+    
+    <header class="services-header">
+        <h1>Nuestras Sesiones</h1>
+        <p>Encuentra el equilibrio perfecto entre cuerpo y mente con nuestros tratamientos especializados.</p>
+    </header>
+
+    {% if user.is_staff %}
+    <div class="admin-actions-bar">
+        <a href="{% url 'create_appointment' %}" class="btn-create">
+            <span class="material-icons">add</span> Crear Nueva Sesión
+        </a>
+    </div>
     {% endif %}
-  </li>
-  {% endfor %}
-</ul>
-{% else %}
-<p>No hay sesiones disponibles.</p>
-{% endif %}
 
-<h2>Reserva tu Cita</h2>
+    <div class="services-grid">
+        {% for appointment in appointments %}
+        
+        <article class="service-card {% if appointment.premium %}premium{% endif %}">
+            
+            {% if appointment.premium %}
+            <div class="premium-badge">
+                <span class="material-icons" style="font-size: 12px; vertical-align: middle;">star</span> Premium
+            </div>
+            {% endif %}
 
-<div
-  class="calendly-inline-widget"
-  data-url="https://calendly.com/natursur/fernando-escalona"
-  style="min-width: 320px; height: 700px"
-></div>
+            <div class="card-header-service">
+                <div class="duration-wrapper">
+                    <span class="material-symbols">timer</span>
+                    <span class="duration-time">{{ appointment.duration }}</span>
+                    <span class="duration-unit">min</span>
+                </div>
+            </div>
 
-<script
-  type="text/javascript"
-  src="https://assets.calendly.com/assets/external/widget.js"
-  async
-></script>
-<script>
-  (function () {
-    function parseDateYMD(s) {
-      if (!s) return null;
-      var parts = String(s).split('-');
-      if (parts.length < 3) return null;
-      var y = parseInt(parts[0], 10);
-      var m = parseInt(parts[1], 10) - 1;
-      var d = parseInt(parts[2], 10);
-      var H = 0;
-      var i = 0;
-      if (parts.length > 3) {
-        H = parseInt(parts[3], 10);
-        if (isNaN(H)) H = 0;
-      }
-      if (parts.length > 4) {
-        i = parseInt(parts[4], 10);
-        if (isNaN(i)) i = 0;
-      }
-      if (isNaN(y) || isNaN(m) || isNaN(d) || isNaN(H) || isNaN(i)) return null;
-      return new Date(y, m, d, H, i);
-    }
+            <div class="card-body-service">
+                <h2 class="service-name">{{ appointment.name }}</h2>
+                <div class="separator"></div>
+                
+                <p class="service-description">
+                    {% if appointment.description %}
+                        {{ appointment.description|truncatechars:120 }}
+                    {% else %}
+                        Una experiencia renovadora diseñada para tu bienestar integral y relajación profunda.
+                    {% endif %}
+                </p>
 
-    var today = new Date();
+                <div class="price-container">
+                    {% if appointment.discount > 0 %}
+                        <span class="price-original">{{ appointment.price }}€</span>
+                        <span class="price-current price-discount-active">
+                             Oferta: {{ appointment.price|add:appointment.discount|default:appointment.price }}€ 
+                        </span>
+                        <div class="discount-tag">Ahorras {{ appointment.discount }}€</div>
+                        <small style="font-size: 0.7rem; color: #777;">Hasta: {{ appointment.endDiscount|date:"d M Y" }}</small>
+                    {% else %}
+                        <span class="price-current">{{ appointment.price }}€</span>
+                    {% endif %}
+                </div>
+            </div>
 
-    document.querySelectorAll('.price').forEach(function (el) {
-      var rawPrice = el.dataset.price || '';
-      var rawDiscount = el.dataset.discount || '';
-      var rawEnd = el.dataset.enddiscount || '';
+            {% if user.is_staff %}
+            <div class="staff-controls">
+                <a href="{% url 'update_appointment' appointment.id %}" class="btn-staff btn-edit" title="Editar">
+                    <span class="material-icons">edit</span>
+                </a>
+                <a href="{% url 'create_discount' appointment.id %}" class="btn-staff btn-discount" title="Gestionar Descuento">
+                    <span class="material-icons">percent</span>
+                </a>
+                <a href="{% url 'delete_appointment' appointment.id %}" class="btn-staff btn-delete" title="Eliminar" onclick="return confirm('¿Estás seguro de que deseas eliminar este servicio?');">
+                    <span class="material-icons">delete</span>
+                </a>
+            </div>
+            {% endif %}
 
-      function toNumber(s) {
-        if (!s && s !== 0) return NaN;
-        var t = String(s).trim().replace(/\s+/g, '').replace(/,/g, '.').replace(/[^0-9.\-]/g, '');
-        return t === '' ? NaN : parseFloat(t);
-      }
+        </article>
+        {% empty %}
+            <p style="text-align: center; grid-column: 1/-1; padding: 50px;">No hay servicios disponibles en este momento.</p>
+        {% endfor %}
+    </div>
 
-      var price = toNumber(rawPrice);
-      var discount = toNumber(rawDiscount);
-      var endDate = parseDateYMD(rawEnd);
-
-      var active = false;
-      if (endDate && !isNaN(endDate.getTime()) && endDate >= today && !isNaN(discount)) {
-        active = true;
-      }
-
-      if (active) {
-        if (!isNaN(price) && !isNaN(discount)) {
-          el.innerHTML = '<del>' + price.toFixed(2) + ' €</del> ' + discount.toFixed(2) + ' €';
-        } else if (!isNaN(discount)) {
-          el.textContent = discount.toFixed(2) + ' €';
-        }
-      } else {
-        if (!isNaN(price)) {
-          el.textContent = price.toFixed(2) + ' €';
-        } else {
-          el.textContent = rawPrice;
-        }
-      }
-    });
-  })();
-</script>
-{% endblock %}
+</div>
+{% endblock contenido %}
