@@ -58,7 +58,11 @@
         </a>
         {% endif %}
         <a a href="{% url 'profile' %}" class="btn-profile">
-          <span class="material-icons">person</span><span>PERFIL</span>
+          <span class="material-icons">person</span>
+          <span>{{ user.first_name|default:user.username|upper }}</span>
+          {% if user.is_staff %}
+            <span class="material-icons admin-star" title="Administrador">verified</span>
+          {% endif %}
         </a>
         <a a href="{% url 'logout' %}" class="btn-profile">
           <span class="material-icons">logout</span><span>CERRAR SESIÓN</span>

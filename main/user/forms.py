@@ -33,6 +33,10 @@ class ClientCreationForm(UserCreationForm):
 
 class ClientLoginForm(AuthenticationForm):
 
+    error_messages = {
+        'invalid_login': _("Usuario o contraseña incorrectos."),
+    }
+
     username = forms.CharField(
         label=_('Usuario'),
         widget=forms.TextInput(attrs={
@@ -40,6 +44,9 @@ class ClientLoginForm(AuthenticationForm):
             'placeholder': 'Usuario',
             'class': 'form-control',
         }),
+        error_messages={
+            'required': _("Por favor, escribe tu usuario."),
+        }
     )
 
     password = forms.CharField(
@@ -49,4 +56,7 @@ class ClientLoginForm(AuthenticationForm):
             'placeholder': 'Contraseña',
             'class': 'form-control',
         }),
+        error_messages={
+            'required': _("Por favor, escribe tu contraseña."),
+        }
     )

@@ -15,8 +15,23 @@ def registration(request):
     return render(request, 'registration.html', {'form': form})
 
 
+from django.shortcuts import render, redirect
+from django.contrib.auth import login as auth_login # Usamos un alias 'auth_login' para evitar conflictos de nombres
+from .forms import ClientLoginForm # Asegúrate de importar tu formulario personalizado
+
 def login(request):
-    return render(request, 'login.html')
+    if request.method == 'POST':
+        form = ClientLoginForm(request, data=request.POST)
+        
+        if form.is_valid():
+            user = form.get_user()
+            auth_login(request, user)
+            return redirect('home') 
+            
+    else:
+        form = ClientLoginForm()
+
+    return render(request, 'login.html', {'form': form})
 
 
 def logout_view(request):

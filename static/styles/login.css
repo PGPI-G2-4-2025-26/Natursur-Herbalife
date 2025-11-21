@@ -19,14 +19,21 @@
 }
 
 .card-icon {
-    width: 60px;
-    height: 60px;
+    width: 120px;       
+    height: 70px;
     background-color: var(--color-tertiary);
     border-radius: 50%;
+    overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
     margin: 0 auto 20px;
+}
+
+.card-icon img {
+    width: 100%;        
+    height: 100%;       
+    object-fit: cover;   
 }
 
 .card-icon .material-icons {
@@ -85,9 +92,43 @@
 /* --- Acciones del Formulario (Contraseña y Botón) --- */
 .form-actions {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
     margin-top: 20px;
+}
+
+.form-errors {
+    background-color: #fdecec;
+    color: #e74c3c;
+    padding: 12px 15px; 
+    border-radius: 8px; 
+    margin-bottom: 20px;
+    text-align: left;
+    font-size: 0.9em;
+    
+    display: flex;
+    align-items: flex-start; 
+    gap: 10px; 
+    border: 1px solid #fadbd8;
+}
+
+.form-errors .material-icons { 
+    font-size: 20px; 
+    margin: 0; 
+    flex-shrink: 0; 
+    padding-top: 1px;
+}
+
+.field-error {
+    color: #e74c3c; 
+    font-size: 0.85em;
+    margin-top: 5px;
+    text-align: left;
+    font-weight: 500; 
+}
+
+.error-text {
+    line-height: 1.4;
 }
 
 .forgot-password {
@@ -114,7 +155,8 @@
 }
 
 .btn-submit:hover {
-    background-color: #2e5a17; 
+    background-color: var(--color-tertiary); 
+    color: var(--color-primary);
 }
 
 /* --- Separador 'o' --- */
@@ -148,32 +190,7 @@
     font-size: 0.9em;
 }
 
-/* --- Botón de Google --- */
-.btn-google {
-    width: 100%;
-    background-color: var(--color-google-btn);
-    color: var(--color-primary);
-    border: 1px solid var(--color-primary);
-    padding: 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 1em;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: background-color 0.3s;
-}
 
-.btn-google .material-icons {
-    color: var(--color-primary);
-    font-size: 20px;
-    margin-right: 10px;
-}
-
-.btn-google:hover {
-    background-color: #d8e5d5;
-}
 
 /* --- Enlace de Registro --- */
 .register-link {
