@@ -42,6 +42,10 @@ class Appointment(models.Model):
     def save(self, *args, **kwargs):
         self.full_clean()
         super().save(*args, **kwargs)
+
+    @property
+    def total_money_save(self):
+        return self.price - self.discount
             
     def __str__(self):
         return self.name
