@@ -1,7 +1,5 @@
 /* --- CONFIGURACIÓN GENERAL DE LA PÁGINA DE SERVICIOS --- */
 .services-page {
-    /* FORZAMOS que el contenido baje 160px. 
-       Esto deja espacio para el Navbar (aprox 100px) + un respiro visual. */
     margin-top: 120px ; 
     
     padding: 0 20px 40px 20px;
@@ -11,8 +9,7 @@
     
     background-color: var(--color-secondary);
     min-height: calc(100vh - 300px);
-    
-    /* Importante: Evitamos que este contenedor tape nada por error */
+
     position: relative; 
     z-index: 1; 
 }
@@ -22,6 +19,7 @@
     text-align: center;
     margin-top: 40px;
     margin-bottom: 60px;
+    background-color: var(--color-secondary);
 }
 
 .services-header h1 {
