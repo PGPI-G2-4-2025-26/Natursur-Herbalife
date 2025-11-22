@@ -1,15 +1,26 @@
 /* --- CONFIGURACIÓN GENERAL DE LA PÁGINA DE SERVICIOS --- */
 .services-page {
-    padding: 120px 20px 40px 20px; 
+    /* FORZAMOS que el contenido baje 160px. 
+       Esto deja espacio para el Navbar (aprox 100px) + un respiro visual. */
+    margin-top: 120px ; 
+    
+    padding: 0 20px 40px 20px;
     max-width: 1200px;
-    margin: 0 auto;
+    margin-left: auto;
+    margin-right: auto;
+    
     background-color: var(--color-secondary);
     min-height: calc(100vh - 300px);
+    
+    /* Importante: Evitamos que este contenedor tape nada por error */
+    position: relative; 
+    z-index: 1; 
 }
 
 /* --- ENCABEZADO DE SECCIÓN --- */
 .services-header {
     text-align: center;
+    margin-top: 40px;
     margin-bottom: 60px;
 }
 
@@ -131,7 +142,7 @@
 /* --- CUERPO DE LA TARJETA --- */
 .card-body-service {
     padding: 25px;
-    flex-grow: 1; /* Empuja el footer hacia abajo */
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -163,7 +174,7 @@
 
 /* --- PRECIOS --- */
 .price-container {
-    margin-top: auto; /* Pega el precio al fondo del body */
+    margin-top: auto;
     background-color: #fafafa;
     width: 100%;
     padding: 15px;
@@ -185,7 +196,7 @@
 }
 
 .price-discount-active {
-    color: #e74c3c; /* Rojo suave para ofertas */
+    color: #e74c3c;
 }
 
 .discount-tag {
@@ -219,22 +230,18 @@
     color: white;
 }
 
-.btn-edit { background-color: #6c757d; } /* Gris */
+.btn-edit { background-color: #6c757d; }
 .btn-edit:hover { background-color: #5a6268; }
 
-.btn-discount { background-color: var(--color-golden); } /* Dorado */
+.btn-discount { background-color: var(--color-golden); }
 .btn-discount:hover { background-color: #8a7603; }
 
-.btn-delete { background-color: #dc3545; } /* Rojo */
+.btn-delete { background-color: #dc3545; }
 .btn-delete:hover { background-color: #c82333; }
 
 /* --- RESPONSIVE --- */
 @media (max-width: 768px) {
     .services-grid {
         grid-template-columns: 1fr;
-    }
-    .services-page {
-        /* Ajuste móvil */
-        padding-top: 120px; 
     }
 }
