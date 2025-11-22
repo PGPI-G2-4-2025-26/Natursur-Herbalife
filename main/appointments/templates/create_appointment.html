@@ -1,20 +1,32 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Crear sesión</title>
-</head>
-<body>
-    <h1>Crear sesión</h1>
-    <form method="post" action ="{% url 'create_appointment' %}">
-        {% csrf_token %}
-        {{ form.non_field_errors }}
-        {{ form.as_p }}
-        <div class="actions">
-            <button type="submit" class="btn btn-primary">Crear</button>
-            <a href="{% url 'appointments' %}" class="btn-secondary">Cancelar</a>
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Crear Nueva Sesión | Natursur{% endblock title %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'styles/forms.css' %}">
+{% endblock extra_head %}
+
+{% block contenido %}
+<div class="form-page-container">
+    <div class="form-card">
+        
+        <div class="form-header">
+            <h1>Nueva Sesión</h1>
+            <p>Añade un nuevo servicio al catálogo de Natursur.</p>
         </div>
-    </form>
-</body>
-</html>
+
+        <form method="post" action="{% url 'create_appointment' %}">
+            {% csrf_token %}
+            
+            {{ form.as_p }}
+
+            <div class="form-actions">
+                <a href="{% url 'appointments' %}" class="btn-cancel">Cancelar</a>
+                <button type="submit" class="btn-submit">Crear Sesión</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+{% endblock contenido %}

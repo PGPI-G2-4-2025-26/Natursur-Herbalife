@@ -1,22 +1,38 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="utf-8">
-    <title>Crear descuento - {{ appointment.name }}</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-</head>
-<body>
-    <h1>Crear/Editar descuento</h1>
-    <p>Cita: <strong>{{ appointment.name }}</strong></p>
+{% extends 'base.html' %}
+{% load static %}
 
-    <form method="post" action="{% url 'create_discount' appointment.id %}">
-        {% csrf_token %}
-        {{ form.non_field_errors }}
-        {{ form.as_p }}
-        <div class="actions">
-            <button type="submit" class="primary">Guardar</button>
-            <a href="{% url 'appointments' %}" class="button">Cancelar</a>
+{% block title %}Gestionar Descuento | Natursur{% endblock title %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'styles/forms.css' %}">
+{% endblock extra_head %}
+
+{% block contenido %}
+<div class="form-page-container">
+    <div class="form-card">
+        
+        <div class="form-header">
+            <h1>Ofertas y Promociones</h1>
+            <p>Aplicando descuento a:</p>
+            <h2 style="color: var(--color-golden); margin-top: 10px;">{{ appointment.name }}</h2>
         </div>
-    </form>
-</body>
-</html>
+
+        <form method="post" action="{% url 'create_discount' appointment.id %}">
+            {% csrf_token %}
+            
+            {{ form.as_p }}
+            
+            <div style="margin-top: 20px; padding: 10px; background: #fff8e1; border-radius: 8px; font-size: 0.85rem; color: #8a7603;">
+                <span class="material-icons" style="font-size: 14px; vertical-align: middle;">info</span>
+                El descuento se restará del precio original automáticamente en el listado.
+            </div>
+
+            <div class="form-actions">
+                <a href="{% url 'appointments' %}" class="btn-cancel">Volver</a>
+                <button type="submit" class="btn-submit">Aplicar Descuento</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+{% endblock contenido %}
