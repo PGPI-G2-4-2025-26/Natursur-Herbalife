@@ -1,0 +1,28 @@
+{% extends 'base.html' %} {% block encabezado %}
+<h1>Finalizar Pedido</h1>
+{% endblock %} {% block contenido %}
+<h2>Datos de contacto</h2>
+<form method="post">
+  {% csrf_token %} {{ form.as_p }}
+  <h3>Resumen del carrito</h3>
+  {% if cart_items %}
+  <ul>
+    {% for item in cart_items %}
+    <li>
+      {{ item.product.name }} — Cantidad: {{ item.quantity }}
+      <br />
+      Precio unitario: {{ item.unit_price|floatformat:2 }} &nbsp;|&nbsp;
+      Subtotal: {{ item.subtotal|floatformat:2 }}
+    </li>
+    {% endfor %}
+  </ul>
+  <p>Total: <strong>{{ total_price_display }}</strong></p>
+  {% else %}
+  <p>No hay productos en el carrito.</p>
+  {% endif %}
+
+  <button type="submit">Confirmar y pagar</button>
+</form>
+
+<a href="{% url 'view_cart' %}">Volver al carrito</a>
+{% endblock %}

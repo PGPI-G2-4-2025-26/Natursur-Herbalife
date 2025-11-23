@@ -109,80 +109,81 @@ DEFAULT_PRODUCTS = [
 DEFAULT_ORDERS = [
     {
         'id': 1,
-        'total_price': Decimal('49.98'),
+        # 'total_price': Decimal('49.98'),
         'is_paid': True,
         'date': None,
         'status': 'SOLICITADO',
-        'user_id': 3,  # Assuming user with ID 3 exists
-        'telephone': '123456789',
-        'full_name': 'Client User',
-        'contact_email': 'client@example.com',
+        'registered_user_id': 3,  # Assuming user with ID 3 exists
+        'solicitant_contact': '123456789',
+        'solicitant_name': 'Client User',
+        'solicitant_address': '',
+        # 'contact_email': 'client@example.com',
     },
     {
         'id': 2,
-        'total_price': Decimal('29.99'),
+        # 'total_price': Decimal('29.99'),
         'is_paid': False,
         'date': None,
         'status': 'ENCARGADO',
-        'user_id': 3,  # Assuming user with ID 3 exists
-        'telephone': '123456789',
-        'full_name': 'Client User',
-        'contact_email': 'client@example.com',
+        'registered_user_id': 3,  # Assuming user with ID 3 exists
+        'solicitant_contact': '123456789',
+        'solicitant_name': 'Client User',
+        'solicitant_address': '',
     },
     {
         'id': 3,
-        'total_price': Decimal('19.99'),
+        # 'total_price': Decimal('19.99'),
         'is_paid': True,
         'date': None,
         'status': 'RECOGIDO_CLIENTE',
-        'user_id': 2,  # Assuming user with ID 2 exists
-        'telephone': '987654321',
-        'full_name': 'Super Admin',
-        'contact_email': 'superadmin@example.com',
+        'registered_user_id': 2,  # Assuming user with ID 2 exists
+        'solicitant_contact': '987654321',
+        'solicitant_name': 'Super Admin',
+        'solicitant_address': '',
     },
     {
         'id': 4,
-        'total_price': Decimal('0.00'),
+        # 'total_price': Decimal('0.00'),
         'is_paid': False,
         'date': None,
         'status': 'EN_CARRITO',
-        'user_id': 3,  # Assuming user with ID 3 exists
-        'telephone': '123456789',
-        'full_name': 'Client User',
-        'contact_email': 'client@example.com',
+        'registered_user_id': 3,  # Assuming user with ID 3 exists
+        'solicitant_contact': '123456789',
+        'solicitant_name': 'Client User',
+        'solicitant_address': '',
     },
     {
         'id': 5,
-        'total_price': Decimal('99.99'),
+        # 'total_price': Decimal('99.99'),
         'is_paid': False,
         'date': None,
         'status': 'SOLICITADO',
-        'user_id': 3,
-        'telephone': '123456789',
-        'full_name': 'Client User',
-        'contact_email': 'client@example.com',
+        'registered_user_id': 3,
+        'solicitant_contact': '123456789',
+        'solicitant_name': 'Client User',
+        'solicitant_address': '',
     },
     {
         'id': 6,
-        'total_price': Decimal('59.99'),
+        # 'total_price': Decimal('59.99'),
         'is_paid': True,
         'date': None,
         'status': 'RECOGIDO_CLIENTE',
-        'user_id': 3,
-        'telephone': '987654321',
-        'full_name': 'Super Admin',
-        'contact_email': 'superadmin@example.com',
+        'registered_user_id': 3,
+        'solicitant_contact': '987654321',
+        'solicitant_name': 'Super Admin',
+        'solicitant_address': '',
     },
     {
         'id': 7,
-        'total_price': Decimal('39.99'),
+        # 'total_price': Decimal('39.99'),
         'is_paid': False,
         'date': None,
         'status': 'SOLICITADO',
-        'user_id': 3,
-        'telephone': '123456789',
-        'full_name': 'Client User',
-        'contact_email': 'client@example.com',
+        'registered_user_id': 3,
+        'solicitant_contact': '123456789',
+        'solicitant_name': 'Client User',
+        'solicitant_address': '',
     }
 ]
 
@@ -191,41 +192,49 @@ DEFAULT_ORDER_PRODUCTS = [
         'product_id': 1,
         'quantity': 2,
         'order_id': 1,
+        'price_at_order': Decimal('19.99'),
     },
     {
         'product_id': 2,
         'quantity': 1,
         'order_id': 1,
+        'price_at_order': Decimal('19.99'),
     },
     {
         'product_id': 2,
         'quantity': 1,
         'order_id': 2,
+        'price_at_order': Decimal('19.99'),
     },
     {
         'product_id': 1,
         'quantity': 1,
         'order_id': 3,
+        'price_at_order': Decimal('19.99'),
     },
     {
         'product_id': 1,
         'quantity': 1,
         'order_id': 4,
+        'price_at_order': Decimal('19.99'),
     },
     {
         'product_id': 1,
         'quantity': 1,
         'order_id': 5,
+        'price_at_order': Decimal('19.99'),
     },
     {
         'product_id': 2,
         'quantity': 3,
         'order_id': 6,
+        'price_at_order': Decimal('19.99'),
     },
     {
         'product_id': 1,
         'quantity': 2,
         'order_id': 7,
+        'price_at_order': Decimal('19.99'),
     },
 ]
 
@@ -303,12 +312,12 @@ class Command(BaseCommand):
             obj, created = Order.objects.update_or_create(
                 id=o['id'],
                 defaults={
-                    'total_price': o['total_price'],
+                    # 'total_price': o['total_price'],
                     'status': o['status'],
-                    'user_id': o['user_id'],
-                    'telephone': o['telephone'],
-                    'full_name': o['full_name'],
-                    'contact_email': o['contact_email'],
+                    'registered_user_id': o['registered_user_id'],
+                    'solicitant_contact': o['solicitant_contact'],
+                    'solicitant_name': o['solicitant_name'],
+                    'solicitant_address': o['solicitant_address'],
                 }
             )
             if created:
@@ -325,6 +334,7 @@ class Command(BaseCommand):
                     'product_id': op['product_id'],
                     'quantity': op['quantity'],
                     'order_id': op['order_id'],
+                    'price_at_order': op['price_at_order'],
                 }
             )
             if created:

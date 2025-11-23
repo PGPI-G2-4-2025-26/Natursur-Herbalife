@@ -50,6 +50,7 @@
         {% if user.is_staff %}
         <a a href="{% url 'show_orders_admin' %}" class="btn-profile">
           <span class="material-icons">inventory</span><span>PEDIDOS</span>
+
         </a>
         {% endif %}
 
@@ -80,15 +81,11 @@
 
   <section class="main-content-section">
     {% block contenido %}{% endblock contenido %}
-    {% if user.is_authenticated %}
-    {% if not user.is_staff %}
     <a href="{% url 'view_cart' %}" class="btn-cesta">
       <span class="material-icons">shopping_basket</span>
       Carrito
       <span class="cesta-count">X</span>
     </a>
-    {% endif %}
-    {% endif %}
   </section>
 
   <footer class="footer">

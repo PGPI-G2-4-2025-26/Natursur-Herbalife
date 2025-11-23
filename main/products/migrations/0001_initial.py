@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=200, verbose_name='Name')),
-                ('ref', models.CharField(max_length=50, unique=True, verbose_name='Reference/SKU')),
+                ('ref', models.CharField(max_length=50, verbose_name='Reference/SKU')),
                 ('price', models.DecimalField(decimal_places=2, max_digits=6, verbose_name='Price')),
                 ('flavor', models.CharField(blank=True, max_length=100, null=True, verbose_name='Flavor')),
                 ('description', models.CharField(blank=True, max_length=100, null=True, verbose_name='Description')),
