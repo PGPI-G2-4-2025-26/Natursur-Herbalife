@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block encabezado %}
+{% endblock %}
+
+{% block contenido %}
+    <div class="pedidos-container">
+        <div class="pedidos-header">
+            <div>
+                <h2>Mis pedidos</h2>
+            </div>
+
+            <form method="get" class="filter-form" aria-label="Filtrar pedidos por estado">
+                <label for="status" class="filter-label">Filtrar por estado:</label>
+                <select name="status" id="status" class="filter-select">
+                    <option value="">Todos</option>
+                    <option value="SOLICITADO" {% if current_status == "SOLICITADO" %}selected{% endif %}>Solicitado</option>
+                    <option value="ENCARGADO" {% if current_status == "ENCARGADO" %}selected{% endif %}>Encargado</option>
+                    <option value="RECIBIDO_NATURSUR" {% if current_status == "RECIBIDO_NATURSUR" %}selected{% endif %}>Recogida disponible</option>
+                    <option value="RECOGIDO_CLIENTE" {% if current_status == "RECOGIDO_CLIENTE" %}selected{% endif %}>Recogido</option>
+                </select>
+
+                <label for="per_page" class="filter-label">Mostrar por página:</label>
+                <select name="per_page" id="per_page" class="filter-select">
+                    <option value="5" {% if current_per_page == 5 %}selected{% endif %}>5</option>
+                    <option value="10" {% if current_per_page == 10 %}selected{% endif %}>10</option>
+                    <option value="25" {% if current_per_page == 25 %}selected{% endif %}>25</option>
+                    <option value="50" {% if current_per_page == 50 %}selected{% endif %}>50</option>
+                </select>
+
+                <button type="submit" class="filter-btn">Filtrar</button>
+            </form>
+        </div>
+
+        <div class="pedidos-list" id="pedidos-list">
+        
+        {% for order in orders %}
+            <div class="pedido-card">
+                <div class="pedido-info">
+                    <h4>Pedido #{{ order.id }}</h4> 
+                    <p>Realizado el {{ order.date|date:"d/m/Y" }}</p>
+                </div>
+                <div class="pedido-status">
+                    <span class="status-tag">
+                        {% if order.status == 'SOLICITADO' %}
+                            SOLICITADO
+                        {% elif order.status == 'ENCARGADO' %}
+                            ENCARGADO
+                        {% elif order.status == 'RECIBIDO_NATURSUR' %}
+                            RECOGIDA DISPONIBLE
+                        {% elif order.status == 'RECOGIDO_CLIENTE' %}
+                            RECOGIDO
+                        {% else %}
+                            {{ order.status }}
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="pedido-total">
+                    <h4>Total</h4>
+                    <p>{{ order.total_price }} € - {{ order.total_quantity }} artículos</p>
+                </div>
+                <div class="pedido-entrega">
+                    <h4>{{ order.get_metodo_entrega_display }}</h4>
+                </div>
+                <div class="pedido-accion">
+                    <a href="{% url 'order_detail' order.id %}" class="btn-ver-pedido">Ver pedido</a>
+                </div>
+            </div>
+        {% empty %}
+            <p>No tienes ningún pedido todavía.</p>
+        {% endfor %}
+        
+    </div>
+
+    <div class="pagination">
+        {% if pedidos.has_previous %}
+            <a href="?page={{ pedidos.previous_page_number }}&per_page={{ current_per_page }}{% if current_status %}&status={{ current_status }}{% endif %}" class="btn-page">Anterior</a>
+        {% else %}
+            <button class="btn-page" disabled>Anterior</button>
+        {% endif %}
+
+        {% if pedidos.has_next %}
+            <a href="?page={{ pedidos.next_page_number }}&per_page={{ current_per_page }}{% if current_status %}&status={{ current_status }}{% endif %}" class="btn-page">Siguiente</a>
+        {% else %}
+            <button class="btn-page" disabled>Siguiente</button>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

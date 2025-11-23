@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block encabezado %}
+{% endblock %}
+
+{% block contenido %}
+<form method="post" action="{% url 'edit_order' order.id %}">
+    {% csrf_token %}
+    <div class="pedidos-container">
+        <div class="detail-header">
+            <div>
+                <h2>Editar Pedido #{{ order.id }}</h2>
+                <div class="subtitle">Modifica los datos del pedido y del cliente</div>
+            </div>
+
+            <div style="display:flex; gap:8px; align-items:center;">
+                <button type="submit" class="btn-edit-pedido">Guardar</button>
+                <a href="{% url 'show_orders_admin' %}" class="btn-back">← Volver a pedidos</a>
+            </div>
+        </div>
+
+        <div class="main-content-layout">
+            <div class="top-row">
+                <div class="info-card left-card">
+                    <h3>Información del pedido</h3>
+                    <div class="data-grid">
+                        <div class="label">Identificador</div>
+                        <div class="value">Pedido #{{ order.id }}</div>
+
+                        <div class="label">Fecha realizada</div>
+                        <div class="value">{{ order.date|date:"d/m/Y H:i" }}</div>
+
+                        <div class="label">Estado</div>
+                        <div class="value">
+                            <select name="status" class="filter-select" aria-label="Estado del pedido">
+                                <option value="SOLICITADO" {% if order.status == "SOLICITADO" %}selected{% endif %}>Solicitado</option>
+                                <option value="ENCARGADO" {% if order.status == "ENCARGADO" %}selected{% endif %}>Encargado</option>
+                                <option value="RECIBIDO_NATURSUR" {% if order.status == "RECIBIDO_NATURSUR" %}selected{% endif %}>Disponible para recoger</option>
+                                <option value="RECOGIDO_CLIENTE" {% if order.status == "RECOGIDO_CLIENTE" %}selected{% endif %}>Recogido</option>
+                            </select>
+                        </div>
+
+                        <div class="label">Precio total</div>
+                        <div class="value">{{ order.total_price }} €</div>
+                    </div>
+                </div>
+
+                <div class="info-card right-card">
+                    <h3>Datos del cliente</h3>
+                    <div class="data-grid">
+                        <div class="label">Nombre y apellidos</div>
+                        <div class="value">{{ order.full_name }}</div>
+                        <div class="label">Teléfono</div>
+                        <div class="value">{{ order.telephone }}</div>
+                        <div class="label">Correo electrónico</div>
+                        <div class="value">{{ order.contact_email }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-card items-section full-width">
+                <h3>Artículos</h3>
+                <div class="item-list">
+                    {% for item in order.orderproduct_set.all %}
+                        <div class="item-row">
+                            {% if item.product.image %}
+                                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="item-image">
+                            {% endif %}
+                            <div class="item-name"><strong>{{ item.product.name }}</strong></div>
+                            <div class="item-qty">Cantidad: {{ item.quantity }}</div>
+                            <div class="item-price">{{ item.product.price }} €</div>
+                        </div>
+                    {% empty %}
+                        <p>No hay artículos en este pedido.</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="delete-action-wrapper" style="margin-top:8px;">
+                <div class="delete-action">
+                    <input type="hidden" name="action" id="form-action" value="">
+                    <button type="button" class="btn-delete-pedido" onclick="confirmDelete()">Eliminar pedido</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+function confirmDelete() {
+    const msg = "ATENCIÓN: Este pedido se borrará de la base de datos y el cambio será visible para el usuario. ¿Desea continuar?";
+    if (confirm(msg)) {
+        document.getElementById('form-action').value = 'delete';
+        document.querySelector('form[action$="{% url "edit_order" order.id %}"]').submit();
+    }
+}
+</script>
+{% endblock %}
