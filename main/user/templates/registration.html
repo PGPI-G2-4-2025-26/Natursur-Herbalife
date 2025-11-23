@@ -1,24 +1,114 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block encabezado %}
-<h1>Registrarse</h1>
-{% endblock %}
+{% block title %}Crear Cuenta - NaturSur{% endblock title %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'styles/login.css' %}">
+{% endblock extra_head %}
 
 {% block contenido %}
-    <form method="post" action="{% url 'registration' %}">
-        {% csrf_token %}
-        {% if form.errors %}
-            <div class="error">Por favor corrige los errores indicados abajo.</div>
+<div class="login-container">
+    <div class="login-card">
+
+        <div class="card-icon">
+            <img src="{% static 'images/logoLimpioNatursur.png' %}" alt="Logo NaturSur">
+        </div>
+
+        <h2>Crear cuenta</h2>
+        <p class="subtitle">Únete a la comunidad de Natursur</p>
+
+        {% if form.non_field_errors %}
+        <div class="form-errors">
+            <span class="material-icons">error_outline</span>
+            <div class="error-text">
+                {% for error in form.non_field_errors %}
+                {{ error }}<br>
+                {% endfor %}
+            </div>
+        </div>
         {% endif %}
 
-        <div>
-            {{ form.as_p }}
-        </div>
+        <form method="post" action="{% url 'registration' %}" class="login-form" novalidate>
+            {% csrf_token %}
 
-        <div>
-            <button type="submit">Crear cuenta</button>
-        </div>
+            <div class="form-group">
+                <label for="{{ form.username.id_for_label }}">Nombre de Usuario</label>
+                <div class="input-group">
+                    <span class="material-icons">person</span>
+                    {{ form.username }}
+                </div>
+                {% if form.username.errors %}
+                <div class="field-error">
+                    {% for error in form.username.errors %}
+                    {{ error }}
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
 
-        <p><a href="{% url 'login' %}">¿Ya tienes cuenta? Accede aquí.</a></p>
-    </form>
-{% endblock %}
+            {% if form.email %}
+            <div class="form-group">
+                <label for="{{ form.email.id_for_label }}">Correo Electrónico</label>
+                <div class="input-group">
+                    <span class="material-icons">email</span>
+                    {{ form.email }}
+                </div>
+                {% if form.email.errors %}
+                <div class="field-error">
+                    {% for error in form.email.errors %}
+                    {{ error }}
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            <div class="form-group">
+                <label for="{{ form.password1.id_for_label }}">Contraseña</label>
+                <div class="input-group">
+                    <span class="material-icons">lock</span>
+                    {{ form.password1 }}
+                </div>
+                {% if form.password1.errors %}
+                <div class="field-error">
+                    {% for error in form.password1.errors %}
+                    {{ error }}
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.password2.id_for_label }}">Confirmar Contraseña</label>
+                <div class="input-group">
+                    <span class="material-icons">lock_reset</span>
+                    {{ form.password2 }}
+                </div>
+                {% if form.password2.errors %}
+                    {% for error in form.password2.errors %}
+                    <div class="field-error">{{ error }}</div>
+                {% endfor %}
+                {% endif %}
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-submit">
+                    <span class="material-icons">person_add</span> Crear cuenta
+                </button>
+            </div>
+
+            <div class="divider">
+                <span class="divider-text">o</span>
+            </div>
+
+            <p class="register-link">
+                ¿Ya tienes cuenta? <a href="{% url 'login' %}">Inicia sesión</a>
+            </p>
+
+        </form>
+    </div>
+</div>
+{% endblock contenido %}

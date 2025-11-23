@@ -1,23 +1,22 @@
 from django.shortcuts import render, redirect
-from .forms import ClientCreationForm
-from django.contrib.auth import logout
-
+from .forms import ClientCreationForm, ClientLoginForm
+from django.contrib.auth import logout, login as auth_login
+from django.conf import settings
 
 def registration(request):
     if request.method == 'POST':
         form = ClientCreationForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('login')
+            user = form.save()
+            user.backend = settings.AUTHENTICATION_BACKENDS[0]
+            
+            auth_login(request, user)
+            return redirect('home') 
+            
     else:
         form = ClientCreationForm()
 
     return render(request, 'registration.html', {'form': form})
-
-
-from django.shortcuts import render, redirect
-from django.contrib.auth import login as auth_login # Usamos un alias 'auth_login' para evitar conflictos de nombres
-from .forms import ClientLoginForm # Asegúrate de importar tu formulario personalizado
 
 def login(request):
     if request.method == 'POST':
@@ -40,6 +39,7 @@ def logout_view(request):
         logout(request)
         return redirect('login')
     return render(request, 'logout.html')
+
 
 def profile(request):
     return render(request, 'profile.html')
