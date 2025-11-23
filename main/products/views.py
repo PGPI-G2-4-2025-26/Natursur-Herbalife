@@ -227,7 +227,6 @@ def show_orders(request):
     paginator = Paginator(qs.order_by('date'), per_page)
     pedidos = paginator.get_page(page_number)
 
-    # Compatibilizar con plantillas que esperan atributos antiguos
     for o in pedidos:
         if not hasattr(o, 'full_name'):
             setattr(o, 'full_name', getattr(o, 'solicitant_name', '') or '')
@@ -235,6 +234,20 @@ def show_orders(request):
             setattr(o, 'contact_email', getattr(o, 'solicitant_contact', '') or '')
         if not hasattr(o, 'telephone'):
             setattr(o, 'telephone', '')
+        # calcular precio total del pedido para mostrar en la lista
+        total_price = Decimal('0.00')
+        lines = OrderProduct.objects.filter(order=o).select_related('product')
+        for l in lines:
+            unit_price = l.price_at_order if getattr(l, 'price_at_order', None) is not None else l.product.price
+            unit_price = Decimal(unit_price)
+            qty = int(l.quantity or 0)
+            subtotal = (unit_price * qty).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+            total_price += subtotal
+        try:
+            total_price_display = f"{total_price:.2f}".replace('.', ',')
+        except Exception:
+            total_price_display = str(total_price)
+        setattr(o, 'total_price', total_price_display)
 
     context = {
         'orders': pedidos,              
@@ -271,7 +284,6 @@ def show_orders_admin(request):
     paginator = Paginator(qs.order_by('date'), per_page)
     pedidos = paginator.get_page(page_number)
 
-    # Compatibilizar con plantillas que esperan atributos antiguos
     for o in pedidos:
         if not hasattr(o, 'full_name'):
             setattr(o, 'full_name', getattr(o, 'solicitant_name', '') or '')
@@ -279,6 +291,20 @@ def show_orders_admin(request):
             setattr(o, 'contact_email', getattr(o, 'solicitant_contact', '') or '')
         if not hasattr(o, 'telephone'):
             setattr(o, 'telephone', '')
+        # calcular precio total del pedido para mostrar en la lista (admin)
+        total_price = Decimal('0.00')
+        lines = OrderProduct.objects.filter(order=o).select_related('product')
+        for l in lines:
+            unit_price = l.price_at_order if getattr(l, 'price_at_order', None) is not None else l.product.price
+            unit_price = Decimal(unit_price)
+            qty = int(l.quantity or 0)
+            subtotal = (unit_price * qty).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+            total_price += subtotal
+        try:
+            total_price_display = f"{total_price:.2f}".replace('.', ',')
+        except Exception:
+            total_price_display = str(total_price)
+        setattr(o, 'total_price', total_price_display)
 
     context = {
         'orders': pedidos,
@@ -330,6 +356,21 @@ def edit_order(request, order_id):
     first_name = parts[0] if parts else ''
     last_name = parts[1] if len(parts) > 1 else ''
 
+    # calcular precio total del pedido para mostrar en la vista de edición
+    total_price = Decimal('0.00')
+    lines = OrderProduct.objects.filter(order=order).select_related('product')
+    for l in lines:
+        unit_price = l.price_at_order if getattr(l, 'price_at_order', None) is not None else l.product.price
+        unit_price = Decimal(unit_price)
+        qty = int(l.quantity or 0)
+        subtotal = (unit_price * qty).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+        total_price += subtotal
+    try:
+        total_price_display = f"{total_price:.2f}".replace('.', ',')
+    except Exception:
+        total_price_display = str(total_price)
+    setattr(order, 'total_price', total_price_display)
+
     context = {
         'order': order,
         'status_choices': Order.STATUS_CHOICES,
@@ -350,9 +391,25 @@ def order_detail(request, order_id):
         return redirect('my_orders')
 
     products = OrderProduct.objects.filter(order=order).select_related('product')
+    # calcular precio total del pedido para mostrar en el detalle
+    total_price = Decimal('0.00')
+    for l in products:
+        unit_price = l.price_at_order if getattr(l, 'price_at_order', None) is not None else l.product.price
+        unit_price = Decimal(unit_price)
+        qty = int(l.quantity or 0)
+        subtotal = (unit_price * qty).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+        total_price += subtotal
+    try:
+        total_price_display = f"{total_price:.2f}".replace('.', ',')
+    except Exception:
+        total_price_display = str(total_price)
+    setattr(order, 'total_price', total_price_display)
+
     context = {
         'order': order,
         'products': products,
+        'total_price': total_price,
+        'total_price_display': total_price_display,
     }
     return render(request, 'order_detail.html', context)
 

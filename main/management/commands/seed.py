@@ -109,54 +109,54 @@ DEFAULT_PRODUCTS = [
 DEFAULT_ORDERS = [
     {
         'id': 1,
-        # 'total_price': Decimal('49.98'),
         'is_paid': True,
         'date': None,
+        'order_identified': 'ORDER123',
         'status': 'SOLICITADO',
-        'registered_user_id': 3,  # Assuming user with ID 3 exists
+        'registered_user_id': 3,
         'solicitant_contact': '123456789',
         'solicitant_name': 'Client User',
         'solicitant_address': '',
-        # 'contact_email': 'client@example.com',
+
     },
     {
         'id': 2,
-        # 'total_price': Decimal('29.99'),
         'is_paid': False,
         'date': None,
+        'order_identified': 'ORDER124',
         'status': 'ENCARGADO',
-        'registered_user_id': 3,  # Assuming user with ID 3 exists
+        'registered_user_id': 3,
         'solicitant_contact': '123456789',
         'solicitant_name': 'Client User',
         'solicitant_address': '',
     },
     {
         'id': 3,
-        # 'total_price': Decimal('19.99'),
         'is_paid': True,
         'date': None,
+        'order_identified': 'ORDER125',
         'status': 'RECOGIDO_CLIENTE',
-        'registered_user_id': 2,  # Assuming user with ID 2 exists
+        'registered_user_id': 2,
         'solicitant_contact': '987654321',
         'solicitant_name': 'Super Admin',
         'solicitant_address': '',
     },
     {
         'id': 4,
-        # 'total_price': Decimal('0.00'),
         'is_paid': False,
         'date': None,
+        'order_identified': 'ORDER126',
         'status': 'EN_CARRITO',
-        'registered_user_id': 3,  # Assuming user with ID 3 exists
+        'registered_user_id': 3,  
         'solicitant_contact': '123456789',
         'solicitant_name': 'Client User',
         'solicitant_address': '',
     },
     {
         'id': 5,
-        # 'total_price': Decimal('99.99'),
         'is_paid': False,
         'date': None,
+        'order_identified': 'ORDER127',
         'status': 'SOLICITADO',
         'registered_user_id': 3,
         'solicitant_contact': '123456789',
@@ -165,9 +165,9 @@ DEFAULT_ORDERS = [
     },
     {
         'id': 6,
-        # 'total_price': Decimal('59.99'),
         'is_paid': True,
         'date': None,
+        'order_identified': 'ORDER126',
         'status': 'RECOGIDO_CLIENTE',
         'registered_user_id': 3,
         'solicitant_contact': '987654321',
@@ -176,9 +176,9 @@ DEFAULT_ORDERS = [
     },
     {
         'id': 7,
-        # 'total_price': Decimal('39.99'),
         'is_paid': False,
         'date': None,
+        'order_identified': 'ORDER127',
         'status': 'SOLICITADO',
         'registered_user_id': 3,
         'solicitant_contact': '123456789',
@@ -312,9 +312,9 @@ class Command(BaseCommand):
             obj, created = Order.objects.update_or_create(
                 id=o['id'],
                 defaults={
-                    # 'total_price': o['total_price'],
                     'status': o['status'],
                     'registered_user_id': o['registered_user_id'],
+                    'order_identified': o['order_identified'],
                     'solicitant_contact': o['solicitant_contact'],
                     'solicitant_name': o['solicitant_name'],
                     'solicitant_address': o['solicitant_address'],

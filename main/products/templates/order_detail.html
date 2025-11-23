@@ -30,6 +30,8 @@
                 <div class="data-grid">
                     <div class="label">Identificador</div>
                     <div class="value">Pedido #{{ order.id }}</div>
+                    <div class="label">Identificador externo</div>
+                    <div class="value">{{ order.order_identified|default:"-" }}</div>
                     <div class="label">Fecha realizada</div>
                     <div class="value">{{ order.date|date:"d/m/Y" }}</div>
                     <div class="label">Estado</div>
@@ -48,8 +50,6 @@
                     <div class="value">{{ order.solicitant_name }}</div>
                     <div class="label">Teléfono o email</div>
                     <div class="value">{{ order.solicitant_contact }}</div>
-                    <div class="label">Dirección</div>
-                    <div class="value">{{ order.solicitant_address }}</div>
                 </div>
             </div>
         </div>
