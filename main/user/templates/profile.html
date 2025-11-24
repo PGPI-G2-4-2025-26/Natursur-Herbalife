@@ -1,8 +1,93 @@
-{% extends 'base.html' %} {% block encabezado %}
-<h1>Tu perfil</h1>
-{% endblock %} {% block contenido %}
+{% extends 'base.html' %}
+{% load static %}
 
-<p>
-    <a>Tus datos aquí!</a>
-</p>
-{% endblock %}
+{% block title %}Mi Perfil - NaturSur{% endblock title %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'styles/login.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/profile.css' %}">
+{% endblock extra_head %}
+
+{% block contenido %}
+<div class="login-container">
+    <div class="login-card profile-card">
+        
+        <div class="profile-header">
+            <div class="profile-avatar">
+                {{ user.username.0|upper }}
+            </div>
+            <div class="profile-info">
+                <h2 class="profile-name">
+                    @{{ user.username }}
+                </h2>
+                
+                <div class="profile-role">
+                    Cuenta de 
+                    {% if user.is_superuser %}
+                        Super Administrador
+                    {% elif user.is_staff %}
+                        Administrador
+                    {% else %}
+                        Cliente
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="data-section">
+            <h3 class="data-title">Información Personal</h3>
+            <div class="data-grid">
+                <div class="data-item">
+                    <label>Nombre</label>
+                    <div class="data-value">{{ user.first_name|default:"-" }}</div>
+                </div>
+                
+                <div class="data-item">
+                    <label>Apellidos</label>
+                    <div class="data-value">{{ user.last_name|default:"-" }}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="data-section">
+            <h3 class="data-title">Información de Contacto</h3>
+            <div class="data-grid">
+                <div class="data-item"> 
+                    <label>Correo Electrónico</label>
+                    <div class="data-value">{{ user.email|default:"No especificado" }}</div>
+                </div>
+                <div class="data-item"> 
+                    <label>Teléfono</label>
+                    <div class="data-value">{{ user.phone|default:"No especificado" }}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="data-section">
+            <h3 class="data-title">Detalles de la Cuenta</h3>
+            <div class="data-grid">
+                <div class="data-item">
+                    <label>Miembro desde</label>
+                    <div class="data-value">{{ user.date_joined|date:"d F Y" }}</div>
+                </div>
+                
+                <div class="data-item">
+                    <label>Último acceso</label>
+                    <div class="data-value">{{ user.last_login|date:"d/m/Y - H:i" }}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-actions">
+            <a href="{% url 'home' %}" class="btn-profile-action">
+                <span class="material-icons">home</span> Volver
+            </a>
+            
+            <a href="{% url 'logout' %}" class="btn-profile-action logout">
+                <span class="material-icons">logout</span> Cerrar sesión
+            </a>
+        </div>
+
+    </div>
+</div>
+{% endblock contenido %}

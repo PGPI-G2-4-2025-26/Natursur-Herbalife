@@ -1,19 +1,87 @@
-{% extends 'base.html' %} {% block encabezado %}
-<h1>Acceder a mi Cuenta</h1>
-{% endblock %} {% block contenido %}
-<form method="post" action="{% url 'login' %}">
-  {% csrf_token %} {% if form.errors %}
-  <div class="error">Por favor corrige los errores indicados abajo.</div>
-  {% endif %}
+{% extends 'base.html' %}
+{% load static %}
 
-  <div>{{ form.as_p }}</div>
+{% block title %}Iniciar Sesión - NaturSur{% endblock title %}
 
-  <div>
-    <button type="submit">Iniciar sesión</button>
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'styles/login.css' %}">
+{% endblock extra_head %}
+
+{% block contenido %}
+<div class="login-container">
+  <div class="login-card">
+    <div class="card-icon">
+      <img src="{% static 'images/logoLimpioNatursur.png' %}" alt="Icono Login">
+    </div>
+
+    <h2>Iniciar sesión</h2>
+    <p class="subtitle">Accede a tu cuenta para continuar</p>
+
+    {% if form.errors %}
+    <div class="form-errors">
+      <span class="material-icons">error_outline</span>
+      <div class="error-text">
+        {% if form.non_field_errors %}
+        {% for error in form.non_field_errors %}
+        {{ error }}
+        {% endfor %}
+
+        {% else %}
+        Usuario o contraseña incorrectos.
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+
+    <form method="post" action="{% url 'login' %}" class="login-form" novalidate>
+      {% csrf_token %}
+
+      <div class="form-group">
+        <label for="{{ form.username.id_for_label }}">Usuario o Correo</label>
+        <div class="input-group">
+          <span class="material-icons">person</span> {{ form.username }}
+        </div>
+        {% if form.username.errors %}
+        <div class="field-error">
+          {% for error in form.username.errors %}
+          {{ error }}
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        <label for="{{ form.password.id_for_label }}">Contraseña</label>
+        <div class="input-group">
+          <span class="material-icons">lock</span> {{ form.password }}
+        </div>
+
+        {% if form.password.errors %}
+        <div class="field-error">
+          {% for error in form.password.errors %}
+          {{ error }}
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+
+      <div class="form-actions">
+
+
+        <button type="submit" class="btn-submit">
+          <span class="material-icons">arrow_forward</span> Entrar
+        </button>
+      </div>
+
+      <div class="divider">
+        <span class="divider-text">o</span>
+      </div>
+      <p class="register-link">
+        ¿No tienes una cuenta? <a href="{% url 'registration' %}">Regístrate</a>
+      </p>
+    </form>
+
+
   </div>
-
-  <p>
-    <a href="{% url 'registration' %}">¿No tienes cuenta? Regístrate aquí.</a>
-  </p>
-</form>
-{% endblock %}
+</div>
+{% endblock contenido %}
