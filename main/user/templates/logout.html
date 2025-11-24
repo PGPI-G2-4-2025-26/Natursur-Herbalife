@@ -1,15 +1,44 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block encabezado %}
-<h1>Cerrar sesión</h1>
-{% endblock %}
+{% block title %}Cerrar Sesión - NaturSur{% endblock title %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'styles/login.css' %}">
+{% endblock extra_head %}
 
 {% block contenido %}
-<p>¿Estás seguro que quieres cerrar sesión{% if user.is_authenticated %} como {{ user.username }}{% endif %}?</p>
+<div class="login-container">
+    <div class="login-card">
 
-<form method="post" action="{% url 'logout' %}">
-    {% csrf_token %}
-    <button type="submit">Cerrar sesión</button>
-    <a href="{% url 'login' %}">Cancelar</a>
-</form>
-{% endblock %}
+        <div class="card-icon">
+            <img src="{% static 'images/logoLimpioNatursur.png' %}" alt="Logo NaturSur">
+        </div>
+
+        <h2>Cerrar sesión</h2>
+        <p class="subtitle" style="margin-bottom: 30px; line-height: 1.5;">
+            {% if user.is_authenticated %}
+            <strong>{{ user.username }}</strong>,
+            {% endif %}
+            ¿estás seguro de que quieres salir?
+        </p>
+
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+
+                <button type="submit" class="btn-submit" style="width: 100%; justify-content: center;">
+                    <span class="material-icons">logout</span> Cerrar sesión
+                </button>
+
+                <a href="{% url 'home' %}" class="btn-google"
+                    style="text-decoration: none; color: inherit; justify-content: center;">
+                    Cancelar
+                </a>
+            </div>
+        </form>
+
+    </div>
+</div>
+{% endblock contenido %}

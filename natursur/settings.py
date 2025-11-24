@@ -147,3 +147,27 @@ MEDIA_URL = '/media/'
 LOGIN_REDIRECT_URL = '/' 
 
 LOGOUT_REDIRECT_URL = '/'
+
+AUTHENTICATION_BACKENDS = [
+    'main.user.backends.EmailOrUsernameModelBackend', 
+
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'main.user.validators.CustomMinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 8,
+        }
+    },
+    {
+        'NAME': 'main.user.validators.CustomCommonPasswordValidator',
+    },
+    {
+        'NAME': 'main.user.validators.CustomNumericPasswordValidator',
+    },
+    {
+        'NAME': 'main.user.validators.CustomUserAttributeSimilarityValidator',
+    },
+]

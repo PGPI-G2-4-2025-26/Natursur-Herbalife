@@ -161,6 +161,12 @@ header {
     background-color: var(--color-tertiary);
 }
 
+.admin-star {
+    font-size: 16px !important; 
+    vertical-align: middle; 
+    
+}
+
 .btn-profile {
     background-color: transparent; 
     color: var(--color-primary); 
