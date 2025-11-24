@@ -1,0 +1,23 @@
+{% extends 'base.html' %} {% block encabezado %}
+<h1>Pedido procesado correctamente</h1>
+{% endblock %} {% block contenido %}
+<p>Su pedido ha sido procesado.</p>
+<p>Identificador de pedido: <strong>{{ order.order_identified }}</strong></p>
+<p>Total: <strong>{{ total_price_display }}</strong></p>
+
+<h3>Detalle</h3>
+{% if cart_items %}
+<ul>
+  {% for item in cart_items %}
+  <li>
+    {{ item.product.name }} — Cantidad: {{ item.quantity }} — Precio unitario:
+    {{ item.unit_price_display }} — Subtotal: {{ item.subtotal_display }}
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>No hay productos en este pedido.</p>
+{% endif %}
+
+<a class="btn" href="{% url 'list_products' %}">Volver a la tienda</a>
+{% endblock %}

@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=200, verbose_name='Name')),
-                ('ref', models.CharField(max_length=50, unique=True, verbose_name='Reference/SKU')),
+                ('ref', models.CharField(max_length=50, verbose_name='Reference/SKU')),
                 ('price', models.DecimalField(decimal_places=2, max_digits=6, verbose_name='Price')),
                 ('flavor', models.CharField(blank=True, max_length=100, null=True, verbose_name='Flavor')),
                 ('description', models.CharField(blank=True, max_length=100, null=True, verbose_name='Description')),
@@ -30,6 +30,40 @@ class Migration(migrations.Migration):
                 'verbose_name_plural': 'Products',
             },
         ),
+        migrations.CreateModel(
+            name='Order',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('total_price', models.DecimalField(decimal_places=2, max_digits=8, verbose_name='Total Price')),
+                ('date', models.DateTimeField(auto_now_add=True, verbose_name='Date')),
+                ('status', models.CharField(choices=[('EN_CARRITO', 'IN CART'), ('SOLICITADO', 'SOLICITED'), ('ENCARGADO', 'ORDERED'), ('RECIBIDO_NATURSUR', 'RECEIVED BY NATURSUR'), ('RECOGIDO_CLIENTE', 'PICKED UP BY CLIENT')], default='SOLICITADO', max_length=20, verbose_name='Status')),
+                ('user', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to=settings.AUTH_USER_MODEL, verbose_name='User')),
+                ('telephone', models.CharField(max_length=20, verbose_name='Telephone')),
+                ('full_name', models.CharField(max_length=255, verbose_name='Full Name')),
+                ('contact_email', models.EmailField(verbose_name='Contact Email')),
+                ('notas', models.TextField(blank=True, max_length=500, null=True, verbose_name='Notes')),
+            ],
+            options={
+                'verbose_name': 'Order',
+                'verbose_name_plural': 'Orders',
+            },
+        ),
+
+        migrations.CreateModel(
+            name='OrderProduct',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('quantity', models.PositiveIntegerField(default=1, verbose_name='Quantity')),
+                ('order', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='products.order', verbose_name='Order')),
+                ('product', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='products.product', verbose_name='Product (id_producto)')),
+            ],
+            options={
+                'verbose_name': 'Order Product',
+                'verbose_name_plural': 'Order Products',
+            },
+        ),
+
+
         migrations.CreateModel(
             name='ProductSolicitation',
             fields=[

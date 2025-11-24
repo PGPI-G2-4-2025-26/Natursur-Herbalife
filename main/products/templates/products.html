@@ -5,7 +5,12 @@
 {% endblock %}
 
 {% block contenido %}
-    
+    <form method="get" action="{% url 'list_products' %}" style="margin-bottom:12px;">
+        <input type="text" name="q" placeholder="Buscar productos por nombre..." value="{{ q|default:'' }}" style="padding:6px; width:240px;">
+        <button type="submit">Buscar</button>
+        <a href="{% url 'list_products' %}">Limpiar</a>
+    </form>
+
     {% for product in products %}
         <div style="border: 1px solid #ccc; padding: 10px; margin: 10px;">
             <h3>{{ product.name }}</h3>
@@ -13,15 +18,93 @@
             <p>Precio: {{ product.price }}</p>
             <p>Sabor: {{ product.flavor }}</p>
             <p>Tamaño: {{ product.size }}</p>
+            <p>Stock Disponible: {{ product.available_stock }}</p>
             {% if product.image %}
-                <img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-width: 200px;">
+                {# si el nombre del archivo almacenado comienza por 'http' se trata de una URL externa #}
+                {% if product.image|slice:":4" == "http" %}
+                    <img src="{{ product.image }}" alt="{{ product.name }}" style="max-width: 200px;">
+                {% else %}
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-width: 200px;">
+                {% endif %}
             {% else %}
                 <p>No hay imagen disponible.</p>
             {% endif %}
-            <a href="{% url 'add_to_cart' product_id=product.id %}">Añadir al Carrito</a>
+            <form action="{% url 'add_to_cart' product_id=product.id %}" method="post" class="add-to-cart-form" style="display:inline-block;">
+                {% csrf_token %}
+                <input type="hidden" name="q" value="{{ q|default:'' }}">
+                    {% comment %} Usar atributos preparados en la vista: product.in_cart_qty y product.max_add {% endcomment %}
+                    <div class="quantity-control" data-product-id="{{ product.id }}" data-stock="{{ product.stock }}" data-in-cart="{{ product.in_cart_qty|default:0 }}">
+                        <button type="button" class="decr-btn">−</button>
+                        <input type="number" name="quantity" class="quantity-input" value="1" min="1" max="{{ product.max_add|default:0 }}" style="width:60px;text-align:center;" readonly>
+                        <button type="button" class="incr-btn">+</button>
+                    </div>
+                <button type="submit">Añadir al Carrito</button>
+            </form>
+            {% comment %} Mostrar sólo los mensajes que pertenecen a este producto (extra_tags: 'product-<id>') {% endcomment %}
+            {% if last_added_product_id and product.id == last_added_product_id %}
+                {% if success_notification %}
+                    <div class="alert alert-{{ success_notification.tags }}" role="alert">
+                        {{ success_notification.text }}
+                    </div>
+                {% endif %}
+            {% endif %}
         </div>
     {% empty %}
         <p>No hay productos disponibles en este momento.</p>
     {% endfor %}
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function(){
+        document.querySelectorAll('.quantity-control').forEach(function(ctrl){
+            var prodId = ctrl.getAttribute('data-product-id');
+            var stock = parseInt(ctrl.getAttribute('data-stock') || '0', 10);
+            var inCart = parseInt(ctrl.getAttribute('data-in-cart') || '0', 10);
+            var input = ctrl.querySelector('.quantity-input');
+            var decr = ctrl.querySelector('.decr-btn');
+            var incr = ctrl.querySelector('.incr-btn');
+            var maxAllowed = parseInt(input.getAttribute('max') || '0', 10);
+
+            function updateButtons(){
+                var val = parseInt(input.value || '0', 10);
+                if (isNaN(val) || val < 1) val = 1;
+                if (val > maxAllowed) val = maxAllowed;
+                input.value = val;
+                if (val <= 1) decr.disabled = true; else decr.disabled = false;
+                if (val >= maxAllowed) incr.disabled = true; else incr.disabled = false;
+                // disable if nothing can be added
+                if (maxAllowed <= 0){
+                    input.disabled = true;
+                    decr.disabled = true;
+                    incr.disabled = true;
+                    var form = ctrl.closest('form');
+                    if (form){
+                        var submit = form.querySelector('button[type=submit]');
+                        if (submit) submit.disabled = true;
+                    }
+                }
+            }
+
+            decr.addEventListener('click', function(){
+                var val = parseInt(input.value || '0', 10) - 1;
+                if (isNaN(val)) val = 1;
+                if (val < 1) val = 1;
+                input.value = val;
+                updateButtons();
+            });
+
+            incr.addEventListener('click', function(){
+                var val = parseInt(input.value || '0', 10) + 1;
+                if (isNaN(val)) val = 1;
+                if (val > maxAllowed) val = maxAllowed;
+                input.value = val;
+                updateButtons();
+            });
+
+            input.addEventListener('change', updateButtons);
+            // initialize
+            updateButtons();
+        });
+    });
+    </script>
 
 {% endblock %}

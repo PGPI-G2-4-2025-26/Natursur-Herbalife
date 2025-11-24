@@ -12,6 +12,8 @@
   <link rel="stylesheet" href="{% static 'styles/footer.css' %}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="{% static 'styles/home.css' %}">
+  <link rel="stylesheet" href="{% static 'styles/order.css' %}">
+
 
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Symbols" rel="stylesheet">
@@ -46,15 +48,16 @@
 
 
         {% if user.is_staff %}
-        <a a href="{% url 'admin_solicitations_list' %}" class="btn-profile">
-          <span class="material-icons">inventory</span><span>SOLICITUDES</span>
+        <a a href="{% url 'show_orders_admin' %}" class="btn-profile">
+          <span class="material-icons">inventory</span><span>PEDIDOS</span>
+
         </a>
         {% endif %}
 
         {% if user.is_authenticated %}
         {% if not user.is_staff %}
-        <a a href="{% url 'my_solicitations' user.id %}" class="btn-profile">
-          <span class="material-icons">inventory</span><span>MIS SOLICITUDES</span>
+        <a a href="{% url 'my_orders' %}" class="btn-profile">
+          <span class="material-icons">inventory</span><span>MIS PEDIDOS</span>
         </a>
         {% endif %}
         <a a href="{% url 'profile' %}" class="btn-profile">
@@ -78,15 +81,11 @@
 
   <section class="main-content-section">
     {% block contenido %}{% endblock contenido %}
-    {% if user.is_authenticated %}
-    {% if not user.is_staff %}
     <a href="{% url 'view_cart' %}" class="btn-cesta">
       <span class="material-icons">shopping_basket</span>
       Carrito
       <span class="cesta-count">X</span>
     </a>
-    {% endif %}
-    {% endif %}
   </section>
 
   <footer class="footer">
