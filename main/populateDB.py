@@ -4,7 +4,7 @@ from main.products.models import Product
 from playwright.sync_api import sync_playwright
 from django.core.files.base import ContentFile
 from urllib.parse import urlparse, unquote
-import requests
+#import requests
 
 import os, ssl
 if (not os.environ.get('PYTHONHTTPSVERIFY', '') and
