@@ -291,7 +291,6 @@ def show_orders_admin(request):
             setattr(o, 'contact_email', getattr(o, 'solicitant_contact', '') or '')
         if not hasattr(o, 'telephone'):
             setattr(o, 'telephone', '')
-        # calcular precio total del pedido para mostrar en la lista (admin)
         total_price = Decimal('0.00')
         lines = OrderProduct.objects.filter(order=o).select_related('product')
         for l in lines:
@@ -356,10 +355,9 @@ def edit_order(request, order_id):
     first_name = parts[0] if parts else ''
     last_name = parts[1] if len(parts) > 1 else ''
 
-    # calcular precio total del pedido para mostrar en la vista de edición
     total_price = Decimal('0.00')
-    lines = OrderProduct.objects.filter(order=order).select_related('product')
-    for l in lines:
+    products = OrderProduct.objects.filter(order=order).select_related('product')
+    for l in products:
         unit_price = l.price_at_order if getattr(l, 'price_at_order', None) is not None else l.product.price
         unit_price = Decimal(unit_price)
         qty = int(l.quantity or 0)
@@ -373,6 +371,7 @@ def edit_order(request, order_id):
 
     context = {
         'order': order,
+        'products': products,
         'status_choices': Order.STATUS_CHOICES,
         'first_name': first_name,
         'last_name': last_name,

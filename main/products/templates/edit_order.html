@@ -61,23 +61,22 @@
                 </div>
             </div>
 
-            <div class="info-card items-section full-width">
-                <h3>Artículos</h3>
-                <div class="item-list">
-                    {% for item in order.orderproduct_set.all %}
-                        <div class="item-row">
-                            {% if item.product.image %}
-                                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="item-image">
-                            {% endif %}
-                            <div class="item-name"><strong>{{ item.product.name }}</strong></div>
-                            <div class="item-qty">Cantidad: {{ item.quantity }}</div>
-                            <div class="item-price">{{ item.product.price }} €</div>
-                        </div>
-                    {% empty %}
-                        <p>No hay artículos en este pedido.</p>
-                    {% endfor %}
-                </div>
+        <div class="info-card items-section full-width">
+            <h3>Artículos</h3>
+            <div class="item-list">
+                {% for item in products %}
+                    <div class="item-row">
+                        {% if item.product.image %}
+                            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="item-image">
+                        {% endif %}
+                        <div class="item-name"><strong>{{ item.product.name }}</strong></div>
+                        <div class="item-qty">Cantidad: {{ item.quantity }}</div>
+                    </div>
+                {% empty %}
+                    <p>No hay artículos en este pedido.</p>
+                {% endfor %}
             </div>
+        </div>
 
             <div class="delete-action-wrapper" style="margin-top:8px;">
                 <div class="delete-action">
