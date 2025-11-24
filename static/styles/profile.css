@@ -1,0 +1,136 @@
+.profile-card {
+    max-width: 600px;
+    width: 100%;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 20px;
+}
+
+.profile-avatar {
+    width: 80px;
+    height: 80px;
+    background-color: var(--color-tertiary);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 20px;
+    font-size: 35px;
+    font-weight: bold;
+    color: var(--color-primary);
+    user-select: none; 
+}
+
+.profile-info {
+    flex-grow: 1;
+    text-align: left;
+}
+
+.profile-name {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: var(--color-text-dark);
+    margin: 0;
+    line-height: 1.2;
+}
+
+.profile-role {
+    font-size: 0.85em;
+    color: var(--color-primary);
+    font-weight: 700;
+    margin-top: 5px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.data-section {
+    text-align: left;
+    margin-bottom: 30px;
+}
+
+.data-title {
+    font-size: 1.1em;
+    font-weight: 600;
+    color: var(--color-text-dark);
+    border-left: 4px solid var(--color-primary);
+    padding-left: 10px;
+    margin-bottom: 20px;
+}
+
+.data-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; 
+    gap: 20px 30px; 
+}
+
+.data-item {
+    margin-bottom: 5px;
+}
+
+.data-item label {
+    display: block;
+    font-size: 0.85em;
+    color: var(--color-text-light);
+    margin-bottom: 4px;
+}
+
+.data-value {
+    font-size: 1.05em;
+    color: var(--color-text-dark);
+    font-weight: 500;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #f0f0f0; 
+}
+
+.profile-actions {
+    display: flex;
+    justify-content: center; 
+    gap: 15px; 
+    margin-top: 40px;
+}
+
+.btn-profile-action {
+    background-color: var(--color-tertiary); 
+    color: var(--color-primary);
+    padding: 12px 25px; 
+    border-radius: 8px; 
+    
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    
+    font-weight: bold;
+    font-size: 1em;
+    text-decoration: none;
+    transition: background-color 0.3s, transform 0.1s;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+}
+
+.btn-profile-action:hover {
+    background-color: var(--color-primary) ; 
+    transform: translateY(-2px); 
+    color: var(--color-white);
+}
+
+.btn-profile-action .material-icons {
+    margin-right: 8px; 
+    font-size: 20px;
+}
+
+.btn-profile-action.logout {
+    background-color: #fcedec;
+    color: #e74c3c; 
+    padding: 10px 23px; 
+}
+
+.btn-profile-action.logout:hover {
+    background-color: #ec3f2f;
+    color: var(--color-white);
+}
