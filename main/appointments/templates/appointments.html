@@ -88,13 +88,13 @@
                 </p>
 
                 <div class="price-container">
-                    {% if appointment.discount > 0 %}
+                    {% if appointment.endDiscount > now %}
                         <span class="price-original">{{ appointment.price }}€</span>
                         <span class="price-current price-discount-active">
                              Oferta: {{ appointment.discount }}€ 
                         </span>
                         <div class="discount-tag">Ahorras {{ appointment.total_money_save }}€</div>
-                        <small style="font-size: 0.7rem; color: #777;">Hasta: {{ appointment.endDiscount|date:"d M Y" }}</small>
+                        <small style="font-size: 0.7rem; color: #777;">Hasta: {{ appointment.endDiscount}}</small>
                     {% else %}
                         <span class="price-current">{{ appointment.price }}€</span>
                     {% endif %}

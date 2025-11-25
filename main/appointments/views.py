@@ -5,11 +5,13 @@ from django.shortcuts import redirect, render
 from .models import Appointment
 from django.contrib.admin.views.decorators import staff_member_required
 from . import forms as appointment_forms
-from django.utils import formats
+from django.utils import formats, timezone
+from django.core.exceptions import ValidationError
 
 def appointments(request):
     appointments = Appointment.objects.all()
-    return render(request, 'appointments.html', {'appointments': appointments})
+    now = timezone.now()
+    return render(request, 'appointments.html', {'appointments': appointments, 'now': now})
 
 @staff_member_required(login_url='appointments')
 def create_appointment(request):
@@ -26,9 +28,22 @@ def create_appointment(request):
                 discount=cd.get('discount', 0),
                 endDiscount=cd.get('endDiscount', None)
             )
-            appointment.full_clean()
-            appointment.save()
-            return redirect('appointments')
+            try:
+                appointment.full_clean()
+                appointment.save()
+                return redirect('appointments')
+            except ValidationError as e:
+                if hasattr(e, 'message_dict'):
+                    for field, messages in e.message_dict.items():
+                        if field in form.fields:
+                            for m in messages:
+                                form.add_error(field, m)
+                        else:
+                            for m in messages:
+                                form.add_error(None, m)
+                else:
+                    for m in e.messages:
+                        form.add_error(None, m)
     else:
         form = appointment_forms.CreateAppointmentForm()
 
@@ -46,9 +61,22 @@ def update_appointment(request, appointment_id):
             appointment.duration = cd.get('duration')
             appointment.description = cd.get('description', '')
             appointment.premium = cd.get('premium', False)
-            appointment.full_clean()
-            appointment.save()
-            return redirect('appointments')
+            try:
+                appointment.full_clean()
+                appointment.save()
+                return redirect('appointments')
+            except ValidationError as e:
+                if hasattr(e, 'message_dict'):
+                    for field, messages in e.message_dict.items():
+                        if field in form.fields:
+                            for m in messages:
+                                form.add_error(field, m)
+                        else:
+                            for m in messages:
+                                form.add_error(None, m)
+                else:
+                    for m in e.messages:
+                        form.add_error(None, m)
     else:
         initial = {
             'name': appointment.name,
@@ -76,8 +104,21 @@ def create_discount(request, appointment_id):
             cd = form.cleaned_data
             appointment.discount = cd.get('discount')
             appointment.endDiscount = cd.get('endDiscount')
-            appointment.save()
-            return redirect('appointments')
+            try:
+                appointment.save()
+                return redirect('appointments')
+            except ValidationError as e:
+                if hasattr(e, 'message_dict'):
+                    for field, messages in e.message_dict.items():
+                        if field in form.fields:
+                            for m in messages:
+                                form.add_error(field, m)
+                        else:
+                            for m in messages:
+                                form.add_error(None, m)
+                else:
+                    for m in e.messages:
+                        form.add_error(None, m)
     else:
         formatted_date_text = "Sin fecha asignada"
         
