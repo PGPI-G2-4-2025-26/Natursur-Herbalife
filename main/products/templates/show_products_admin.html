@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block encabezado %}
+<h1>Gestión de Productos Herbalife</h1>
+{% endblock %}
+
+{% block contenido %}
+    <div class="products-page">
+        <div class="products-header">
+            <div class="page-heading">
+                <h1>Gestión de Productos Herbalife</h1>
+            </div>
+            <form method="get" action="{% url 'show_products_admin' %}" class="search-form" role="search" aria-label="Buscar productos">
+                <input
+                    type="text"
+                    name="q"
+                    class="search-input"
+                    placeholder="Buscar productos por nombre..."
+                    value="{{ q|default:'' }}"
+                />
+                <button type="submit" class="search-btn" aria-label="Buscar">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <circle cx="11" cy="11" r="6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </button>
+                <a href="{% url 'show_products_admin' %}" class="clear-btn" title="Limpiar búsqueda" aria-label="Limpiar búsqueda">×</a>
+            </form>
+        </div>
+
+        {% if user.is_staff %}
+        <div class="admin-actions-bar">
+            <a href="{% url 'create_product_admin' %}" class="btn-create">
+                <span class="material-icons">add</span> Añadir Producto
+            </a>
+        </div>
+        {% endif %}
+
+        <div class="products-grid">
+        {% for product in products %}
+            <article class="product-card">
+                {% if product.image %}
+                    {% if product.image|slice:":4" == "http" %}
+                        <img class="product-image" src="{{ product.image }}" alt="{{ product.name }}">
+                    {% else %}
+                        <img class="product-image" src="{{ product.image.url }}" alt="{{ product.name }}">
+                    {% endif %}
+                {% else %}
+                    <div class="no-image">No hay imagen disponible.</div>
+                {% endif %}
+
+                <div class="product-info">
+                    <div class="product-title">{{ product.name }}</div>
+                    {% if product.flavor %}
+                        <div class="product-meta"> <b>・ Sabor:</b> {{ product.flavor }} </div>
+                    {% else %}
+                        <div class="product-meta"> <b>・ Sabor:</b> Sin sabor</div>
+                    {% endif %}
+                    
+                    {% if product.size %}
+                        <div class="product-meta"> <b>・ Tamaño:</b> {{ product.size }} </div>
+                    {% else %}
+                        <div class="product-meta"></div>
+                    {% endif %}
+
+                    <div class="price-row">
+                        <div class="price">{{ product.price }} €</div>
+                    </div>
+
+                    
+
+                </div>
+				{% if user.is_staff %}
+				<div class="staff-controls">
+					<a href="{% url 'edit_product_admin' product.id %}" class="btn-staff btn-edit" title="Editar">
+						<span class="material-icons">edit</span>
+					</a>
+                    <form method="post" action="{% url 'delete_product_admin' product.id %}" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este producto?');" style="margin:0;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-staff btn-delete" title="Eliminar">
+                            <span class="material-icons">delete</span>
+                        </button>
+                    </form>
+				</div>
+				{% endif %}
+            </article>
+        {% empty %}
+            <p class="no-products">No hay productos disponibles en este momento.</p>
+        {% endfor %}
+        </div>
+
+        <div class="pagination">
+        {% if products.has_previous %}
+            <a href="?page={{ products.previous_page_number }}{% if current_query %}&q={{ current_query }}{% endif %}" class="btn-page">Anterior</a>
+        {% else %}
+            <button class="btn-page disabled" disabled>Anterior</button>
+        {% endif %}
+
+        {% if products.has_next %}
+            <a href="?page={{ products.next_page_number }}{% if current_query %}&q={{ current_query }}{% endif %}" class="btn-page">Siguiente</a>
+        {% else %}
+            <button class="btn-page disabled" disabled>Siguiente</button>
+        {% endif %}
+        </div>
+    </div>
+
+{% endblock %}

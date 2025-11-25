@@ -165,22 +165,22 @@ header {
 }
 
 .btn-profile {
-  background-color: transparent;
-  color: var(--color-primary);
-  padding: 10px 10px;
-  margin: 0;
-  text-decoration: none;
-  font-weight: bold;
-  font-size: 0.7em;
-  position: relative;
-  display: flex;
-  overflow: hidden;
-  justify-content: center;
-  align-items: center;
-
-  transition: background-color 0.2s;
-  transform: none;
-  line-height: 1.2;
+    background-color: transparent; 
+    color: var(--color-primary); 
+    padding: 5px 5px; 
+    margin: 0;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.7em;
+    position: relative; 
+    display:  flex; 
+    overflow: hidden; 
+    justify-content: center; 
+    align-items: center;
+    
+    transition: background-color 0.2s; 
+    transform: none; 
+    line-height: 1.2; 
 }
 
 .btn-profile i,

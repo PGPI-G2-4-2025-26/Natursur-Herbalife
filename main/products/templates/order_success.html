@@ -13,7 +13,7 @@
       <div class="success-icon">✓</div>
       <div>
         <div class="order-id">Identificador de pedido: <strong>{{ order.order_identified }}</strong></div>
-        <p>Total: <strong>{{ total_price_display }}</strong></p>
+        <p>Total: <strong>{{ total_price_display }} €</strong></p>
       </div>
     </div>
 
@@ -23,7 +23,7 @@
         {% for item in cart_items %}
           <li class="detail-item">
             <span class="name">{{ item.product.name }}</span>
-            <span class="meta">{{ item.unit_price_display }} x {{ item.quantity }}  = {{ item.subtotal_display }}</span>
+            <span class="meta">{{ item.unit_price_display }} € x {{ item.quantity }}  = {{ item.subtotal_display }} €</span>
           </li>
         {% endfor %}
       </ul>
@@ -33,7 +33,7 @@
 
     <div class="total-row">
       <span class="label">Total</span>
-      <span class="value">{{ total_price_display }}</span>
+      <span class="value">{{ total_price_display }} €</span>
     </div>
 
     <div style="margin-top:18px;">

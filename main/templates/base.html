@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="{% static 'styles/cart.css' %}">
   <link rel="stylesheet" href="{% static 'styles/finalize_order.css' %}">
   <link rel="stylesheet" href="{% static 'styles/order_success.css' %}">
+  <link rel="stylesheet" href="{% static 'styles/edit_product.css' %}">
 
 
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -50,34 +51,35 @@
 
       <nav class="navbar-profile-button-container">
 
-
         {% if user.is_staff %}
-        <a a href="{% url 'show_orders_admin' %}" class="btn-profile">
+        <a href="{% url 'show_products_admin' %}" class="btn-profile">
+          <span class="material-icons">store</span><span>GESTIÓN DE PRODUCTOS</span>
+        </a>
+        <a href="{% url 'show_orders_admin' %}" class="btn-profile">
           <span class="material-icons">inventory</span><span>PEDIDOS</span>
-
         </a>
         {% endif %}
 
         {% if user.is_authenticated %}
         {% if not user.is_staff %}
-        <a a href="{% url 'my_orders' %}" class="btn-profile">
+        <a href="{% url 'my_orders' %}" class="btn-profile">
           <span class="material-icons">inventory</span><span>MIS PEDIDOS</span>
         </a>
         {% endif %}
-        <a a href="{% url 'profile' %}" class="btn-profile">
+        <a href="{% url 'profile' %}" class="btn-profile">
           <span class="material-icons">person</span>
           <span>{{ user.first_name|default:user.username|upper }}</span>
           {% if user.is_staff %}
             <span class="material-icons admin-star" title="Administrador">verified</span>
           {% endif %}
         </a>
-        <a a href="{% url 'logout' %}" class="btn-profile">
+        <a href="{% url 'logout' %}" class="btn-profile">
           <span class="material-icons">logout</span><span>CERRAR SESIÓN</span>
           {% else %}
-          <a a href="{% url 'login' %}" class="btn-profile">
+          <a href="{% url 'login' %}" class="btn-profile">
             <span class="material-symbols">login</span><span>INICIAR SESIÓN</span>
           </a>
-          <a a href="{% url 'registration' %}" class="btn-profile">
+          <a href="{% url 'registration' %}" class="btn-profile">
             <span class="material-symbols">person_add</span><span>REGISTRARSE</span>
           </a>
 
