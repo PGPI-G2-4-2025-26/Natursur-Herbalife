@@ -1,8 +1,9 @@
 from django.core.management.base import BaseCommand
 from decimal import Decimal
-
+import os
+import shutil
+from django.conf import settings
 from main.user.models import UserProfile
-
 
 
 DEFAULT_APPOINTMENTS = [
@@ -72,7 +73,7 @@ DEFAULT_USERS = [
         'is_staff': True,
         'is_superuser': False,
         'phone': '666111222',
-        'photo': 'user_photos/adminPhoto.png',
+        'photo': 'adminPhoto.png',
         
 
     },
@@ -94,7 +95,7 @@ DEFAULT_USERS = [
         'is_staff': False,
         'is_superuser': False,
         'phone': '666555444',
-        'photo': 'user_photos/clientPhoto.png',
+        'photo': 'clientPhoto.png',
     },
 ]
 
@@ -282,14 +283,27 @@ class Command(BaseCommand):
                 updated_cnt += 1
                 self.stdout.write(self.style.NOTICE(f"Updated user: {obj.username}"))
 
+
         for u in DEFAULT_USERS:
             user = User.objects.get(username=u['username'])
             profile, created = UserProfile.objects.get_or_create(user=user)
             profile.phone = u.get('phone', '')
-            
             if u.get('photo'):
-                profile.photo = u.get('photo')
+                filename = u.get('photo')
+                source_path = os.path.join(settings.BASE_DIR, 'seed_data', 'photos', filename)
+                source_path = os.path.join(settings.BASE_DIR, 'seed_data', 'photos', filename)
+                destination_dir = os.path.join(settings.MEDIA_ROOT, 'user_photos')
+                destination_path = os.path.join(destination_dir, filename)
+                
+                if os.path.exists(source_path):
+                    os.makedirs(destination_dir, exist_ok=True)
+                    shutil.copy(source_path, destination_path)
+                    profile.photo = f'user_photos/{filename}'
+                else:
+                    self.stdout.write(self.style.WARNING(f"FOTO NO ENCONTRADA: {source_path}"))
+            
             profile.save()
+
             if created:
                 created_cnt += 1
                 self.stdout.write(self.style.SUCCESS(f"Created profile for user: {user.username}"))
