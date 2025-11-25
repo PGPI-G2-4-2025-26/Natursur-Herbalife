@@ -72,7 +72,7 @@ DEFAULT_USERS = [
         'is_staff': True,
         'is_superuser': False,
         'phone': '666111222',
-        'photo': 'userPhotos/adminPhoto.png',
+        'photo': 'user_photos/adminPhoto.png',
         
 
     },
@@ -94,7 +94,7 @@ DEFAULT_USERS = [
         'is_staff': False,
         'is_superuser': False,
         'phone': '666555444',
-        'photo': 'userPhotos/clientPhoto.png',
+        'photo': 'user_photos/clientPhoto.png',
     },
 ]
 
