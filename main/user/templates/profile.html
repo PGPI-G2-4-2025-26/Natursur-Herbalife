@@ -3,91 +3,322 @@
 
 {% block title %}Mi Perfil - NaturSur{% endblock title %}
 
+
 {% block extra_head %}
-    <link rel="stylesheet" href="{% static 'styles/login.css' %}">
-    <link rel="stylesheet" href="{% static 'styles/profile.css' %}">
+<link rel="stylesheet" href="{% static 'styles/login.css' %}">
+<link rel="stylesheet" href="{% static 'styles/profile.css' %}">
+<style>
+    /* Ocultamos el modo edición por defecto */
+    #edit-mode {
+        display: none;
+    }
+
+    /* Estilo para que los inputs se parezcan al texto normal y no rompan el diseño */
+    .data-grid .form-control {
+        width: 100%;
+        padding: 8px;
+        margin-top: -5px;
+        /* Ajuste fino para alinear con el texto de lectura */
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 1em;
+        background-color: #fff;
+    }
+
+    /* Input de archivo un poco más discreto */
+    input[type="file"] {
+        font-size: 0.8em;
+        margin-top: 10px;
+        width: 100%;
+    }
+</style>
 {% endblock extra_head %}
 
 {% block contenido %}
 <div class="login-container">
     <div class="login-card profile-card">
-        
-        <div class="profile-header">
-            <div class="profile-avatar">
-                {{ user.username.0|upper }}
-            </div>
-            <div class="profile-info">
-                <h2 class="profile-name">
-                    @{{ user.username }}
-                </h2>
-                
-                <div class="profile-role">
-                    Cuenta de 
-                    {% if user.is_superuser %}
-                        Super Administrador
-                    {% elif user.is_staff %}
-                        Administrador
+
+        <div id="view-mode">
+
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    {% if user.userprofile.photo %}
+                    <img src="{{ user.userprofile.photo.url }}" alt="Avatar"
+                        style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
                     {% else %}
-                        Cliente
+                    {{ user.username.0|upper }}
                     {% endif %}
                 </div>
+                <div class="profile-info">
+                    <h2 class="profile-name">@{{ user.username }}</h2>
+                    <div class="profile-role">
+                        Cuenta de
+                        {% if user.is_superuser %}
+                        Super Administrador
+                        {% elif user.is_staff %}
+                        Administrador
+                        {% else %}
+                        Cliente
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="data-section">
+                <h3 class="data-title">Información Personal</h3>
+                <div class="data-grid">
+                    <div class="data-item">
+                        <label>Nombre</label>
+                        <div class="data-value">{{ user.first_name|default:"-" }}</div>
+                    </div>
+                    <div class="data-item">
+                        <label>Apellidos</label>
+                        <div class="data-value">{{ user.last_name|default:"-" }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="data-section">
+                <h3 class="data-title">Información de Contacto</h3>
+                <div class="data-grid">
+                    <div class="data-item">
+                        <label>Correo Electrónico</label>
+                        <div class="data-value">{{ user.email|default:"No especificado" }}</div>
+                    </div>
+                    <div class="data-item">
+                        <label>Teléfono</label>
+                        <div class="data-value">{{ user.userprofile.phone|default:"-" }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="data-section">
+                <h3 class="data-title">Detalles de la Cuenta</h3>
+                <div class="data-grid">
+                    <div class="data-item">
+                        <label>Miembro desde</label>
+                        <div class="data-value">{{ user.date_joined|date:"d F Y" }}</div>
+                    </div>
+                    <div class="data-item">
+                        <label>Último acceso</label>
+                        <div class="data-value">{{ user.last_login|date:"d/m/Y - H:i" }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-actions">
+                <a href="{% url 'home' %}" class="btn-profile-action">
+                    <span class="material-icons">home</span> Volver
+                </a>
+                <button type="button" onclick="toggleEditMode()" class="btn-profile-action edit">
+                    <span class="material-icons">edit</span> Editar
+                </button>
+                <a href="{% url 'logout' %}" class="btn-profile-action logout">
+                    <span class="material-icons">logout</span> Cerrar sesión
+                </a>
             </div>
         </div>
 
-        <div class="data-section">
-            <h3 class="data-title">Información Personal</h3>
-            <div class="data-grid">
-                <div class="data-item">
-                    <label>Nombre</label>
-                    <div class="data-value">{{ user.first_name|default:"-" }}</div>
+        <div id="edit-mode">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="profile-header" style="margin-bottom: 10px; padding-bottom: 10px;">
+
+                    <div style="margin-right: 20px; display: flex; flex-direction: column; align-items: center;">
+
+                        <div style="display: none;">
+                            <input type="file" name="photo" id="file-input-manual" accept="image/*">
+
+                            <input type="hidden" name="delete_photo" id="delete_photo_input" value="false">
+                        </div>
+
+                        <label for="file-input-manual" class="avatar-edit-container" title="Cambiar foto">
+
+                            <img src="{% if user.userprofile.photo %}{{ user.userprofile.photo.url }}{% endif %}"
+                                alt="Avatar" 
+                                class="avatar-img" 
+                                id="img-preview"
+                                data-original-url="{% if user.userprofile.photo %}{{ user.userprofile.photo.url }}{% endif %}"
+                                {% if not user.userprofile.photo %}
+                                style="display: none;"
+                                {% endif %}>
+
+                            <div class="avatar-placeholder" id="initial-preview"
+                                {% if user.userprofile.photo %}style="display: none;"{% endif %}>
+                                {{ user.username.0|upper }}
+                            </div>
+
+                            <div class="camera-overlay">
+                                <span class="material-icons">photo_camera</span>
+                            </div>
+                        </label>
+
+                        
+                        <button type="button" onclick="deletePhoto()" class="btn-delete-photo" id="btn-delete-action"
+                            {% if not user.userprofile.photo %}style="display: none;"{% endif %}>
+                            Eliminar foto
+                        </button>
+
+
+                    </div>
+
+                    <div class="profile-info" style="align-self: flex-start; margin-top: 10px;">
+                        <h2 class="profile-name">@{{ user.username }}</h2>
+                        <div class="profile-role" style="color: var(--color-primary);">
+                            Editar perfil
+                        </div>
+                    </div>
                 </div>
-                
-                <div class="data-item">
-                    <label>Apellidos</label>
-                    <div class="data-value">{{ user.last_name|default:"-" }}</div>
+
+                <div class="data-section">
+                    <h3 class="data-title">Información Personal</h3>
+                    <div class="data-grid">
+                        <div class="data-item">
+                            <label>Nombre</label>
+                            {{ u_form.first_name }}
+                        </div>
+                        <div class="data-item">
+                            <label>Apellidos</label>
+                            {{ u_form.last_name }}
+                        </div>
+                    </div>
                 </div>
-            </div>
+
+                <div class="data-section">
+                    <h3 class="data-title">Información de Contacto</h3>
+                    <div class="data-grid">
+                        <div class="data-item">
+                            <label>Correo Electrónico</label>
+                            <div class="data-value" style="color: var(--color-primary);">{{ user.email }}</div>
+                        </div>
+                        <div class="data-item">
+                            <label>Teléfono</label>
+                            {{ p_form.phone }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="data-section">
+                    <h3 class="data-title">Detalles de la Cuenta</h3>
+                    <div class="data-grid">
+                        <div class="data-item">
+                            <label>Miembro desde</label>
+                            <div class="data-value" style="color: var(--color-primary);">{{ user.date_joined|date:"d F Y" }}</div>
+                        </div>
+                        <div class="data-item">
+                            <label>Último acceso</label>
+                            <div class="data-value" style="color: var(--color-primary);">{{ user.last_login|date:"d/m/Y - H:i" }}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-actions">
+                    <button type="submit" class="btn-profile-action">
+                        <span class="material-icons">save</span> Guardar
+                    </button>
+
+                    <button type="button" onclick="cancelEdit()" class="btn-profile-action logout">
+                        <span class="material-icons">close</span> Cancelar
+                    </button>
+                </div>
+            </form>
         </div>
 
-        <div class="data-section">
-            <h3 class="data-title">Información de Contacto</h3>
-            <div class="data-grid">
-                <div class="data-item"> 
-                    <label>Correo Electrónico</label>
-                    <div class="data-value">{{ user.email|default:"No especificado" }}</div>
-                </div>
-                <div class="data-item"> 
-                    <label>Teléfono</label>
-                    <div class="data-value">{{ user.phone|default:"No especificado" }}</div>
-                </div>
-            </div>
-        </div>
 
-        <div class="data-section">
-            <h3 class="data-title">Detalles de la Cuenta</h3>
-            <div class="data-grid">
-                <div class="data-item">
-                    <label>Miembro desde</label>
-                    <div class="data-value">{{ user.date_joined|date:"d F Y" }}</div>
-                </div>
-                
-                <div class="data-item">
-                    <label>Último acceso</label>
-                    <div class="data-value">{{ user.last_login|date:"d/m/Y - H:i" }}</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="profile-actions">
-            <a href="{% url 'home' %}" class="btn-profile-action">
-                <span class="material-icons">home</span> Volver
-            </a>
-            
-            <a href="{% url 'logout' %}" class="btn-profile-action logout">
-                <span class="material-icons">logout</span> Cerrar sesión
-            </a>
-        </div>
 
     </div>
 </div>
+
+<script>
+    
+
+    var fileInput = document.getElementById('file-input-manual');
+    if (fileInput) {
+        fileInput.onchange = function (evt) {
+            var file = evt.target.files[0];
+            
+            if (file) {
+                var reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    var imgPreview = document.getElementById('img-preview');
+                    var initPreview = document.getElementById('initial-preview');
+                    var deleteBtn = document.getElementById('btn-delete-action');
+                    var deleteInput = document.getElementById('delete_photo_input');
+                    var feedback = document.getElementById('file-name-feedback');
+
+                    imgPreview.src = e.target.result;
+                    imgPreview.style.display = 'block'; 
+                    if(initPreview) initPreview.style.display = 'none'; 
+                                        
+                    if(deleteInput) deleteInput.value = 'false';
+                    
+                    if(deleteBtn) deleteBtn.style.display = 'block';
+                }
+                
+                reader.readAsDataURL(file);
+            }
+        };
+    }
+
+    function deletePhoto() {
+        document.getElementById('delete_photo_input').value = 'true';
+        
+        document.getElementById('file-input-manual').value = '';
+
+        document.getElementById('img-preview').style.display = 'none';
+        document.getElementById('initial-preview').style.display = 'flex';
+        
+        var btn = document.getElementById('btn-delete-action');
+        if(btn) btn.style.display = 'none';
+        
+    }
+
+    function toggleEditMode() {
+        var viewMode = document.getElementById("view-mode");
+        var editMode = document.getElementById("edit-mode");
+
+        if (viewMode.style.display === "none") {
+            viewMode.style.display = "block";
+            editMode.style.display = "none";
+        } else {
+            viewMode.style.display = "none";
+            editMode.style.display = "block";
+        }
+    }
+
+    function cancelEdit() {
+        var fileInput = document.getElementById('file-input-manual');
+        if(fileInput) fileInput.value = '';
+        var feedback = document.getElementById('file-name-feedback');
+        if(feedback) feedback.textContent = '';
+
+        var img = document.getElementById('img-preview');
+        var init = document.getElementById('initial-preview');
+        var deleteBtn = document.getElementById('btn-delete-action');
+        var deleteInput = document.getElementById('delete_photo_input');
+
+        var originalUrl = img.getAttribute('data-original-url');
+
+        if (originalUrl && originalUrl.trim() !== "") {
+            img.src = originalUrl;      
+            img.style.display = 'block'; 
+            init.style.display = 'none'; 
+            
+            if(deleteBtn) deleteBtn.style.display = 'block';
+            if(deleteInput) deleteInput.value = 'false';
+            
+        } else {
+            img.style.display = 'none';  
+            img.src = '';               
+            init.style.display = 'flex';
+            
+            if(deleteBtn) deleteBtn.style.display = 'none';
+        }
+
+        toggleEditMode();
+    }
+</script>
 {% endblock contenido %}
