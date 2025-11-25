@@ -5,9 +5,11 @@ __pycache__/
 venv/
 .venv/
 
+media/*
+!media/.gitkeep
+
 # --- Django Files ---
 db.sqlite3
-/media/
 /static_root/
 
 # --- Archivos Sensibles ---

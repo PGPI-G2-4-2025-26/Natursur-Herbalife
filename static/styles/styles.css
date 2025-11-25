@@ -46,10 +46,11 @@ header {
 }
 
 .navbar {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  align-items: center;
-  width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;     
+    align-items: center; 
+    width: 100%;  
+    height: auto;
 }
 
 .navbar-logo {
@@ -76,24 +77,24 @@ header {
 }
 
 .btn-nav {
-  border-left: 1px solid var(--color-white);
-  border-right: 1px solid var(--color-white);
-  background-color: transparent;
-  color: var(--color-text-dark);
-  padding: 20px 70px;
-  margin: 0;
-  text-decoration: none;
-  font-weight: bold;
-  font-size: 1.1em;
-  position: relative;
-  display: flex;
-  overflow: hidden;
-  justify-content: center;
-  align-items: center;
-
-  transition: background-color 0.2s;
-  transform: none;
-  line-height: 1.2;
+    border-left: 1px solid var(--color-white); 
+    border-right: 1px solid var(--color-white);    
+    background-color:transparent; 
+    color: var(--color-text-dark); 
+    padding: 24px 70px; 
+    margin: 0;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.1em;
+    position: relative; 
+    display:  flex; 
+    overflow: hidden; 
+    justify-content: center; 
+    align-items: center;
+    
+    transition: background-color 0.2s; 
+    transform: none; 
+    line-height: 1.2; 
 }
 
 .btn-nav span {

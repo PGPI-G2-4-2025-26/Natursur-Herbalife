@@ -24,6 +24,13 @@
     font-weight: bold;
     color: var(--color-primary);
     user-select: none; 
+    overflow: hidden;
+}
+
+.profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .profile-info {
@@ -133,4 +140,99 @@
 .btn-profile-action.logout:hover {
     background-color: #ec3f2f;
     color: var(--color-white);
+}
+.btn-profile-action.edit {
+    background-color: #f9f4c9;
+    color: #fea427; 
+    padding: 10px 23px; 
+}
+
+.btn-profile-action.edit:hover {
+    background-color: #ecd02f;
+    color: var(--color-white);
+}
+
+#id_photo {
+    display: none;
+}
+
+.avatar-edit-container {
+    position: relative;
+    display: block;
+    width: 80px;
+    height: 80px;
+    
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+    
+    background-color: var(--color-tertiary);
+}
+
+.avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.avatar-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px;
+    color: var(--color-primary);
+    font-weight: bold;
+}
+
+.camera-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%; 
+    height: 100%;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    background-color: rgba(0, 0, 0, 0.4); 
+    color: white;
+    
+    opacity: 0.5; 
+    transition: opacity 0.3s ease;
+}
+
+.camera-overlay .material-icons {
+    font-size: 32px;
+}
+
+.avatar-edit-container:hover .camera-overlay {
+    opacity: 1; 
+}
+
+
+.btn-delete-photo {
+    background-color: transparent;
+    border: none; 
+    padding: 5px 0; 
+    
+    color: #c62828; 
+    font-size: 0.8em;
+    text-decoration: none; 
+    
+    margin-top: 5px;
+    cursor: pointer;
+    font-family: inherit; 
+}
+
+.btn-delete-photo:hover {
+    background-color: transparent;
+    color: #b71c1c;
+    text-decoration: underline; 
+}
+.d-none {
+    display: none !important;
 }
