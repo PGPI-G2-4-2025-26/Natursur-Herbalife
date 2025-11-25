@@ -7,7 +7,6 @@ venv/
 
 # --- Django Files ---
 db.sqlite3
-/media/
 /static_root/
 
 # --- Archivos Sensibles ---
