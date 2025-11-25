@@ -128,3 +128,6 @@ def añadir_personalizados():
 def cargar():
     importar_productos_desde_csv()
     añadir_personalizados()
+
+if __name__ == "__main__":
+    cargar()

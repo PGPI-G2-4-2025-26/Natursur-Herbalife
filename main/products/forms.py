@@ -9,7 +9,7 @@ from .models import Order
 class OrderForm(forms.ModelForm):
     # Declarar campos explícitamente para poder controlar validación y mensajes
     solicitant_name = forms.CharField(
-        label='Full Name',
+        label='Nombre completo',
         required=True,
         min_length=3,
         widget=forms.TextInput(attrs={'placeholder': 'Nombre completo'}),
@@ -20,7 +20,7 @@ class OrderForm(forms.ModelForm):
     )
 
     solicitant_contact = forms.CharField(
-        label='Email or Phone Number (for contact)',
+        label='Email o Número de teléfono (para contacto)',
         required=True,
         widget=forms.TextInput(attrs={'placeholder': 'Correo electrónico o teléfono'}),
         error_messages={
@@ -29,7 +29,7 @@ class OrderForm(forms.ModelForm):
     )
 
     solicitant_address = forms.CharField(
-        label='Address',
+        label='Dirección de envío',
         required=True,
         min_length=6,
         widget=forms.Textarea(attrs={'rows': 2, 'placeholder': 'Dirección de envío'}),

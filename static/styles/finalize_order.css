@@ -1,0 +1,152 @@
+/* Styles for finalize_order page (checkout) */
+
+:root{
+    --brand-green: #2c5a2c;
+    --brand-dark: #2c3e50;
+    --muted: #666;
+    --card-bg: #ffffff;
+    --card-shadow: 0 8px 18px rgba(0,0,0,0.06);
+}
+
+.finalize-page{
+    font-family: system-ui, sans-serif;
+    color: #222;
+    padding: 28px 16px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.finalize-grid{
+    display:grid;
+    grid-template-columns: 1fr 360px;
+    gap: 24px;
+    align-items:start;
+}
+
+.checkout-form{ background:transparent; }
+.checkout-form h2{ margin-top:0; }
+
+.form-fields p{ margin:10px 0; }
+.form-fields label{ display:block; font-weight:600; margin-bottom:6px; color:var(--brand-dark); }
+.form-fields input[type="text"],
+.form-fields input[type="email"],
+.form-fields input[type="tel"],
+.form-fields textarea,
+.form-fields select{
+    width:100%;
+    padding:10px 12px;
+    border-radius:8px;
+    border:1px solid rgba(0,0,0,0.08);
+    box-sizing:border-box;
+    font-size:0.95rem;
+    /* ensure inputs and textarea use the same font as the page */
+    font-family: inherit;
+}
+.form-fields textarea{ min-height:100px; }
+
+/* Placeholder styling: use the same font and size as inputs/textareas */
+.form-fields input::placeholder,
+.form-fields textarea::placeholder{
+    color: rgba(0,0,0,0.45);
+    font-family: inherit;
+    font-size: 0.95rem;
+    opacity: 1; /* make sure opacity isn't reduced by browsers */
+}
+
+.form-actions{
+    margin-top:16px;
+    display:flex;
+    gap:12px;
+    align-items:center;
+}
+.confirm-btn{
+    background:var(--brand-green);
+    color:#fff;
+    padding:10px 16px;
+    border-radius:10px;
+    border:none;
+    cursor:pointer;
+    font-weight:700;
+    text-align: center;
+    transition: transform .12s ease, box-shadow .12s ease, opacity .12s ease;
+    /* fixed size and typography to match back-link */
+    width:180px;
+    height:44px;
+    font-size:16px;
+    /* center text vertically using flexbox for robust alignment */
+    line-height: normal;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    box-sizing:border-box;
+}
+.back-link{
+
+    color:var(--brand-dark);
+    padding:10px 16px;
+    border-radius:10px;
+    border:1px solid rgba(0,0,0,0.06);
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    
+    transition: transform .12s ease, box-shadow .12s ease, background-color .12s ease, color .12s ease;
+    /* fixed size and typography to match confirm button */
+    width:180px;
+    height:44px;
+    font-size:16px;
+    line-height:44px;
+    box-sizing:border-box;
+}
+
+/* Hover / focus feedback for action buttons */
+.confirm-btn:hover,
+.confirm-btn:focus{
+    opacity:0.95;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(168, 216, 168, 0.12);
+    outline: none;
+}
+.confirm-btn:focus{ box-shadow: 0 0 0 4px rgba(138, 199, 138, 0.08); }
+
+.back-link:hover,
+.back-link:focus{
+    background: #6fb987;
+    color: #fff;
+    border-color: #6fb987;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(168, 212, 168, 0.12);
+    outline: none;
+}
+
+.checkout-summary{
+    background:var(--card-bg);
+    box-shadow:var(--card-shadow);
+    padding:16px;
+    border-radius:10px;
+    position:sticky;
+    top:28px;
+}
+.checkout-summary h3{ margin-top:0; }
+.summary-list{ list-style:none; margin:0; padding:0; max-height:360px; overflow:auto; }
+.summary-item{
+    display:flex;
+    justify-content:space-between;
+    gap:8px;
+    padding:10px 0;
+    border-bottom:1px solid rgba(0,0,0,0.04);
+}
+.summary-item .s-name{ flex:1 1 auto; color:var(--brand-dark); }
+.summary-item .s-qty{ color:var(--muted); margin-left:8px; }
+.summary-item .s-price{ min-width:70px; text-align:right; }
+
+.summary-total-row{ display:flex; justify-content:space-between; margin-top:14px; font-weight:800; color:var(--brand-green); }
+.empty{ color:var(--muted); }
+
+@media (max-width: 900px){
+    .finalize-grid{ grid-template-columns: 1fr; }
+    .checkout-summary{ position:static; top:auto; }
+    /* make action buttons full-width on small screens */
+    .form-actions{ flex-direction:column; align-items:stretch; }
+    .confirm-btn, .back-link{ width:100%; min-width:0; height:auto; line-height:normal; }
+}
