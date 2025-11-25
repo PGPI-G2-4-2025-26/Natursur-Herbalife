@@ -57,7 +57,13 @@
 
                     <div class="price-row">
                         <div class="price">{{ product.price }} €</div>
-                        <div class="stock">Stock Disponible: {{ product.available_stock }}</div>
+                        {% if product.available_stock == 0 %}
+                            <div class="stock stock-out">Fuera de stock</div>
+                        {% elif product.available_stock < 5 %}
+                            <div class="stock stock-low">Quedan pocas unidades ({{ product.available_stock }})</div>
+                        {% else %}
+                            <div class="stock stock-available">Disponible</div>
+                        {% endif %}
                     </div>
 
                     <form action="{% url 'add_to_cart' product_id=product.id %}" method="post" class="add-to-cart-form">

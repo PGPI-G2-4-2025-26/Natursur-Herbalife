@@ -89,6 +89,13 @@
 
   <section class="main-content-section">
     {% block contenido %}{% endblock contenido %}
+    {% if messages %}
+      <div class="site-messages">
+        {% for message in messages %}
+          <div class="message {{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
     <a href="{% url 'view_cart' %}" class="btn-cesta">
       <span class="material-icons">shopping_basket</span>
       Carrito

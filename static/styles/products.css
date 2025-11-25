@@ -166,6 +166,29 @@
 	color:var(--muted);
 }
 
+/* Estados de stock */
+.stock-out{
+	color: #d9534f;
+	background: rgba(217,83,79,0.06);
+	padding: 4px 8px;
+	border-radius: 6px;
+	font-weight: 700;
+}
+.stock-low{
+	color: #f0ad4e;
+	background: rgba(240,173,78,0.06);
+	padding: 4px 8px;
+	border-radius: 6px;
+	font-weight: 700;
+}
+.stock-available{
+	color: var(--brand-green);
+	background: rgba(44,90,44,0.04);
+	padding: 4px 8px;
+	border-radius: 6px;
+	font-weight: 700;
+}
+
 .add-to-cart-row{
 	display:flex;
 	align-items:center;

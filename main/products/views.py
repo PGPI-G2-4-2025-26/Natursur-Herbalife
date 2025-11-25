@@ -6,9 +6,10 @@ from django.core.paginator import Paginator
 from main.populateDB import cargar
 from .models import Product, Order, OrderProduct
 from .forms import OrderForm
-from .service import ProductService
+from .service import ProductService, InsufficientStockError
 from decimal import Decimal, ROUND_HALF_UP
 from django.contrib import messages
+from django.core.exceptions import ValidationError
 
 def list_products(request):
     q = request.GET.get('q', '')
@@ -198,7 +199,57 @@ def finalize_order(request):
     order.status = 'SOLICITADO'
     order.save()
 
-    paid_order = ProductService.mark_order_as_paid(order.id)
+    try:
+        paid_order = ProductService.mark_order_as_paid(order.id)
+    except (ValidationError, InsufficientStockError) as e:
+        if isinstance(e, InsufficientStockError):
+            removed = getattr(e, 'removed', []) or []
+        else:
+            raw = getattr(e, 'message_dict', {})
+            removed = raw.get('insufficient_stock_removed') or raw.get('insufficient_stock') or []
+            if removed and isinstance(removed, list) and not all(isinstance(x, dict) for x in removed):
+                removed = []
+        order.status = 'EN_CARRITO'
+        order.save()
+
+        try:
+            removed_ids = [int(r.get('line_id')) for r in removed if r.get('line_id')]
+        except Exception:
+            removed_ids = []
+        if removed_ids:
+            OrderProduct.objects.filter(id__in=removed_ids).delete()
+
+        lines = OrderProduct.objects.filter(order=order)
+        total_price = 0
+        for l in lines:
+            unit_price = l.price_at_order if getattr(l, 'price_at_order', None) is not None else l.product.price
+            unit_price = Decimal(unit_price)
+            qty = int(l.quantity or 0)
+            subtotal = (unit_price * qty).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+            setattr(l, 'unit_price', unit_price)
+            setattr(l, 'subtotal', subtotal)
+            setattr(l, 'unit_price_display', f"{unit_price:.2f}".replace('.', ','))
+            setattr(l, 'subtotal_display', f"{subtotal:.2f}".replace('.', ','))
+            total_price += subtotal
+
+        try:
+            total_price_display = f"{total_price:.2f}".replace('.', ',')
+        except Exception:
+            total_price_display = str(total_price)
+
+        if removed:
+            item_texts = []
+            for r in removed:
+                name = r.get('product_name') or r.get('product_ref') or str(r.get('product_id'))
+                qty = r.get('quantity_removed') or r.get('requested') or ''
+                item_texts.append(f"{name} (cantidad eliminada: {l.quantity})")
+            messages.error(request, 'No se pudo completar el pago. Algunos productos ya no estaban disponibles y fueron eliminados del carrito: ' + ', '.join(item_texts))
+        else:
+            messages.error(request, 'No se pudo completar el pago por falta de stock en algunos productos.')
+
+        form = OrderForm(instance=order)
+        return redirect('view_cart')
+
     try:
         total_price_display = f"{total_price:.2f}".replace('.', ',')
     except Exception:
