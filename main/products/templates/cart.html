@@ -1,43 +1,75 @@
-{% extends 'base.html' %} {% block encabezado %}
-<h1>Página Principal de Natursur</h1>
-{% endblock %} {% block contenido %}
-<div style="display: flex">
-  <div style="width: 70%; padding: 10px">
-    <h2>Carrito de Compras</h2>
+{% extends 'base.html' %}
+{% load static %}
+
+{% block encabezado %}
+<link rel="stylesheet" href="{% static 'styles/cart.css' %}">
+<h1>Carrito de Compras</h1>
+{% endblock %}
+
+{% block contenido %}
+<div class="cart-page">
+  <div class="cart-container">
+    <div class="cart-items">
+      <h2>Carrito de Compras</h2>
+
+      {% if cart_items %}
+        {% for item in cart_items %}
+          <div class="cart-item">
+            <div class="item-thumb">
+              {% if item.product.image %}
+                {% if item.product.image|slice:":4" == "http" %}
+                  <img src="{{ item.product.image }}" alt="{{ item.product.name }}">
+                {% else %}
+                  <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                {% endif %}
+              {% else %}
+                <div class="no-image">No hay imagen</div>
+              {% endif %}
+            </div>
+
+            <div class="item-info">
+              <div class="item-title">{{ item.product.name }}</div>
+              <div class="item-meta">Precio unitario: {{ item.unit_price_display }}</div>
+              <div class="item-meta">Subtotal: {{ item.subtotal_display }}</div>
+
+              <div class="item-actions">
+                <div>
+                  <label for="qty-{{ item.id }}">Cantidad</label>
+                  <input id="qty-{{ item.id }}" class="quantity-input" value="{{ item.quantity }}" readonly>
+                </div>
+
+                <form method="post" action="{% url 'remove_from_cart' item.id %}">
+                  {% csrf_token %}
+                  <button type="submit" class="remove-btn">Eliminar</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+
+      {% else %}
+        <div class="cart-empty">
+          <p>Tu carrito está vacío.</p>
+          <a href="{% url 'list_products' %}" class="continue-link">Seguir comprando</a>
+        </div>
+      {% endif %}
+    </div>
+
     {% if cart_items %}
-    <ul>
-      {% for item in cart_items %}
-      <li>
-        {{ item.product.name }} - Cantidad: {{ item.quantity }}
-        <br />
-        Precio unitario: {{ item.unit_price_display }} &nbsp;|&nbsp; Subtotal:
-        {{ item.subtotal_display }}
-        <form
-          method="post"
-          action="{% url 'remove_from_cart' item.id %}"
-          style="display: inline"
-        >
-          {% csrf_token %}
-          <button type="submit">Eliminar</button>
-        </form>
-      </li>
-      {% endfor %}
-    </ul>
-    <p>Total: {{ total_price_display }}</p>
-    <form method="get" action="{% url 'finalize_order' %}">
-      <button type="submit">Proceder al Pago</button>
-    </form>
-    <a
-      href="{% url 'list_products' %}"
-      >Seguir comprando</a
-    >
-    {% else %}
-    <p>Tu carrito está vacío.</p>
-    <a
-      href="{% url 'list_products' %}"
-      >Seguir comprando</a
-    >
+      <aside class="order-summary">
+        <div class="summary-row"><span>Subtotal</span><span>{{ total_price_display }}</span></div>
+        <div class="summary-row"><span>Envío</span><span>—</span></div>
+        <div class="summary-row summary-total"><span>Total</span><span>{{ total_price_display }}</span></div>
+        
+        <div class="summary-actions">
+          <form method="get" action="{% url 'finalize_order' %}" style="margin:0;">
+            <button type="submit" class="checkout-btn">Proceder al Pago</button>
+          </form>
+          <a href="{% url 'list_products' %}" class="continue-link">Seguir comprando</a>
+        </div>
+      </aside>
     {% endif %}
   </div>
 </div>
+
 {% endblock %}
