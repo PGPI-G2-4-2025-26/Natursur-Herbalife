@@ -33,7 +33,7 @@ a {
 }
 
 a:hover {
-    color: var(--color-primary);
+    color: rgb(154, 228, 120);
 }
 
 
