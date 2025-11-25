@@ -59,10 +59,12 @@
             <div class="item-list">
                 {% for item in products %}
                     <div class="item-row">
-                        {% if item.product.image %}
+                        {% if item.product_image %}
+                            <img src="{{ item.product_image }}" alt="{{ item.product_name }}" class="item-image">
+                        {% elif item.product and item.product.image %}
                             <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="item-image">
                         {% endif %}
-                        <div class="item-name"><strong>{{ item.product.name }}</strong></div>
+                        <div class="item-name"><strong>{{ item.product_name|default:item.product.name }}</strong></div>
                         <div class="item-qty">Cantidad: {{ item.quantity }}</div>
                     </div>
                 {% empty %}

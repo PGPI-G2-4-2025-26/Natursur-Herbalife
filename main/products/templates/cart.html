@@ -15,8 +15,10 @@
       {% if cart_items %}
         {% for item in cart_items %}
           <div class="cart-item">
-            <div class="item-thumb">
-              {% if item.product.image %}
+              <div class="item-thumb">
+              {% if item.product_image %}
+                  <img src="{{ item.product_image }}" alt="{{ item.product_name }}">
+              {% elif item.product and item.product.image %}
                 {% if item.product.image|slice:":4" == "http" %}
                   <img src="{{ item.product.image }}" alt="{{ item.product.name }}">
                 {% else %}
@@ -27,10 +29,10 @@
               {% endif %}
             </div>
 
-            <div class="item-info">
-              <div class="item-title">{{ item.product.name }}</div>
-              <div class="item-meta">Precio unitario: {{ item.unit_price_display }}</div>
-              <div class="item-meta">Subtotal: {{ item.subtotal_display }}</div>
+              <div class="item-info">
+              <div class="item-title">{{ item.product_name|default:item.product.name }}</div>
+              <div class="item-meta">Precio unitario: {{ item.unit_price_display }} €</div>
+              <div class="item-meta">Subtotal: {{ item.subtotal_display }} €</div>
 
               <div class="item-actions">
                 <div>
@@ -57,9 +59,9 @@
 
     {% if cart_items %}
       <aside class="order-summary">
-        <div class="summary-row"><span>Subtotal</span><span>{{ total_price_display }}</span></div>
+        <div class="summary-row"><span>Subtotal</span><span>{{ total_price_display }} €</span></div>
         <div class="summary-row"><span>Envío</span><span>—</span></div>
-        <div class="summary-row summary-total"><span>Total</span><span>{{ total_price_display }}</span></div>
+        <div class="summary-row summary-total"><span>Total</span><span>{{ total_price_display }} €</span></div>
         
         <div class="summary-actions">
           <form method="get" action="{% url 'finalize_order' %}" style="margin:0;">

@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models.functions import Coalesce
-from django.db.models import Sum
+from django.db.models import Sum, Q
 from django.core.paginator import Paginator
 from main.populateDB import cargar
 from .models import Product, Order, OrderProduct
@@ -9,14 +10,16 @@ from .forms import OrderForm
 from .service import ProductService
 from decimal import Decimal, ROUND_HALF_UP
 from django.contrib import messages
+from .forms import ProductForm
+from django.db import IntegrityError, transaction
 
 def list_products(request):
     q = request.GET.get('q', '')
     q = q.strip() if isinstance(q, str) else ''
     if q:
-        products = Product.objects.filter(name__icontains=q)
+        products = Product.objects.filter(name__icontains=q).exclude(name='(producto eliminado)')
     else:
-        products = Product.objects.all()
+        products = Product.objects.exclude(name='(producto eliminado)')
 
     cart_quantities = {}
     order = None
@@ -43,7 +46,14 @@ def list_products(request):
         setattr(p, 'max_add', max_add)
         product_list.append(p)
 
-    return render(request, 'products.html', {'products': product_list, 'q': q})
+    try:
+        page_number = int(request.GET.get('page', 1))
+    except (TypeError, ValueError):
+        page_number = 1
+    paginator = Paginator(product_list, 21)
+    products_page = paginator.get_page(page_number)
+
+    return render(request, 'products.html', {'products': products_page, 'q': q})
 
 def add_to_cart(request, product_id):
     
@@ -83,42 +93,22 @@ def add_to_cart(request, product_id):
         'product_id': product.id,
         'added_qty': added_qty,
     }
+    messages.success(request, success_message)
 
-    products = Product.objects.all()
-    cart_quantities = {}
-    order = None
-    if hasattr(request, 'user') and request.user.is_authenticated:
-        order = Order.objects.filter(status='EN_CARRITO', registered_user=request.user).first()
-    else:
-        cookie = request.COOKIES.get('anon_user_id')
-        if cookie:
-            order = Order.objects.filter(status='EN_CARRITO', anonymous_user_cookie=cookie).first()
+    page = request.POST.get('page', request.GET.get('page', '1'))
 
-    if order:
-        lines = OrderProduct.objects.filter(order=order)
-        for l in lines:
-            cart_quantities[l.product.id] = l.quantity
+    base = reverse('list_products')
+    qs = f"?page={page}"
+    if q:
+        qs += f"&q={q}"
 
-    product_list = []
-    for p in products:
-        in_cart = cart_quantities.get(p.id, 0)
-        max_add = p.stock - in_cart
-        if max_add < 0:
-            max_add = 0
-        setattr(p, 'in_cart_qty', in_cart)
-        setattr(p, 'available_stock', p.stock - in_cart if (p.stock - in_cart) > 0 else 0)
-        setattr(p, 'max_add', max_add)
-        product_list.append(p)
+    fragment = f"#product-{product.id}"
+    redirect_url = f"{base}{qs}{fragment}"
 
-    response = render(request, 'products.html', {
-        'products': product_list,
-        'last_added_product_id': product.id,
-        'q': q,
-        'success_notification': success_notification,
-    })
+    resp = redirect(redirect_url)
     if anon_cookie:
-        response.set_cookie('anon_user_id', anon_cookie, max_age=60*60*24*30)
-    return response
+        resp.set_cookie('anon_user_id', anon_cookie, max_age=60*60*24*30)
+    return resp
 
 def view_cart(request):
     order = None
@@ -134,8 +124,11 @@ def view_cart(request):
     if order:
         lines = OrderProduct.objects.filter(order=order)
         for l in lines:
-            unit_price = l.price_at_order if getattr(l, 'price_at_order', None) is not None else l.product.price
-            unit_price = Decimal(unit_price)
+            raw_price = l.price_at_order if getattr(l, 'price_at_order', None) is not None else (l.product.price if l.product else 0)
+            try:
+                unit_price = Decimal(raw_price)
+            except Exception:
+                unit_price = Decimal('0.00')
             qty = int(l.quantity or 0)
             subtotal = (unit_price * qty).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
             setattr(l, 'unit_price', unit_price)
@@ -221,7 +214,12 @@ def show_orders(request):
     if status:
         qs = qs.filter(status=status)
 
-    qs = qs.annotate(total_quantity=Coalesce(Sum('order_products__quantity'), 0))
+    qs = qs.annotate(
+        total_quantity=Coalesce(
+            Sum('order_products__quantity', filter=Q(order_products__product__isnull=False) & ~Q(order_products__product__name='(producto eliminado)')),
+            0
+        )
+    )
 
     page_number = request.GET.get('page', 1)
     paginator = Paginator(qs.order_by('date'), per_page)
@@ -234,12 +232,14 @@ def show_orders(request):
             setattr(o, 'contact_email', getattr(o, 'solicitant_contact', '') or '')
         if not hasattr(o, 'telephone'):
             setattr(o, 'telephone', '')
-        # calcular precio total del pedido para mostrar en la lista
         total_price = Decimal('0.00')
-        lines = OrderProduct.objects.filter(order=o).select_related('product')
+        lines = OrderProduct.objects.filter(order=o).select_related('product').exclude(product__isnull=True).exclude(product__name='(producto eliminado)')
         for l in lines:
-            unit_price = l.price_at_order if getattr(l, 'price_at_order', None) is not None else l.product.price
-            unit_price = Decimal(unit_price)
+            raw_price = l.price_at_order if getattr(l, 'price_at_order', None) is not None else (l.product.price if l.product else 0)
+            try:
+                unit_price = Decimal(raw_price)
+            except Exception:
+                unit_price = Decimal('0.00')
             qty = int(l.quantity or 0)
             subtotal = (unit_price * qty).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
             total_price += subtotal
@@ -294,8 +294,11 @@ def show_orders_admin(request):
         total_price = Decimal('0.00')
         lines = OrderProduct.objects.filter(order=o).select_related('product')
         for l in lines:
-            unit_price = l.price_at_order if getattr(l, 'price_at_order', None) is not None else l.product.price
-            unit_price = Decimal(unit_price)
+            raw_price = l.price_at_order if getattr(l, 'price_at_order', None) is not None else (l.product.price if l.product else 0)
+            try:
+                unit_price = Decimal(raw_price)
+            except Exception:
+                unit_price = Decimal('0.00')
             qty = int(l.quantity or 0)
             subtotal = (unit_price * qty).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
             total_price += subtotal
@@ -342,7 +345,6 @@ def edit_order(request, order_id):
             if combined:
                 order.solicitant_name = combined
 
-        # solicitant_contact stores contact info (email or phone). Prefer email when provided.
         if email:
             order.solicitant_contact = email
         elif telephone:
@@ -358,8 +360,11 @@ def edit_order(request, order_id):
     total_price = Decimal('0.00')
     products = OrderProduct.objects.filter(order=order).select_related('product')
     for l in products:
-        unit_price = l.price_at_order if getattr(l, 'price_at_order', None) is not None else l.product.price
-        unit_price = Decimal(unit_price)
+        raw_price = l.price_at_order if getattr(l, 'price_at_order', None) is not None else (l.product.price if l.product else 0)
+        try:
+            unit_price = Decimal(raw_price)
+        except Exception:
+            unit_price = Decimal('0.00')
         qty = int(l.quantity or 0)
         subtotal = (unit_price * qty).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
         total_price += subtotal
@@ -390,11 +395,13 @@ def order_detail(request, order_id):
         return redirect('my_orders')
 
     products = OrderProduct.objects.filter(order=order).select_related('product')
-    # calcular precio total del pedido para mostrar en el detalle
     total_price = Decimal('0.00')
     for l in products:
-        unit_price = l.price_at_order if getattr(l, 'price_at_order', None) is not None else l.product.price
-        unit_price = Decimal(unit_price)
+        raw_price = l.price_at_order if getattr(l, 'price_at_order', None) is not None else (l.product.price if l.product else 0)
+        try:
+            unit_price = Decimal(raw_price)
+        except Exception:
+            unit_price = Decimal('0.00')
         qty = int(l.quantity or 0)
         subtotal = (unit_price * qty).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
         total_price += subtotal
@@ -430,6 +437,162 @@ def carga(request):
            
     return render(request, 'confirmacion.html')
 
+@login_required
+def show_product_admin(request):
+    if not request.user.is_staff:
+        return redirect('list_products')
+
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        if action == 'delete':
+            try:
+                pid = int(request.POST.get('product_id'))
+                prod = Product.objects.get(id=pid)
+                prod_name = prod.name
+                prod.delete()
+                messages.success(request, f"Producto '{prod_name}' eliminado correctamente.")
+                base = reverse('show_products_admin')
+                q = request.GET.get('q', '')
+                per_page = request.GET.get('per_page', '')
+                params = []
+                if q:
+                    params.append(f"q={q}")
+                if per_page:
+                    params.append(f"per_page={per_page}")
+                if params:
+                    return redirect(base + '?' + '&'.join(params))
+                return redirect(base)
+            except (Product.DoesNotExist, ValueError, TypeError):
+                messages.error(request, 'No se pudo eliminar el producto.')
+
+    q = request.GET.get('q', '').strip()
+    per_page = 21
+
+    qs = Product.objects.exclude(name='(producto eliminado)')
+    if q:
+        qs = qs.filter(name__icontains=q)
+    qs = qs.order_by('name')
+
+    page_number = request.GET.get('page', 1)
+    paginator = Paginator(qs, per_page)
+    products_page = paginator.get_page(page_number)
+
+    return render(request, 'show_products_admin.html', {
+        'products': products_page,
+        'current_query': q,
+    })
+
+
+@login_required
+def create_product_admin(request):
+    if not request.user.is_staff:
+        return redirect('list_products')
+
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES)
+        if form.is_valid():
+            prod = form.save(commit=False)
+            if getattr(prod, 'stock', None) is None:
+                prod.stock = 0
+            prod.save()
+            messages.success(request, f"Producto '{prod.name}' creado correctamente.")
+            return redirect('show_products_admin')
+    else:
+        form = ProductForm()
+
+    return render(request, 'create_product_admin.html', {'form': form})
+
+
+@login_required
+def edit_product_admin(request, product_id):
+    if not request.user.is_staff:
+        return redirect('list_products')
+
+    try:
+        prod = Product.objects.get(id=product_id)
+    except Product.DoesNotExist:
+        messages.error(request, 'Producto no encontrado.')
+        return redirect('show_products_admin')
+
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES, instance=prod)
+        if form.is_valid():
+            prod = form.save(commit=False)
+            if getattr(prod, 'stock', None) is None:
+                prod.stock = 0
+            prod.save()
+            messages.success(request, f"Producto '{prod.name}' actualizado correctamente.")
+            return redirect('show_products_admin')
+        else:
+            messages.error(request, 'Hay errores en el formulario. Revísalos e inténtalo de nuevo.')
+    else:
+        form = ProductForm(instance=prod)
+
+    return render(request, 'edit_product_admin.html', {'form': form, 'product': prod})
+
+
+@login_required
+def delete_product_admin(request, product_id):
+    """Delete a product (admin only). Accepts POST only and redirects back to admin list."""
+    if not request.user.is_staff:
+        return redirect('list_products')
+
+    if request.method != 'POST':
+        return redirect('show_products_admin')
+
+    try:
+        prod = Product.objects.get(id=product_id)
+        prod_name = prod.name
+
+        cart_lines = OrderProduct.objects.filter(product=prod, order__status='EN_CARRITO')
+        if cart_lines.exists():
+            cart_lines.delete()
+
+        hist_lines = OrderProduct.objects.filter(product=prod).exclude(order__status='EN_CARRITO')
+        for l in hist_lines:
+            changed = False
+            if not getattr(l, 'product_name', None):
+                l.product_name = prod.name
+                changed = True
+            if not getattr(l, 'product_image', None):
+                img = getattr(prod, 'image', None)
+                if img:
+                    try:
+                        l.product_image = img.url
+                    except Exception:
+                        l.product_image = getattr(img, 'name', None)
+                    changed = True
+            if not getattr(l, 'price_at_order', None):
+                try:
+                    l.price_at_order = prod.price
+                    changed = True
+                except Exception:
+                    pass
+            if changed:
+                l.save()
+
+        try:
+            with transaction.atomic():
+                hist_lines.update(product=None)
+        except IntegrityError:
+            placeholder, _ = Product.objects.get_or_create(
+                name='(producto eliminado)',
+                defaults={
+                    'ref': None,
+                    'price': 0,
+                    'flavor': None,
+                    'size': None,
+                    'stock': 0,
+                }
+            )
+            hist_lines.update(product=placeholder)
+
+        prod.delete()
+        messages.success(request, f"Producto '{prod_name}' eliminado correctamente.")
+    except Product.DoesNotExist:
+        messages.error(request, 'Producto no encontrado.')
+
+    return redirect('show_products_admin')
 
 def remove_from_cart(request, item_id):
     if request.method != 'POST':

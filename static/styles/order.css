@@ -293,8 +293,11 @@ body {
     transition: background-color 0.3s;
 }
 
-.btn-page:hover {
+.btn-page:hover,
+.btn-page:focus {
     background-color: #f9f9f9;
+    color: #333;
+    text-decoration: none;
 }
 
 .btn-page.disabled {
@@ -302,6 +305,27 @@ body {
     color: #aaa;
     cursor: not-allowed;
     border-color: #eee;
+}
+
+/* Stronger disabled rules to avoid visual differences across templates */
+.pagination .btn-page.disabled,
+.pagination .btn-page[disabled],
+.pagination button.btn-page[disabled],
+.pagination a.btn-page.disabled {
+    background-color: #f5f5f5 !important;
+    color: #aaa !important;
+    cursor: not-allowed !important;
+    border-color: #eee !important;
+    pointer-events: none !important;
+    opacity: 1;
+}
+
+/* prevent hover styles from applying to disabled buttons */
+.pagination .btn-page.disabled:hover,
+.pagination .btn-page[disabled]:hover,
+.pagination button.btn-page[disabled]:hover {
+    background-color: #f5f5f5 !important;
+    color: #aaa !important;
 }
 
 @media (max-width: 992px) {

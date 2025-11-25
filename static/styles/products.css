@@ -81,6 +81,42 @@
 	color:var(--brand-dark);
 }
 
+/* Admin actions bar (create product) */
+.admin-actions-bar {
+	display: flex;
+	justify-content: flex-end;
+	margin: 12px 0 18px 0;
+}
+
+.btn-create {
+	background-color: var(--brand-green);
+	color: white;
+	padding: 10px 18px;
+	border-radius: 40px;
+	font-weight: 700;
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	text-decoration: none;
+}
+.btn-create:hover { opacity: 0.95; transform: translateY(-1px); }
+
+/* Ensure btn-create text and icon remain white on hover (override inherited link colors) */
+.btn-create,
+.btn-create .material-icons,
+.btn-create .material-symbols {
+	color: white !important;
+}
+.btn-create:hover,
+.btn-create:focus,
+.btn-create:hover .material-icons,
+.btn-create:focus .material-icons,
+.btn-create:hover .material-symbols,
+.btn-create:focus .material-symbols {
+	color: white !important;
+	text-decoration: none;
+}
+
 .products-grid{
 	display:grid;
 	/* Default: flexible columns that wrap as needed (mobile-first) */
@@ -273,6 +309,113 @@
 	text-align:center;
 	padding:40px 20px;
 	color:var(--muted);
+}
+
+/* Pagination: match look from order.css but tweak spacing for products pages */
+.pagination{
+	display:flex;
+	justify-content:flex-end;
+	gap:10px;
+	/* ensure pagination aligns with the grid width and sits closer to it */
+	margin-top: 18px;
+	margin-bottom: 60px; /* more space from footer */
+	width:100%;
+	max-width:1200px;
+	margin-left:auto;
+	margin-right:0; /* align to the right edge of container */
+}
+
+.btn-page{
+	background-color: #ffffff;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	padding: 8px 16px;
+	font-size: 0.9rem;
+	font-weight: 500;
+	cursor: pointer;
+	color: #333;
+	transition: background-color 0.2s ease;
+}
+
+/* Remove green hover — use neutral hover color */
+.btn-page:hover,
+.btn-page:focus{
+	background-color: #f9f9f9;
+	color: #333;
+	text-decoration: none;
+}
+
+.btn-page.disabled{
+	background-color: #f5f5f5;
+	color: #aaa;
+	cursor: not-allowed;
+	border-color: #eee;
+}
+
+/* Stronger disabled rules to avoid visual differences across templates */
+.pagination .btn-page.disabled,
+.pagination .btn-page[disabled],
+.pagination button.btn-page[disabled],
+.pagination a.btn-page.disabled {
+	background-color: #f5f5f5 !important;
+	color: #aaa !important;
+	cursor: not-allowed !important;
+	border-color: #eee !important;
+	pointer-events: none !important;
+	opacity: 1;
+}
+
+.pagination .btn-page.disabled:hover,
+.pagination .btn-page[disabled]:hover,
+.pagination button.btn-page[disabled]:hover {
+	background-color: #f5f5f5 !important;
+	color: #aaa !important;
+}
+
+/* Acciones del staff (botones editar/desc/delete) - shared with appointments */
+.staff-controls {
+	padding: 15px 20px;
+	background-color: #fff;
+	border-top: 1px solid #eee;
+	display: flex;
+	justify-content: space-between;
+	gap: 10px;
+}
+
+.btn-staff {
+	flex: 1;
+	padding: 8px;
+	border-radius: 6px;
+	border: none;
+	cursor: pointer;
+	font-size: 0.9rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	transition: background 0.2s;
+	text-decoration: none;
+	color: white;
+}
+
+.btn-edit { background-color: #005a55; }
+.btn-edit:hover { background-color: #004d49; }
+
+.btn-discount { background-color: #1fa891; }
+.btn-discount:hover { background-color: #1b8d7a; }
+
+.btn-delete { background-color: #dc3545; }
+.btn-delete:hover { background-color: #c82333; }
+
+/* Force icons inside staff buttons to stay white and not inherit green on hover */
+.staff-controls .material-icons,
+.staff-controls .material-symbols {
+	color: white !important;
+}
+.staff-controls .btn-staff:hover .material-icons,
+.staff-controls .btn-staff:focus .material-icons,
+.staff-controls .btn-staff:hover .material-symbols,
+.staff-controls .btn-staff:focus .material-symbols {
+	color: white !important;
 }
 
 /* Responsive tweaks */

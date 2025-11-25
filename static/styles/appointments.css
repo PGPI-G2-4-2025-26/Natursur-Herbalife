@@ -271,6 +271,18 @@
 .btn-delete { background-color: #dc3545; }
 .btn-delete:hover { background-color: #c82333; }
 
+/* Ensure staff icons remain white on hover and don't inherit green from global links */
+.staff-controls .material-icons,
+.staff-controls .material-symbols {
+    color: white !important;
+}
+.staff-controls .btn-staff:hover .material-icons,
+.staff-controls .btn-staff:focus .material-icons,
+.staff-controls .btn-staff:hover .material-symbols,
+.staff-controls .btn-staff:focus .material-symbols {
+    color: white !important;
+}
+
 /* ---------------- SERVICIOS DESTACADOS (SHOWCASE) ---------------- */
 
 .services-showcase {

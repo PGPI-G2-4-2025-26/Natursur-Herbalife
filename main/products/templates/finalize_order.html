@@ -32,11 +32,11 @@
             <li class="summary-item">
               <span class="s-name">{{ item.product.name }}</span>
               <span class="s-qty">x{{ item.quantity }}</span>
-              <div class="s-price">{{ item.subtotal|floatformat:2 }}</div>
+              <div class="s-price">{{ item.subtotal|floatformat:2 }} €</div>
             </li>
           {% endfor %}
         </ul>
-        <div class="summary-total-row"><span>Total</span><strong>{{ total_price_display }}</strong></div>
+        <div class="summary-total-row"><span>Total</span><strong>{{ total_price_display }} €</strong></div>
       {% else %}
         <p class="empty">No hay productos en el carrito.</p>
       {% endif %}

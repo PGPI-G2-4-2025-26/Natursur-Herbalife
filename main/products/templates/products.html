@@ -30,7 +30,7 @@
 
         <div class="products-grid">
         {% for product in products %}
-            <article class="product-card">
+            <article id="product-{{ product.id }}" class="product-card">
                 {% if product.image %}
                     {% if product.image|slice:":4" == "http" %}
                         <img class="product-image" src="{{ product.image }}" alt="{{ product.name }}">
@@ -62,6 +62,7 @@
 
                     <form action="{% url 'add_to_cart' product_id=product.id %}" method="post" class="add-to-cart-form">
                         {% csrf_token %}
+                        <input type="hidden" name="page" value="{{ products.number }}">
                         <input type="hidden" name="q" value="{{ q|default:'' }}">
                         <div class="add-to-cart-row">
                             {% comment %} Usar atributos preparados en la vista: product.in_cart_qty y product.max_add {% endcomment %}
@@ -79,6 +80,20 @@
         {% empty %}
             <p class="no-products">No hay productos disponibles en este momento.</p>
         {% endfor %}
+        </div>
+
+        <div class="pagination">
+        {% if products.has_previous %}
+            <a href="?page={{ products.previous_page_number }}{% if q %}&q={{ q }}{% endif %}" class="btn-page">Anterior</a>
+        {% else %}
+            <button class="btn-page disabled" disabled>Anterior</button>
+        {% endif %}
+
+        {% if products.has_next %}
+            <a href="?page={{ products.next_page_number }}{% if q %}&q={{ q }}{% endif %}" class="btn-page">Siguiente</a>
+        {% else %}
+            <button class="btn-page disabled" disabled>Siguiente</button>
+        {% endif %}
         </div>
     </div>
 
@@ -100,7 +115,6 @@
                 input.value = val;
                 if (val <= 1) decr.disabled = true; else decr.disabled = false;
                 if (val >= maxAllowed) incr.disabled = true; else incr.disabled = false;
-                // disable if nothing can be added
                 if (maxAllowed <= 0){
                     input.disabled = true;
                     decr.disabled = true;
@@ -130,7 +144,6 @@
             });
 
             input.addEventListener('change', updateButtons);
-            // initialize
             updateButtons();
         });
     });
