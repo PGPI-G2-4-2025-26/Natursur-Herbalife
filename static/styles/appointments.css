@@ -1,35 +1,67 @@
 /* --- CONFIGURACIÓN GENERAL DE LA PÁGINA DE SERVICIOS --- */
 .services-page {
-    margin-top: 120px ; 
-    
+    margin-top: 35px;
     padding: 0 20px 40px 20px;
-    max-width: 1200px;
+    /* NO poner max-width aquí para que .services-types pueda sobrescribirlo */
     margin-left: auto;
     margin-right: auto;
-    
     background-color: var(--color-secondary);
     min-height: calc(100vh - 300px);
 
-    position: relative; 
-    z-index: 1; 
+    position: relative;
+    z-index: 1;
+}
+
+/* --- Aplicar max-width:1200px a las secciones principales dentro de .services-page
+   EXCEPTO .services-types (que queda libre para su propio control de ancho) --- */
+.services-page > .services-types,
+.services-page > .services-intro,
+.services-page > .admin-actions-bar,
+.services-page > .services-grid {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
 }
 
 /* --- ENCABEZADO DE SECCIÓN --- */
-.services-header {
+.services-types {
     text-align: center;
     margin-top: 40px;
     margin-bottom: 60px;
     background-color: var(--color-secondary);
+    /* NOTA: no aplicamos max-width aquí (es la excepción) */
 }
 
-.services-header h1 {
+.services-types h1 {
     font-size: 2.8rem;
     color: var(--color-primary);
     margin-bottom: 15px;
     font-weight: 700;
 }
 
-.services-header p {
+.services-types p {
+    color: var(--color-text-light);
+    font-size: 1.1rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.services-intro {
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 60px;
+    background-color: var(--color-secondary);
+}
+
+.services-intro h1 {
+    font-size: 2.8rem;
+    color: var(--color-primary);
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.services-intro p {
     color: var(--color-text-light);
     font-size: 1.1rem;
     max-width: 600px;
@@ -67,6 +99,8 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap: 30px;
+    /* si quieres que las tarjetas queden centradas dentro del max-width, el margin se
+       gestiona desde la regla general (.services-page > .services-grid) */
 }
 
 /* --- TARJETA DE SERVICIO (CARD) --- */
@@ -228,18 +262,85 @@
     color: white;
 }
 
-.btn-edit { background-color: #6c757d; }
-.btn-edit:hover { background-color: #5a6268; }
+.btn-edit { background-color: #005a55; }
+.btn-edit:hover { background-color: #004d49; }
 
-.btn-discount { background-color: var(--color-golden); }
-.btn-discount:hover { background-color: #8a7603; }
+.btn-discount { background-color: #1fa891; }
+.btn-discount:hover { background-color: #1b8d7a; }
 
 .btn-delete { background-color: #dc3545; }
 .btn-delete:hover { background-color: #c82333; }
+
+/* Ensure staff icons remain white on hover and don't inherit green from global links */
+.staff-controls .material-icons,
+.staff-controls .material-symbols {
+    color: white !important;
+}
+.staff-controls .btn-staff:hover .material-icons,
+.staff-controls .btn-staff:focus .material-icons,
+.staff-controls .btn-staff:hover .material-symbols,
+.staff-controls .btn-staff:focus .material-symbols {
+    color: white !important;
+}
+
+/* ---------------- SERVICIOS DESTACADOS (SHOWCASE) ---------------- */
+
+.services-showcase {
+    padding: 25px 20px;
+    max-width: 1400px; /* ajustado a 1200px */
+    margin: 0 auto;
+    display: grid;
+    /* 4 columnas iguales por defecto */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    text-align: center;
+}
+
+.showcase-card {
+    background-color: var(--color-white); /* Fondo blanco para destacar */
+    padding: 30px 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); /* Sombra suave */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid var(--color-tertiary); /* Borde sutil */
+}
+
+.showcase-card:hover {
+    transform: translateY(-5px); /* Pequeño levantamiento en hover */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.card-icon {
+    font-size: 3.5rem;
+    color: var(--color-primary); /* Color principal de Natursur */
+    margin-bottom: 15px;
+    display: block;
+    width: 100%;
+}
+
+.showcase-card h3 {
+    color: var(--color-text-dark);
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.showcase-card p {
+    color: var(--color-text-light);
+    font-size: 1rem;
+    line-height: 1.5;
+}
 
 /* --- RESPONSIVE --- */
 @media (max-width: 768px) {
     .services-grid {
         grid-template-columns: 1fr;
     }
+    .services-showcase {
+        /* Una columna en dispositivos pequeños */
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 40px 20px;
+    }
+    /* En pantallas pequeñas los max-width no causan problema (100% se expandirá) */
 }

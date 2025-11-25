@@ -5,53 +5,103 @@
 {% endblock %}
 
 {% block contenido %}
-    <form method="get" action="{% url 'list_products' %}" style="margin-bottom:12px;">
-        <input type="text" name="q" placeholder="Buscar productos por nombre..." value="{{ q|default:'' }}" style="padding:6px; width:240px;">
-        <button type="submit">Buscar</button>
-        <a href="{% url 'list_products' %}">Limpiar</a>
-    </form>
-
-    {% for product in products %}
-        <div style="border: 1px solid #ccc; padding: 10px; margin: 10px;">
-            <h3>{{ product.name }}</h3>
-            <p>Referencia: {{ product.ref }}</p>
-            <p>Precio: {{ product.price }}</p>
-            <p>Sabor: {{ product.flavor }}</p>
-            <p>Tamaño: {{ product.size }}</p>
-            <p>Stock Disponible: {{ product.available_stock }}</p>
-            {% if product.image %}
-                {# si el nombre del archivo almacenado comienza por 'http' se trata de una URL externa #}
-                {% if product.image|slice:":4" == "http" %}
-                    <img src="{{ product.image }}" alt="{{ product.name }}" style="max-width: 200px;">
-                {% else %}
-                    <img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-width: 200px;">
-                {% endif %}
-            {% else %}
-                <p>No hay imagen disponible.</p>
-            {% endif %}
-            <form action="{% url 'add_to_cart' product_id=product.id %}" method="post" class="add-to-cart-form" style="display:inline-block;">
-                {% csrf_token %}
-                <input type="hidden" name="q" value="{{ q|default:'' }}">
-                    {% comment %} Usar atributos preparados en la vista: product.in_cart_qty y product.max_add {% endcomment %}
-                    <div class="quantity-control" data-product-id="{{ product.id }}" data-stock="{{ product.stock }}" data-in-cart="{{ product.in_cart_qty|default:0 }}">
-                        <button type="button" class="decr-btn">−</button>
-                        <input type="number" name="quantity" class="quantity-input" value="1" min="1" max="{{ product.max_add|default:0 }}" style="width:60px;text-align:center;" readonly>
-                        <button type="button" class="incr-btn">+</button>
-                    </div>
-                <button type="submit">Añadir al Carrito</button>
+    <div class="products-page">
+        <div class="products-header">
+            <div class="page-heading">
+                <h1>Catálogo de Productos Herbalife</h1>
+            </div>
+            <form method="get" action="{% url 'list_products' %}" class="search-form" role="search" aria-label="Buscar productos">
+                <input
+                    type="text"
+                    name="q"
+                    class="search-input"
+                    placeholder="Buscar productos por nombre..."
+                    value="{{ q|default:'' }}"
+                />
+                <button type="submit" class="search-btn" aria-label="Buscar">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <circle cx="11" cy="11" r="6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </button>
+                <a href="{% url 'list_products' %}" class="clear-btn" title="Limpiar búsqueda" aria-label="Limpiar búsqueda">×</a>
             </form>
-            {% comment %} Mostrar sólo los mensajes que pertenecen a este producto (extra_tags: 'product-<id>') {% endcomment %}
-            {% if last_added_product_id and product.id == last_added_product_id %}
-                {% if success_notification %}
-                    <div class="alert alert-{{ success_notification.tags }}" role="alert">
-                        {{ success_notification.text }}
-                    </div>
-                {% endif %}
-            {% endif %}
         </div>
-    {% empty %}
-        <p>No hay productos disponibles en este momento.</p>
-    {% endfor %}
+
+        <div class="products-grid">
+        {% for product in products %}
+            <article id="product-{{ product.id }}" class="product-card">
+                {% if product.image %}
+                    {% if product.image|slice:":4" == "http" %}
+                        <img class="product-image" src="{{ product.image }}" alt="{{ product.name }}">
+                    {% else %}
+                        <img class="product-image" src="{{ product.image.url }}" alt="{{ product.name }}">
+                    {% endif %}
+                {% else %}
+                    <div class="no-image">No hay imagen disponible.</div>
+                {% endif %}
+
+                <div class="product-info">
+                    <div class="product-title">{{ product.name }}</div>
+                    {% if product.flavor %}
+                        <div class="product-meta"> <b>・ Sabor:</b> {{ product.flavor }} </div>
+                    {% else %}
+                        <div class="product-meta"> <b>・ Sabor:</b> Sin sabor</div>
+                    {% endif %}
+                    
+                    {% if product.size %}
+                        <div class="product-meta"> <b>・ Tamaño:</b> {{ product.size }} </div>
+                    {% else %}
+                        <div class="product-meta"></div>
+                    {% endif %}
+
+                    <div class="price-row">
+                        <div class="price">{{ product.price }} €</div>
+                        {% if product.available_stock == 0 %}
+                            <div class="stock stock-out">Fuera de stock</div>
+                        {% elif product.available_stock < 5 %}
+                            <div class="stock stock-low">Quedan pocas unidades ({{ product.available_stock }})</div>
+                        {% else %}
+                            <div class="stock stock-available">Disponible</div>
+                        {% endif %}
+                    </div>
+
+                    <form action="{% url 'add_to_cart' product_id=product.id %}" method="post" class="add-to-cart-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="page" value="{{ products.number }}">
+                        <input type="hidden" name="q" value="{{ q|default:'' }}">
+                        <div class="add-to-cart-row">
+                            {% comment %} Usar atributos preparados en la vista: product.in_cart_qty y product.max_add {% endcomment %}
+                            <div class="quantity-control" data-product-id="{{ product.id }}" data-stock="{{ product.stock }}" data-in-cart="{{ product.in_cart_qty|default:0 }}">
+                                <button type="button" class="decr-btn">−</button>
+                                <input type="number" name="quantity" class="quantity-input" value="1" min="1" max="{{ product.max_add|default:0 }}" readonly>
+                                <button type="button" class="incr-btn">+</button>
+                            </div>
+                            <button type="submit" class="add-to-cart-button">Añadir al Carrito</button>
+                        </div>
+                    </form>
+
+                </div>
+            </article>
+        {% empty %}
+            <p class="no-products">No hay productos disponibles en este momento.</p>
+        {% endfor %}
+        </div>
+
+        <div class="pagination">
+        {% if products.has_previous %}
+            <a href="?page={{ products.previous_page_number }}{% if q %}&q={{ q }}{% endif %}" class="btn-page">Anterior</a>
+        {% else %}
+            <button class="btn-page disabled" disabled>Anterior</button>
+        {% endif %}
+
+        {% if products.has_next %}
+            <a href="?page={{ products.next_page_number }}{% if q %}&q={{ q }}{% endif %}" class="btn-page">Siguiente</a>
+        {% else %}
+            <button class="btn-page disabled" disabled>Siguiente</button>
+        {% endif %}
+        </div>
+    </div>
 
     <script>
     document.addEventListener('DOMContentLoaded', function(){
@@ -71,7 +121,6 @@
                 input.value = val;
                 if (val <= 1) decr.disabled = true; else decr.disabled = false;
                 if (val >= maxAllowed) incr.disabled = true; else incr.disabled = false;
-                // disable if nothing can be added
                 if (maxAllowed <= 0){
                     input.disabled = true;
                     decr.disabled = true;
@@ -101,7 +150,6 @@
             });
 
             input.addEventListener('change', updateButtons);
-            // initialize
             updateButtons();
         });
     });

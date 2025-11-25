@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block encabezado %}
+{% endblock %}
+
+
+{% block contenido %}
+
+<link rel="stylesheet" href="{% static 'styles/forms.css' %}">
+<link rel="stylesheet" href="{% static 'styles/edit_products.css' %}">
+
+<div class="form-page-container">
+	<div class="form-card">
+		<div class="form-header">
+			<h1>Editar Producto</h1>
+			<p>Edita los datos del producto y guarda los cambios.</p>
+		</div>
+
+		<form method="post" action="{% url 'edit_product_admin' product.id %}" enctype="multipart/form-data">
+			{% csrf_token %}
+
+			<div class="form-row">
+				{{ form.name.label_tag }}
+				{{ form.name }}
+				{{ form.name.errors }}
+			</div>
+
+			<div class="form-row">
+				{{ form.price.label_tag }}
+				{{ form.price }}
+				{{ form.price.errors }}
+			</div>
+
+			<div class="form-row">
+				{{ form.flavor.label_tag }}
+				{{ form.flavor }}
+				{{ form.flavor.errors }}
+			</div>
+
+			<div class="form-row">
+				{{ form.size.label_tag }}
+				{{ form.size }}
+				{{ form.size.errors }}
+			</div>
+
+			<div class="form-row">
+				{{ form.ref.label_tag }}
+				{{ form.ref }}
+				{{ form.ref.errors }}
+			</div>
+
+			<div class="form-row">
+				<label for="id_image">{{ form.image.label }}</label>
+				<div id="image-dropzone" class="image-dropzone" tabindex="0">
+					<input id="id_image" name="image" type="file" accept="image/*" style="display:none;">
+					<div class="dz-placeholder" id="dz-placeholder">
+						<button type="button" class="btn-add-image" id="btn-add-image">Insertar imagen</button>
+						<p class="drop-instruction">Arrastra y suelta una imagen aquí, o haz clic para seleccionar</p>
+					</div>
+					<div class="dz-preview" id="dz-preview" style="display:none;">
+						<img id="image-preview" src="{% if product.image %}{% if product.image.url %}{{ product.image.url }}{% else %}{{ product.image }}{% endif %}{% endif %}" alt="Vista previa">
+						<button type="button" id="btn-remove-image" class="btn-remove-image">Eliminar</button>
+					</div>
+				</div>
+				{{ form.image.errors }}
+			</div>  
+
+			<div class="form-actions">
+				<a href="{% url 'show_products_admin' %}" class="btn-cancel">Cancelar</a>
+				<button type="submit" class="btn-submit">Guardar Cambios</button>
+			</div>
+		</form>
+
+	</div>
+</div>
+
+<script>
+;(function(){
+	const dropzone = document.getElementById('image-dropzone');
+	let fileInput = document.getElementById('id_image');
+	const placeholder = document.getElementById('dz-placeholder');
+	const previewWrap = document.getElementById('dz-preview');
+	const previewImg = document.getElementById('image-preview');
+	const btnAdd = document.getElementById('btn-add-image');
+	const btnRemove = document.getElementById('btn-remove-image');
+
+	if(!dropzone || !fileInput) return;
+
+	function showPreviewFile(file){
+		const url = URL.createObjectURL(file);
+		previewImg.src = url;
+		placeholder.style.display = 'none';
+		previewWrap.style.display = 'flex';
+	}
+
+	function clearPreview(){
+		previewImg.src = '';
+		previewWrap.style.display = 'none';
+		placeholder.style.display = 'flex';
+		try {
+			fileInput.value = '';
+		} catch(e) {
+			const newInput = fileInput.cloneNode();
+			fileInput.parentNode.replaceChild(newInput, fileInput);
+			fileInput = document.getElementById('id_image');
+		}
+	}
+
+	btnRemove.addEventListener('click', function(e){
+		e.preventDefault();
+		clearPreview();
+	});
+
+	fileInput.addEventListener('change', function(e){
+		const f = this.files && this.files[0];
+		if(f){
+			showPreviewFile(f);
+		}
+	});
+
+	dropzone.addEventListener('dragover', function(e){
+		e.preventDefault();
+		dropzone.style.borderColor = '#2d9c6a';
+		dropzone.style.background = '#f6fff6';
+	});
+	dropzone.addEventListener('dragleave', function(e){
+		e.preventDefault();
+		dropzone.style.borderColor = '#d6d6d6';
+		dropzone.style.background = '#fafafa';
+	});
+	dropzone.addEventListener('drop', function(e){
+		e.preventDefault();
+		dropzone.style.borderColor = '#d6d6d6';
+		dropzone.style.background = '#fafafa';
+		const dt = e.dataTransfer;
+		if(dt && dt.files && dt.files.length){
+			const file = dt.files[0];
+			if(!file.type.startsWith('image/')) return alert('Solo se permiten imágenes');
+			try{
+				const dataTransfer = new DataTransfer();
+				dataTransfer.items.add(file);
+				fileInput.files = dataTransfer.files;
+			}catch(err){
+			}
+			showPreviewFile(file);
+		}
+	});
+
+	dropzone.addEventListener('click', function(e){
+		if(e.target === btnRemove) return;
+		fileInput.click();
+	});
+
+})();
+</script>
+
+{% endblock %}

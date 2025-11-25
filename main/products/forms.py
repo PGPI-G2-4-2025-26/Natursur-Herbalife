@@ -3,13 +3,12 @@ from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 import re
 
-from .models import Order
+from .models import Order, Product
 
 
 class OrderForm(forms.ModelForm):
-    # Declarar campos explícitamente para poder controlar validación y mensajes
     solicitant_name = forms.CharField(
-        label='Full Name',
+        label='Nombre completo',
         required=True,
         min_length=3,
         widget=forms.TextInput(attrs={'placeholder': 'Nombre completo'}),
@@ -20,7 +19,7 @@ class OrderForm(forms.ModelForm):
     )
 
     solicitant_contact = forms.CharField(
-        label='Email or Phone Number (for contact)',
+        label='Email o Número de teléfono (para contacto)',
         required=True,
         widget=forms.TextInput(attrs={'placeholder': 'Correo electrónico o teléfono'}),
         error_messages={
@@ -29,7 +28,7 @@ class OrderForm(forms.ModelForm):
     )
 
     solicitant_address = forms.CharField(
-        label='Address',
+        label='Dirección de envío',
         required=True,
         min_length=6,
         widget=forms.Textarea(attrs={'rows': 2, 'placeholder': 'Dirección de envío'}),
@@ -48,7 +47,6 @@ class OrderForm(forms.ModelForm):
         name = name.strip()
         if len(name) < 3:
             raise ValidationError('El nombre es demasiado corto.')
-        # evitar números en el nombre
         if any(ch.isdigit() for ch in name):
             raise ValidationError('El nombre no puede contener dígitos.')
         return name
@@ -59,7 +57,6 @@ class OrderForm(forms.ModelForm):
         if not contact:
             raise ValidationError('El contacto es obligatorio.')
 
-        # Si parece un email, validarlo como tal
         if '@' in contact:
             try:
                 validate_email(contact)
@@ -67,7 +64,6 @@ class OrderForm(forms.ModelForm):
                 raise ValidationError('Introduce un correo electrónico válido.')
             return contact
 
-        # En otro caso, validar como teléfono: dígitos, espacios, +, -, (, )
         phone_re = re.compile(r'^\+?[0-9\s\-()]{7,}$')
         if not phone_re.match(contact):
             raise ValidationError('Introduce un teléfono válido (dígitos, espacios, +, - o paréntesis).')
@@ -80,3 +76,37 @@ class OrderForm(forms.ModelForm):
         if len(addr) < 6:
             raise ValidationError('La dirección es demasiado corta.')
         return addr
+    
+class ProductForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ['name', 'price', 'flavor', 'size', 'image', 'ref']
+        widgets = {
+            'name': forms.TextInput(attrs={'placeholder': 'Nombre del producto'}),
+            'price': forms.NumberInput(attrs={'step': '0.01', 'placeholder': '0.00'}),
+            'flavor': forms.TextInput(attrs={'placeholder': 'Sabor'}),
+            'size': forms.TextInput(attrs={'placeholder': 'Tamaño (p. ej. 500 g)'}),
+            'ref': forms.TextInput(attrs={'placeholder': 'Referencia / enlace'}),
+        }
+        labels = {
+            'name': 'Nombre',
+            'price': 'Precio',
+            'flavor': 'Sabor (opcional)',
+            'size': 'Tamaño (opcional)',
+            'image': 'Imagen',
+            'ref': 'Referencia (opcional)',
+        }
+
+    def clean_name(self):
+        name = self.cleaned_data.get('name', '').strip()
+        if not name:
+            raise forms.ValidationError('El nombre es obligatorio.')
+        return name
+
+    def clean_price(self):
+        price = self.cleaned_data.get('price')
+        if price is None:
+            raise forms.ValidationError('El precio es obligatorio.')
+        if price < 0:
+            raise forms.ValidationError('El precio no puede ser negativo.')
+        return price

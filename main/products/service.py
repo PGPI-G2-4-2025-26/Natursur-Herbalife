@@ -2,6 +2,18 @@ from .models import Product, Order, OrderProduct
 import datetime
 from django.db import transaction
 import uuid
+from django.core.exceptions import ValidationError
+
+
+class InsufficientStockError(Exception):
+    """Excepción lanzada cuando faltan unidades de uno o varios productos.
+
+    Se usa en vez de `ValidationError` para preservar la estructura de datos
+    (lista de diccionarios) en el atributo `removed`.
+    """
+    def __init__(self, removed):
+        super().__init__("insufficient_stock")
+        self.removed = removed
 
 
 class ProductService:
@@ -105,6 +117,45 @@ class ProductService:
             order = line.order
         if order.is_paid:
             return order
+        shortages = []
+        lines = OrderProduct.objects.filter(order=order)
+        for l in lines:
+            prod = l.product
+            try:
+                qty = int(l.quantity or 0)
+            except (TypeError, ValueError):
+                qty = 0
+            available = int(prod.stock or 0)
+            if qty > available:
+                shortages.append({
+                    'line_id': getattr(l, 'id', None),
+                    'product_id': getattr(prod, 'id', None),
+                    'product_ref': getattr(prod, 'ref', None),
+                    'product_name': getattr(prod, 'name', None),
+                    'requested': qty,
+                    'available': available,
+                })
+
+        if shortages:
+            # Preparar lista de líneas que deberían eliminarse (la eliminación
+            # se debe realizar fuera de esta transacción para que no se revierta).
+            removed = []
+            for s in shortages:
+                line_id = s.get('line_id')
+                if line_id:
+                    line_obj = OrderProduct.objects.filter(id=line_id).first()
+                    if line_obj:
+                        removed.append({
+                            'line_id': line_obj.id,
+                            'product_id': getattr(line_obj.product, 'id', None),
+                            'product_ref': getattr(line_obj.product, 'ref', None),
+                            'product_name': getattr(line_obj.product, 'name', None),
+                            'quantity_requested': int(line_obj.quantity or 0),
+                        })
+
+            # Lanzar excepción custom con la lista de líneas a eliminar; la vista
+            # se encargará de borrarlas (fuera de la transacción actual).
+            raise InsufficientStockError(removed)
 
         if not order.order_identified:
             for _ in range(10):
@@ -114,7 +165,7 @@ class ProductService:
                     break
             else:
                 order.order_identified = f"ORD-{int(datetime.datetime.utcnow().timestamp())}-{uuid.uuid4().hex[:6].upper()}"
-        lines = OrderProduct.objects.filter(order=order)
+
         for l in lines:
             prod = l.product
             try:

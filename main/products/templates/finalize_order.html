@@ -1,28 +1,46 @@
-{% extends 'base.html' %} {% block encabezado %}
+{% extends 'base.html' %}
+{% load static %}
+
+{% block encabezado %}
+<link rel="stylesheet" href="{% static 'styles/finalize_order.css' %}">
 <h1>Finalizar Pedido</h1>
-{% endblock %} {% block contenido %}
-<h2>Datos de contacto</h2>
-<form method="post">
-  {% csrf_token %} {{ form.as_p }}
-  <h3>Resumen del carrito</h3>
-  {% if cart_items %}
-  <ul>
-    {% for item in cart_items %}
-    <li>
-      {{ item.product.name }} — Cantidad: {{ item.quantity }}
-      <br />
-      Precio unitario: {{ item.unit_price|floatformat:2 }} &nbsp;|&nbsp;
-      Subtotal: {{ item.subtotal|floatformat:2 }}
-    </li>
-    {% endfor %}
-  </ul>
-  <p>Total: <strong>{{ total_price_display }}</strong></p>
-  {% else %}
-  <p>No hay productos en el carrito.</p>
-  {% endif %}
+{% endblock %}
 
-  <button type="submit">Confirmar y pagar</button>
-</form>
+{% block contenido %}
+<div class="finalize-page">
+  <div class="finalize-grid">
+    <main class="checkout-form">
+      <h2>Datos de contacto</h2>
+      <form method="post">
+        {% csrf_token %}
+        <div class="form-fields">
+          {{ form.as_p }}
+        </div>
 
-<a href="{% url 'view_cart' %}">Volver al carrito</a>
+        <div class="form-actions">
+          <button type="submit" class="confirm-btn">Confirmar y pagar</button>
+          <a class="back-link" href="{% url 'view_cart' %}">Volver al carrito</a>
+        </div>
+      </form>
+    </main>
+
+    <aside class="checkout-summary">
+      <h3>Resumen del carrito</h3>
+      {% if cart_items %}
+        <ul class="summary-list">
+          {% for item in cart_items %}
+            <li class="summary-item">
+              <span class="s-name">{{ item.product.name }}</span>
+              <span class="s-qty">x{{ item.quantity }}</span>
+              <div class="s-price">{{ item.subtotal|floatformat:2 }} €</div>
+            </li>
+          {% endfor %}
+        </ul>
+        <div class="summary-total-row"><span>Total</span><strong>{{ total_price_display }} €</strong></div>
+      {% else %}
+        <p class="empty">No hay productos en el carrito.</p>
+      {% endif %}
+    </aside>
+  </div>
+</div>
 {% endblock %}

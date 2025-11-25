@@ -9,11 +9,44 @@
 
 {% block contenido %}
 <div class="services-page">
+
+    <div class="services-types">
+        <h1>Nuestros Servicios</h1>
+        <p>Mejora tu calidad de vida con masajes de osteopatía, masajes biomagnético, técnicas emocionales y asesoramiento nutricional. Encuentra el equilibrio que tu cuerpo y mente necesitan.</p>
+    </div>
     
-    <header class="services-header">
+    
+    <section class="services-showcase">
+        <div class="showcase-card">
+            <span class="material-icons card-icon">spa</span>
+            <h3>Masaje y Osteopatía</h3>
+            <p>Terapias manuales para aliviar tensiones, corregir desajustes corporales y mejorar tu bienestar físico general.</p>
+        </div>
+
+        <div class="showcase-card">
+            <span class="material-icons card-icon">device_thermostat</span>
+            <h3>Par Biomagnético</h3>
+            <p>Aplicación de imanes terapéuticos para equilibrar el pH corporal y apoyar la recuperación natural del organismo.</p>
+        </div>
+
+        <div class="showcase-card">
+            <span class="material-icons card-icon">psychology</span>
+            <h3>Técnicas Emocionales</h3>
+            <p>Herramientas efectivas para gestionar emociones, reducir estrés y promover un estado mental más equilibrado.</p>
+        </div>
+
+        <div class="showcase-card">
+            <span class="material-icons card-icon">local_dining</span>
+            <h3>Asesoramiento Nutricional</h3>
+            <p>Guía profesional para adoptar hábitos alimenticios saludables y alcanzar tus objetivos de salud y energía.</p>
+        </div>
+    </section>
+
+
+    <div class="services-intro">
         <h1>Nuestras Sesiones</h1>
         <p>Encuentra el equilibrio perfecto entre cuerpo y mente con nuestros tratamientos especializados.</p>
-    </header>
+    </div>
 
     {% if user.is_staff %}
     <div class="admin-actions-bar">
@@ -55,13 +88,13 @@
                 </p>
 
                 <div class="price-container">
-                    {% if appointment.discount > 0 %}
+                    {% if appointment.endDiscount > now %}
                         <span class="price-original">{{ appointment.price }}€</span>
                         <span class="price-current price-discount-active">
                              Oferta: {{ appointment.discount }}€ 
                         </span>
                         <div class="discount-tag">Ahorras {{ appointment.total_money_save }}€</div>
-                        <small style="font-size: 0.7rem; color: #777;">Hasta: {{ appointment.endDiscount|date:"d M Y" }}</small>
+                        <small style="font-size: 0.7rem; color: #777;">Hasta: {{ appointment.endDiscount}}</small>
                     {% else %}
                         <span class="price-current">{{ appointment.price }}€</span>
                     {% endif %}
