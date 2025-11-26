@@ -20,7 +20,7 @@
             {% if user.is_authenticated %}
             <strong>{{ user.username }}</strong>,
             {% endif %}
-            ¿estás seguro de que quieres salir?
+            ¿estás seguro/a de que quieres salir?
         </p>
 
         <form method="post" action="{% url 'logout' %}">

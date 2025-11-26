@@ -42,7 +42,7 @@
                     <p>Realizado el {{ order.date|date:"d/m/Y" }}</p>
                 </div>
                 <div class="pedido-status">
-                    <span class="status-tag">
+                    <span class="status-tag status-tag-{{ order.status|lower }}">
                         {% if order.status == 'SOLICITADO' %}
                             SOLICITADO
                         {% elif order.status == 'ENCARGADO' %}

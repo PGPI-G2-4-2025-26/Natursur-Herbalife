@@ -46,7 +46,7 @@
                     <p style="margin-top:6px; color:#555; font-weight:600;">{{ order.full_name }}</p>
                 </div>
                 <div class="pedido-status">
-                    <span class="status-tag">
+                    <span class="status-tag status-tag-{{ order.status|lower }}">
                         {% if order.status == 'SOLICITADO' %}
                             SOLICITADO
                         {% elif order.status == 'ENCARGADO' %}

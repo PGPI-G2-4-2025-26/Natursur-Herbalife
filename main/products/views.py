@@ -112,6 +112,7 @@ def add_to_cart(request, product_id):
     return resp
 
 def view_cart(request):
+    ## creo puede refactorizar por order = ProductService.get_active_cart_for_request(request)
     order = None
     if hasattr(request, 'user') and request.user.is_authenticated:
         order = Order.objects.filter(status='EN_CARRITO', registered_user=request.user).first()
@@ -119,6 +120,7 @@ def view_cart(request):
         cookie = request.COOKIES.get('anon_user_id')
         if cookie:
             order = Order.objects.filter(status='EN_CARRITO', anonymous_user_cookie=cookie).first()
+    ##
 
     cart_items = []
     total_price = 0
@@ -234,8 +236,8 @@ def finalize_order(request):
             item_texts = []
             for r in removed:
                 name = r.get('product_name') or r.get('product_ref') or str(r.get('product_id'))
-                qty = r.get('quantity_removed') or r.get('requested') or ''
-                item_texts.append(f"{name} (cantidad eliminada: {l.quantity})")
+                qty = r.get('quantity_requested') or r.get('requested') or ''
+                item_texts.append(f"{name} (cantidad eliminada: {qty})")
             messages.error(request, 'No se pudo completar el pago. Algunos productos ya no estaban disponibles y fueron eliminados del carrito: ' + ', '.join(item_texts))
         else:
             messages.error(request, 'No se pudo completar el pago por falta de stock en algunos productos.')
