@@ -102,7 +102,7 @@ header {
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 100%;
+  height: 110%;
   position: absolute;
   top: 0;
   left: 0;
@@ -166,23 +166,24 @@ header {
 }
 
 .btn-profile {
-    background-color: transparent; 
-    color: var(--color-primary); 
-    padding: 13px; 
-    height: 100%; 
-    margin: 0;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 0.7em;
-    position: relative; 
-    display:  flex; 
-    overflow: hidden; 
-    justify-content: center; 
-    align-items: center;
-    
-    transition: background-color 0.2s; 
-    transform: none; 
-    line-height: 1.2; 
+  background-color: transparent; 
+  color: var(--color-primary); 
+  padding: 13px; 
+  width: 110px;
+  height: 100%; 
+  margin: 0;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 0.7em;
+  position: relative; 
+  display:  flex; 
+  overflow: hidden; 
+  justify-content: center; 
+  align-items: center;
+  
+  transition: background-color 0.2s; 
+  transform: none; 
+  line-height: 1.2; 
 }
 
 .btn-profile i,
