@@ -236,8 +236,8 @@ def finalize_order(request):
             item_texts = []
             for r in removed:
                 name = r.get('product_name') or r.get('product_ref') or str(r.get('product_id'))
-                qty = r.get('quantity_removed') or r.get('requested') or ''
-                item_texts.append(f"{name} (cantidad eliminada: {l.quantity})")
+                qty = r.get('quantity_requested') or r.get('requested') or ''
+                item_texts.append(f"{name} (cantidad eliminada: {qty})")
             messages.error(request, 'No se pudo completar el pago. Algunos productos ya no estaban disponibles y fueron eliminados del carrito: ' + ', '.join(item_texts))
         else:
             messages.error(request, 'No se pudo completar el pago por falta de stock en algunos productos.')
