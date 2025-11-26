@@ -70,7 +70,7 @@
 
 .why-section {
   padding: 80px 20px;
-  background: #009688;
+  background: var(--brand-cyan);
   color: #fff; /* por defecto los textos dentro serán blancos */
 }
 
@@ -156,6 +156,7 @@
   font-size: 2rem;
   font-weight: bold;
   margin-bottom: 15px;
+  color: var(--color-primary);
 }
 
 .testi-sub {
@@ -340,7 +341,7 @@
 
 .testimonials-section h2 {
     font-size: 2.5rem; /* 40px */
-    color: #2c5a2c;
+    color: var(--color-primary);
     margin-bottom: 40px;
     font-weight: 700;
 }
@@ -435,7 +436,7 @@
 
 .social-feed-section h2 {
     font-size: 2.5rem; /* 40px */
-    color: #2c5a2c;
+    color: var(--color-primary);
     margin-bottom: 20px;
     font-weight: 700;
 }
@@ -550,7 +551,7 @@
 }
 
 .left-column .pre-heading {
-    color: #00a09a;
+    color: var(--brand-cyan);
     font-size: 0.9rem;
     font-weight: bold;
     letter-spacing: 1px;
@@ -573,7 +574,7 @@
 
 .left-column .cta-button {
   display: inline-block;
-  background-color: #00a09a;
+  background-color: var(--brand-cyan);
   color: #ffffff;
   padding: 14px 28px;
   text-decoration: none;

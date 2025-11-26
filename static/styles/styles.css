@@ -9,6 +9,8 @@
   --color-input-bg: #f7f7f7;
   --color-google-btn: #e9f4e5;
   --color-golden: #9d8603;
+  --brand-green: #29672c;
+  --brand-cyan: #00a09a;
 }
 
 /* Estilos Globales y de Tipografía */
@@ -33,7 +35,7 @@ a {
 }
 
 a:hover {
-  color: rgb(154, 228, 120);
+  color: rgb(180, 196, 173);
 }
 
 header {
@@ -284,7 +286,7 @@ header {
 }
 .site-messages .success {
   background: #e6f8ec;
-  border-left: 4px solid #2c5a2c;
+  border-left: 4px solid var(--brand-green);
   color: #1b5a2b;
 }
 .site-messages .error {
