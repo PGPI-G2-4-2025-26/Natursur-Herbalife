@@ -1,6 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator
-
+from datetime.datetime import datetime
 
 class Appointment(models.Model):
     name = models.CharField(max_length=255, verbose_name="Name")
