@@ -4,7 +4,6 @@ import os
 import shutil
 from django.conf import settings
 from main.user.models import UserProfile
-from datetime import datetime
 
 
 DEFAULT_APPOINTMENTS = [
@@ -14,8 +13,8 @@ DEFAULT_APPOINTMENTS = [
         'duration': 40,
         'description': '',
         'premium': False,
-        'discount': Decimal('15.00'),
-        'endDiscount': datetime(2025, 12, 31, 23, 59),
+        'discount': Decimal('0.00'),
+        'endDiscount': None,
     },
     {
         'name': "Sesión 60'",
