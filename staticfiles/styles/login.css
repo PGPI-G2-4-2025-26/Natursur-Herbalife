@@ -1,0 +1,204 @@
+/* --- Contenedor Principal (Login Card) --- */
+.login-container {
+    flex-grow: 1; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    min-height: 60vh; 
+}
+
+.login-card {
+    background-color: var(--color-white);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px; 
+    text-align: center;
+}
+
+.card-icon {
+    width: 120px;       
+    height: 70px;
+    background-color: var(--color-tertiary);
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 20px;
+}
+
+.card-icon img {
+    width: 100%;        
+    height: 100%;       
+    object-fit: cover;   
+}
+
+.card-icon .material-icons {
+    font-size: 30px;
+    color: var(--color-primary);
+}
+
+.login-card h2 {
+    margin-bottom: 5px;
+    font-size: 1.8em;
+}
+
+.login-card .subtitle {
+    margin-bottom: 25px;
+    color: var(--color-text-light);
+    font-size: 0.9em;
+}
+
+/* --- Formulario --- */
+.login-form {
+    text-align: left;
+}
+
+.login-form label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 8px 10px;
+    background-color: var(--color-input-bg);
+}
+
+.input-group .material-icons {
+    color: var(--color-text-light);
+    margin-right: 10px;
+    font-size: 20px;
+}
+
+.input-group input {
+    border: none;
+    outline: none;
+    flex-grow: 1;
+    background-color: transparent;
+    padding: 5px 0;
+    font-size: 1em;
+}
+
+/* --- Acciones del Formulario (Contraseña y Botón) --- */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.form-errors {
+    background-color: #fdecec;
+    color: #e74c3c;
+    padding: 12px 15px; 
+    border-radius: 8px; 
+    margin-bottom: 20px;
+    text-align: left;
+    font-size: 0.9em;
+    
+    display: flex;
+    align-items: flex-start; 
+    gap: 10px; 
+    border: 1px solid #fadbd8;
+}
+
+.form-errors .material-icons { 
+    font-size: 20px; 
+    margin: 0; 
+    flex-shrink: 0; 
+    padding-top: 1px;
+}
+
+.field-error {
+    color: #e74c3c; 
+    font-size: 0.85em;
+    margin-top: 5px;
+    text-align: left;
+    font-weight: 500; 
+}
+
+.error-text {
+    line-height: 1.4;
+}
+
+.forgot-password {
+    color: var(--color-primary);
+    font-size: 0.9em;
+}
+
+.btn-submit {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.3s;
+}
+
+.btn-submit .material-icons {
+    font-size: 18px;
+    margin-right: 5px;
+}
+
+.btn-submit:hover {
+    background-color: var(--color-tertiary); 
+    color: var(--color-primary);
+}
+
+/* --- Separador 'o' --- */
+.divider {
+    text-align: center;
+    margin: 30px 0;
+    position: relative;
+}
+
+.divider::before, .divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 40%;
+    height: 1px;
+    background-color: #ddd;
+}
+
+.divider::before {
+    left: 0;
+}
+
+.divider::after {
+    right: 0;
+}
+
+.divider-text {
+    background-color: var(--color-white);
+    padding: 0 10px;
+    color: var(--color-text-light);
+    font-size: 0.9em;
+}
+
+
+
+/* --- Enlace de Registro --- */
+.register-link {
+    margin-top: 25px;
+    font-size: 0.9em;
+}
+
+.register-link a {
+    color: var(--color-primary);
+    font-weight: bold;
+}

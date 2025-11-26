@@ -1,0 +1,86 @@
+/* Styles for order_success page */
+
+:root{
+	--brand-dark: #2c3e50;
+	--muted: #666;
+	--card-bg: #ffffff;
+	--card-shadow: 0 10px 24px rgba(0,0,0,0.06);
+}
+
+.order-success-page{
+	font-family: system-ui, sans-serif;
+	color: #222;
+	max-width: 920px;
+	margin: 28px auto;
+	padding: 20px;
+}
+
+.success-card{
+	background: var(--card-bg);
+	box-shadow: var(--card-shadow);
+	border-radius: 12px;
+	padding: 20px;
+}
+
+.success-header{
+	display:flex;
+	align-items:center;
+	gap:14px;
+}
+.success-icon{
+	width:56px;
+	height:56px;
+	border-radius:50%;
+	background:linear-gradient(180deg, rgba(44,90,44,0.14), rgba(44,90,44,0.06));
+	display:inline-flex;
+	align-items:center;
+	justify-content:center;
+	color:var(--brand-green);
+	font-weight:800;
+	font-size:20px;
+}
+
+.order-id{
+	font-weight:800;
+	color:var(--brand-dark);
+	margin-top:8px;
+}
+
+.total-row{
+	margin-top:12px;
+	display:flex;
+	justify-content:space-between;
+	align-items:center;
+	padding-top:8px;
+	border-top:1px solid rgba(0,0,0,0.04);
+}
+.total-row .label{ color:var(--muted); }
+.total-row .value{ color:var(--brand-green); font-weight:900; font-size:1.05rem; }
+
+.detail-list{ list-style:none; margin:12px 0 0 0; padding:0; }
+.detail-item{ display:flex; justify-content:space-between; gap:12px; padding:10px 0; border-bottom:1px solid rgba(0,0,0,0.04); }
+.detail-item .name{ color:var(--brand-dark); flex:1; }
+.detail-item .meta{ color:var(--muted); min-width:120px; text-align:right; }
+
+.empty{ color:var(--muted); margin:8px 0; }
+
+.btn{
+	display:inline-flex;
+	align-items:center;
+	justify-content:center;
+	padding:10px 16px;
+	border-radius:10px;
+	background:var(--brand-green);
+	color:#fff;
+	text-decoration:none;
+	font-weight:700;
+	transition: transform .12s ease, box-shadow .12s ease, opacity .12s ease;
+}
+.btn:hover,.btn:focus{ transform: translateY(-2px); box-shadow: 0 12px 30px rgba(44,90,44,0.12); color: #fff; text-decoration: none; }
+
+@media (max-width:700px){
+	.order-success-page{ padding:14px; margin:18px auto; }
+	.success-icon{ width:46px; height:46px; font-size:18px; }
+	.detail-item .meta{ min-width:90px; }
+}
+

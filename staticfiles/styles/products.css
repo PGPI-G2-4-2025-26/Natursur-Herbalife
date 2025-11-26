@@ -1,0 +1,508 @@
+/* Productos - estilos coherentes con home.css */
+
+:root {
+	--brand-dark: #2c3e50;
+	--muted: #666;
+	--card-bg: #ffffff;
+	--card-shadow: 0 8px 18px rgba(0, 0, 0, 0.06);
+}
+
+.products-page {
+	font-family: system-ui, sans-serif;
+	color: #222;
+	padding: 28px 16px;
+	max-width: 1200px;
+	margin: 0 auto;
+}
+
+.products-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	margin-bottom: 18px;
+}
+
+/* Search form styles */
+.search-form {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.search-input {
+	width: 420px;
+	max-width: calc(100% - 120px);
+	padding: 10px 14px;
+	border-radius: 999px;
+	border: 1px solid rgba(0, 0, 0, 0.08);
+	outline: none;
+	box-shadow: none;
+	font-size: 0.95rem;
+}
+
+.search-input:focus {
+	border-color: var(--brand-green);
+	box-shadow: 0 0 0 4px rgba(0, 160, 154, 0.06);
+}
+
+.search-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 34px;
+	height: 34px;
+	border-radius: 50%;
+	border: none;
+	background: transparent;
+	color: var(--brand-green);
+	cursor: pointer;
+}
+
+.search-btn svg {
+	display: block;
+}
+
+.clear-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 34px;
+	height: 34px;
+	border-radius: 50%;
+	text-decoration: none;
+	color: rgba(0, 0, 0, 0.6);
+	font-weight: 900;
+}
+
+
+.products-header h1 {
+	margin: 0;
+	font-size: 1.6rem;
+	color: var(--brand-dark);
+}
+
+/* Admin actions bar (create product) */
+.admin-actions-bar {
+	display: flex;
+	justify-content: flex-end;
+	margin: 12px 0 18px 0;
+}
+
+.btn-create {
+	background-color: var(--color-primary);
+	color: white;
+	padding: 10px 18px;
+	border-radius: 40px;
+	font-weight: 700;
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	text-decoration: none;
+}
+
+.btn-create:hover {
+	background-color: var(--color-secondary);
+	color: var(--color-primary);
+	border: 2px solid var(--color-primary);
+}
+
+
+
+.products-grid {
+	display: grid;
+	/* Default: flexible columns that wrap as needed (mobile-first) */
+	grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+	gap: 20px;
+	justify-content: start;
+}
+
+/* On large screens force 3 columns with a larger minimum width so three cards
+   occupy the same space that previously held four. */
+@media (min-width: 1000px) {
+	.products-grid {
+		grid-template-columns: repeat(3, minmax(360px, 1fr));
+		max-width: 1200px;
+		margin: 0 auto;
+	}
+}
+
+/* Ensure grid items stretch to the same height so cards look uniform */
+.products-grid {
+	align-items: stretch;
+}
+
+.product-card {
+	background: var(--card-bg);
+	border-radius: 12px;
+	box-shadow: var(--card-shadow);
+	padding: 16px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	transition: transform 0.18s ease, box-shadow 0.18s ease;
+	height: 100%;
+}
+
+.product-card:hover {
+	transform: translateY(-6px);
+	box-shadow: 0 14px 30px rgba(0, 0, 0, 0.08);
+}
+
+.product-card .product-title {
+	font-size: 1.05rem;
+	font-weight: 700;
+	color: var(--brand-dark);
+}
+
+.product-card .product-meta {
+	color: var(--muted);
+	font-size: 0.9rem;
+}
+
+.product-image {
+	width: 100%;
+	height: 180px;
+	object-fit: contain;
+	background: #fafafa;
+	border-radius: 8px;
+	display: block;
+}
+
+.product-info {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	flex: 1 1 auto;
+}
+
+.price-row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+	/* push the price / actions to the bottom of .product-info */
+	margin-top: auto;
+}
+
+.price {
+	font-weight: 800;
+	color: var(--brand-green);
+	font-size: 1.05rem;
+}
+
+.stock {
+	font-size: 0.9rem;
+	color: var(--muted);
+}
+
+/* Estados de stock */
+.stock-out {
+	color: #d9534f;
+	background: rgba(217, 83, 79, 0.06);
+	padding: 4px 8px;
+	border-radius: 6px;
+	font-weight: 700;
+}
+
+.stock-low {
+	color: #f0ad4e;
+	background: rgba(240, 173, 78, 0.06);
+	padding: 4px 8px;
+	border-radius: 6px;
+	font-weight: 700;
+}
+
+.stock-available {
+	color: var(--brand-green);
+	background: rgba(44, 90, 44, 0.04);
+	padding: 4px 8px;
+	border-radius: 6px;
+	font-weight: 700;
+}
+
+.add-to-cart-row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	margin-top: 6px;
+	width: 100%;
+}
+
+/* Quantity control */
+.quantity-control {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	background: #f6f8f7;
+	border-radius: 10px;
+	padding: 4px;
+}
+
+.quantity-control button {
+	border: none;
+	background: transparent;
+	width: 32px;
+	height: 32px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 1.2rem;
+	cursor: pointer;
+	color: var(--brand-dark);
+	border-radius: 8px;
+}
+
+.quantity-control button:disabled {
+	opacity: 0.45;
+	cursor: not-allowed;
+}
+
+.quantity-input {
+	width: 56px;
+	text-align: center;
+	border-radius: 6px;
+	border: 1px solid rgba(0, 0, 0, 0.06);
+	/* fix vertical centering: use fixed height and line-height, remove vertical padding */
+	height: 36px;
+	line-height: 36px;
+	padding: 0 8px;
+	box-sizing: border-box;
+	background: transparent;
+	font-weight: 600;
+}
+
+/* hide number input spinners for WebKit and Firefox for consistent look */
+.quantity-input::-webkit-outer-spin-button,
+.quantity-input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+.quantity-input[type=number] {
+	-moz-appearance: textfield;
+}
+
+.add-to-cart-button {
+	background: var(--color-primary);
+	color: #fff;
+	padding: 10px 14px;
+	border-radius: 22px;
+	border: none;
+	cursor: pointer;
+	font-weight: 700;
+	transition: opacity .16s ease, transform .12s ease;
+	margin-left: auto;
+}
+
+.add-to-cart-button:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+
+.add-to-cart-button:hover:not(:disabled) {
+	opacity: 0.95;
+	transform: translateY(-1px);
+	background-color: var(--color-secondary);
+	color: var(--color-primary);
+	border: 2px solid var(--color-primary);
+}
+
+.no-image {
+	height: 160px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--muted);
+	background: #fafafa;
+	border-radius: 8px;
+}
+
+.alert {
+	padding: 10px 12px;
+	border-radius: 8px;
+	font-weight: 600;
+	font-size: 0.95rem;
+}
+
+.alert-success {
+	background: #e6f6f4;
+	color: #007a67;
+}
+
+.alert-info {
+	background: #eef6ff;
+	color: #0b5fb5;
+}
+
+/* Empty state */
+.no-products {
+	text-align: center;
+	padding: 40px 20px;
+	color: var(--muted);
+}
+
+/* Pagination: match look from order.css but tweak spacing for products pages */
+.pagination {
+	display: flex;
+	justify-content: flex-end;
+	gap: 10px;
+	/* ensure pagination aligns with the grid width and sits closer to it */
+	margin-top: 18px;
+	margin-bottom: 60px;
+	/* more space from footer */
+	width: 100%;
+	max-width: 1200px;
+	margin-left: auto;
+	margin-right: 0;
+	/* align to the right edge of container */
+}
+
+.btn-page {
+	background-color: #ffffff;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	padding: 8px 16px;
+	font-size: 0.9rem;
+	font-weight: 500;
+	cursor: pointer;
+	color: #333;
+	transition: background-color 0.2s ease;
+}
+
+/* Remove green hover — use neutral hover color */
+.btn-page:hover,
+.btn-page:focus {
+	background-color: #f9f9f9;
+	color: #333;
+	text-decoration: none;
+}
+
+.btn-page.disabled {
+	background-color: #f5f5f5;
+	color: #aaa;
+	cursor: not-allowed;
+	border-color: #eee;
+}
+
+/* Stronger disabled rules to avoid visual differences across templates */
+.pagination .btn-page.disabled,
+.pagination .btn-page[disabled],
+.pagination button.btn-page[disabled],
+.pagination a.btn-page.disabled {
+	background-color: #f5f5f5 !important;
+	color: #aaa !important;
+	cursor: not-allowed !important;
+	border-color: #eee !important;
+	pointer-events: none !important;
+	opacity: 1;
+}
+
+.pagination .btn-page.disabled:hover,
+.pagination .btn-page[disabled]:hover,
+.pagination button.btn-page[disabled]:hover {
+	background-color: #f5f5f5 !important;
+	color: #aaa !important;
+}
+
+/* Acciones del staff (botones editar/desc/delete) - shared with appointments */
+.staff-controls {
+	padding: 15px 20px;
+	background-color: #fff;
+	border-top: 1px solid #eee;
+	display: flex;
+	justify-content: space-between;
+	gap: 10px;
+}
+
+.btn-staff {
+	flex: 1;
+	padding: 8px;
+	border-radius: 6px;
+	border: none;
+	cursor: pointer;
+	font-size: 0.9rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	transition: background 0.2s;
+	text-decoration: none;
+	color: white;
+}
+
+.btn-edit {
+	background-color: var(--brand-cyan)
+}
+
+.btn-edit:hover {
+	background-color: #007a67;
+}
+
+.btn-discount {
+	background-color: #005a55;
+}
+
+.btn-discount:hover {
+	background-color: #004d49;
+}
+
+.btn-delete {
+	background-color: #dc3545;
+}
+
+.btn-delete:hover {
+	background-color: #c82333;
+}
+
+/* Force icons inside staff buttons to stay white and not inherit green on hover */
+.staff-controls .material-icons,
+.staff-controls .material-symbols {
+	color: white !important;
+}
+
+.staff-controls .btn-staff:hover .material-icons,
+.staff-controls .btn-staff:focus .material-icons,
+.staff-controls .btn-staff:hover .material-symbols,
+.staff-controls .btn-staff:focus .material-symbols {
+	color: white !important;
+}
+
+/* Responsive tweaks */
+@media (max-width: 900px) {
+	.product-image {
+		height: 160px;
+	}
+
+	.quantity-input {
+		width: 48px;
+	}
+
+	.search-input {
+		width: 100%;
+		max-width: unset;
+	}
+
+	/* allow grid to expand on smaller screens (remove the 3-column cap) */
+	.products-grid {
+		max-width: none;
+	}
+}
+
+@media (max-width: 480px) {
+	.products-header {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 8px;
+	}
+
+	.product-image {
+		height: 140px;
+	}
+
+	.add-to-cart-row {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 8px;
+	}
+}
