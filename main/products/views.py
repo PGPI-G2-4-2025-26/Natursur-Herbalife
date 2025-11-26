@@ -273,7 +273,7 @@ def show_orders(request):
     )
 
     page_number = request.GET.get('page', 1)
-    paginator = Paginator(qs.order_by('date'), per_page)
+    paginator = Paginator(qs.order_by('-date'), per_page)
     pedidos = paginator.get_page(page_number)
 
     for o in pedidos:
@@ -332,7 +332,7 @@ def show_orders_admin(request):
     qs = qs.annotate(total_quantity=Coalesce(Sum('order_products__quantity'), 0))
 
     page_number = request.GET.get('page', 1)
-    paginator = Paginator(qs.order_by('date'), per_page)
+    paginator = Paginator(qs.order_by('-date'), per_page)
     pedidos = paginator.get_page(page_number)
 
     for o in pedidos:

@@ -80,12 +80,13 @@ class OrderForm(forms.ModelForm):
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['name', 'price', 'flavor', 'size', 'image', 'ref']
+        fields = ['name', 'price', 'flavor', 'size', 'stock', 'image', 'ref']
         widgets = {
             'name': forms.TextInput(attrs={'placeholder': 'Nombre del producto'}),
             'price': forms.NumberInput(attrs={'step': '0.01', 'placeholder': '0.00'}),
             'flavor': forms.TextInput(attrs={'placeholder': 'Sabor'}),
             'size': forms.TextInput(attrs={'placeholder': 'Tamaño (p. ej. 500 g)'}),
+            'stock': forms.NumberInput(attrs={'min': '0', 'step': '1', 'placeholder': '50'}),
             'ref': forms.TextInput(attrs={'placeholder': 'Referencia / enlace'}),
         }
         labels = {
@@ -95,6 +96,7 @@ class ProductForm(forms.ModelForm):
             'size': 'Tamaño (opcional)',
             'image': 'Imagen',
             'ref': 'Referencia (opcional)',
+            'stock': 'Stock'
         }
 
     def clean_name(self):
@@ -110,3 +112,15 @@ class ProductForm(forms.ModelForm):
         if price < 0:
             raise forms.ValidationError('El precio no puede ser negativo.')
         return price
+
+    def clean_stock(self):
+        stock = self.cleaned_data.get('stock')
+        if stock is None:
+            raise forms.ValidationError('La cantidad de stock es obligatoria.')
+        try:
+            stock_int = int(stock)
+        except (TypeError, ValueError):
+            raise forms.ValidationError('Introduce un número entero válido para el stock.')
+        if stock_int < 0:
+            raise forms.ValidationError('El stock no puede ser negativo.')
+        return stock_int
