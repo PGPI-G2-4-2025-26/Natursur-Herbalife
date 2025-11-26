@@ -319,7 +319,8 @@
   color: #f1c40f; /* amarillo */
 }
 
-.header-stars .iconify-icon { font-size: 20px; color: rgba(255,255,255,0.9); }
+.header-stars .iconify-icon { font-size: 20px; color: #f1c40f; }
+.header-stars iconify-icon svg { fill: currentColor; stroke: currentColor; }
 .review-stars .iconify-icon { font-size: 18px; }
 
 @media (max-width: 900px) {
