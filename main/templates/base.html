@@ -116,14 +116,6 @@
 
   <section class="main-content-section">
     {% block contenido %}{% endblock contenido %}
-    {% if messages %}
-    <div class="site-messages">
-      {% for message in messages %}
-      <div class="message {{ message.tags }}">{{ message }}</div>
-      {% endfor %}
-    </div>
-    {% endif %}
-
     {% with route=request.resolver_match.url_name %}
     {% if cart_has_items and route in 'home appointments list_products my_orders' %}
     <a href="{% url 'view_cart' %}" class="btn-cesta">
