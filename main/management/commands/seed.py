@@ -4,7 +4,7 @@ import os
 import shutil
 from django.conf import settings
 from main.user.models import UserProfile
-from datetime.datetime import datetime
+from datetime import datetime
 
 
 DEFAULT_APPOINTMENTS = [
