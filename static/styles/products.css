@@ -419,11 +419,11 @@
 	color: white;
 }
 
-.btn-edit { background-color: #005a55; }
-.btn-edit:hover { background-color: #004d49; }
+.btn-edit { background-color: var(--brand-cyan)}
+.btn-edit:hover { background-color: #007a67; }
 
-.btn-discount { background-color: #1fa891; }
-.btn-discount:hover { background-color: #1b8d7a; }
+.btn-discount { background-color: #005a55; }
+.btn-discount:hover { background-color:#004d49; }
 
 .btn-delete { background-color: #dc3545; }
 .btn-delete:hover { background-color: #c82333; }

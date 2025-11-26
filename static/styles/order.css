@@ -273,7 +273,7 @@ body {
 }
 
 .btn-edit-pedido {
-    background-color: #29bfae;
+    background-color: var(--brand-green);
     color: #ffffff;
     padding: 10px 18px;
     text-decoration: none;
@@ -288,7 +288,7 @@ body {
 .btn-edit-pedido:hover,
 .btn-edit-pedido:focus,
 .btn-edit-pedido:active {
-    background-color: #1fa891;
+    background-color: var(--color-primary);
     color: #ffffff;
 }
 
