@@ -47,6 +47,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -134,6 +135,8 @@ STATICFILES_DIRS = [
 # Directorio donde Django recolectará los archivos estáticos para producción (python manage.py collectstatic)
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
+# WhiteNoise: sirve los archivos estáticos directamente en producción
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
