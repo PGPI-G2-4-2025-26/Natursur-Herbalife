@@ -154,7 +154,7 @@ header {
 }
 
 .navbar-profile-button-container {
-  padding: 0px 5px;
+  padding: 0px 10px;
   display: flex;
   justify-self: end;
   background-color: var(--color-tertiary);
@@ -168,7 +168,8 @@ header {
 .btn-profile {
     background-color: transparent; 
     color: var(--color-primary); 
-    padding: 5px 5px; 
+    padding: 13px; 
+    height: 100%; 
     margin: 0;
     text-decoration: none;
     font-weight: bold;
@@ -191,6 +192,7 @@ header {
 
 .btn-profile:hover {
   background-color: rgba(104, 107, 0, 0.1);
+  color: var(--color-text-dark);
 }
 
 .btn-cesta {
