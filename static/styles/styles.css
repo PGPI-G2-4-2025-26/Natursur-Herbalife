@@ -35,7 +35,7 @@ a {
 }
 
 a:hover {
-  color: rgb(180, 196, 173);
+  color: var(--color-text-dark);
 }
 
 header {
@@ -198,6 +198,11 @@ header {
   color: var(--color-text-dark);
 }
 
+.btn-profile.active {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+
 .btn-cesta {
   background-color: var(--color-primary);
   color: var(--color-white);
@@ -303,6 +308,70 @@ header {
   background: #e8f1ff;
   border-left: 4px solid #11522b;
   color: #123a5a;
+}
+
+.message-container {
+    position: fixed;
+    top: 120px; 
+    right: 20px;
+    z-index: 2000; 
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none; 
+}
+
+.message-toast {
+    background-color: var(--color-white);
+    color: var(--color-text-dark);
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border-left: 5px solid var(--color-primary);
+    
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 300px;
+    
+    pointer-events: auto; 
+    animation: slideIn 0.3s ease-out forwards;
+}
+
+.message-toast .material-icons {
+    color: var(--color-primary);
+}
+
+.close-toast {
+    background: none;
+    border: none;
+    font-size: 1.2em;
+    color: #999;
+    cursor: pointer;
+    margin-left: auto; 
+}
+
+.close-toast:hover {
+    color: #333;
+}
+
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+        transform: translateX(20px);
+    }
 }
 
 @media (max-width: 980px) {

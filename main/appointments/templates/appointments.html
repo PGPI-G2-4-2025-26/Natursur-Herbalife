@@ -91,7 +91,7 @@
                     {% if appointment.endDiscount > now %}
                         <span class="price-original">{{ appointment.price }}€</span>
                         <span class="price-current price-discount-active">
-                             Oferta: {{ appointment.discount }}€ 
+                            Oferta: {{ appointment.discount }}€ 
                         </span>
                         <div class="discount-tag">Ahorras {{ appointment.total_money_save }}€</div>
                         <small style="font-size: 0.7rem; color: #777;">Hasta: {{ appointment.endDiscount}}</small>
@@ -121,7 +121,12 @@
         {% endfor %}
     </div>
 
-    <div class="calendly-inline-widget" data-url="https://calendly.com/natursur/fernando-escalona" style="min-width: 320px; height: 700px"
+    <div class="services-intro">
+        <h1>Pedir cita</h1>
+        <p>Elige la hora que mejor se adapte a tu agenda y reserva tu sesión con nosotros.</p>
+    </div>
+
+    <div class="calendly-inline-widget" data-url="https://calendly.com/natursur/fernando-escalona" style="margin-top:-40px; min-width: 320px; height: 700px"
     ></div>
 
     <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async

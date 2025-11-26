@@ -142,13 +142,13 @@
     color: var(--color-white);
 }
 .btn-profile-action.edit {
-    background-color: #f9f4c9;
-    color: #fea427; 
+    background-color: #cdede5;
+    color:var(--brand-cyan); 
     padding: 10px 23px; 
 }
 
 .btn-profile-action.edit:hover {
-    background-color: #ecd02f;
+    background-color:var(--brand-cyan);
     color: var(--color-white);
 }
 

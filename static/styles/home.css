@@ -574,19 +574,27 @@
 
 .social-button:hover {
     opacity: 0.85;
+    background-color: #fff;
 }
 
 /* Instagram */
 .social-card.instagram .card-header i { color: #E4405F; }
-.social-card.instagram .social-button { background-color: #E4405F; }
+.social-card.instagram .social-button { background-color: #f7c8d0; color: #e73a5a; }
+.social-card.instagram .social-button:hover { background-color: #E4405F; color: var(--color-white); }
 
 /* Facebook */
 .social-card.facebook .card-header i { color: #1877F2; }
-.social-card.facebook .social-button { background-color: #1877F2; }
+.social-card.facebook .social-button { background-color: #c0d9f9; color: #045fd5; }
+.social-card.facebook .social-button:hover { background-color: #006eff; color: var(--color-white) }
+
 
 /* YouTube */
 .social-card.youtube .card-header i { color: #FF0000; }
-.social-card.youtube .social-button { background-color: #FF0000; }
+.social-card.youtube .social-button { background-color: #fcedec;
+    color: #e74c3c;  }
+.social-card.youtube .social-button:hover { background-color: #f11e06; color: var(--color-white)
+
+}
 
 
 /* --- Diseño Responsivo (Móvil) --- */

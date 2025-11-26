@@ -129,13 +129,18 @@
 .summary-total{ font-weight:800; color:var(--brand-green); font-size:1.1rem; }
 
 .checkout-btn{
-	background:var(--brand-green);
+	background:var(--color-primary);
 	color:#fff;
 	padding:12px 16px;
 	border-radius:10px;
 	border:none;
 	cursor:pointer;
 	font-weight:700;
+}
+
+.checkout-btn:hover{
+	background: var(--color-tertiary);
+	color:var(--color-primary);
 }
 
 .continue-link{

@@ -253,7 +253,7 @@ body {
 }
 
 .btn-ver-pedido {
-    background-color: var(--brand-cyan);
+    background-color: var(--color-primary);
     color: #ffffff;
     padding: 10px 18px;
     text-decoration: none;
@@ -268,12 +268,12 @@ body {
 .btn-ver-pedido:hover,
 .btn-ver-pedido:focus,
 .btn-ver-pedido:active {
-    background-color: #005a55;
-    color: #ffffff;
+    background-color: var(--color-tertiary);
+    color: var(--color-text-dark);
 }
 
 .btn-edit-pedido {
-    background-color: var(--brand-green);
+    background-color: var(--color-primary);
     color: #ffffff;
     padding: 10px 18px;
     text-decoration: none;
@@ -288,8 +288,8 @@ body {
 .btn-edit-pedido:hover,
 .btn-edit-pedido:focus,
 .btn-edit-pedido:active {
-    background-color: var(--color-primary);
-    color: #ffffff;
+    background-color: var(--color-tertiary);
+    color: var(--color-text-dark);
 }
 
 .btn-delete-pedido {

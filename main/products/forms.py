@@ -2,11 +2,11 @@ from django import forms
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 import re
-
 from .models import Order, Product
 
-
 class OrderForm(forms.ModelForm):
+    FIXED_ADDRESS_MESSAGE = "Los envíos a domicilio no están disponibles aún. Recogida en tienda disponible en la oficina de Natursur."
+
     solicitant_name = forms.CharField(
         label='Nombre completo',
         required=True,
@@ -29,54 +29,32 @@ class OrderForm(forms.ModelForm):
 
     solicitant_address = forms.CharField(
         label='Dirección de envío',
-        required=True,
-        min_length=6,
-        widget=forms.Textarea(attrs={'rows': 2, 'placeholder': 'Dirección de envío'}),
-        error_messages={
-            'required': 'La dirección es obligatoria.',
-            'min_length': 'Introduce una dirección válida (más caracteres).',
-        }
+        required=False, 
+        widget=forms.Textarea(attrs={
+            'rows': 1, 
+            'readonly': 'readonly', 
+            'class': 'form-control',
+            'style': 'background-color: #e9ecef; color: #495057; cursor: not-allowed; resize: none;'
+        })
     )
 
     class Meta:
         model = Order
         fields = ['solicitant_name', 'solicitant_contact', 'solicitant_address']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.initial['solicitant_address'] = self.FIXED_ADDRESS_MESSAGE
+
     def clean_solicitant_name(self):
-        name = self.cleaned_data.get('solicitant_name', '')
-        name = name.strip()
-        if len(name) < 3:
-            raise ValidationError('El nombre es demasiado corto.')
-        if any(ch.isdigit() for ch in name):
-            raise ValidationError('El nombre no puede contener dígitos.')
-        return name
+        return self.cleaned_data.get('solicitant_name', '').strip()
 
     def clean_solicitant_contact(self):
-        contact = self.cleaned_data.get('solicitant_contact', '')
-        contact = contact.strip()
-        if not contact:
-            raise ValidationError('El contacto es obligatorio.')
-
-        if '@' in contact:
-            try:
-                validate_email(contact)
-            except ValidationError:
-                raise ValidationError('Introduce un correo electrónico válido.')
-            return contact
-
-        phone_re = re.compile(r'^\+?[0-9\s\-()]{7,}$')
-        if not phone_re.match(contact):
-            raise ValidationError('Introduce un teléfono válido (dígitos, espacios, +, - o paréntesis).')
-
-        return contact
+        return self.cleaned_data.get('solicitant_contact', '').strip()
 
     def clean_solicitant_address(self):
-        addr = self.cleaned_data.get('solicitant_address', '')
-        addr = addr.strip()
-        if len(addr) < 6:
-            raise ValidationError('La dirección es demasiado corta.')
-        return addr
-    
+        return self.FIXED_ADDRESS_MESSAGE
+
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product

@@ -59,7 +59,7 @@
     align-items:center;
 }
 .confirm-btn{
-    background:var(--brand-green);
+    background:var(--color-primary);
     color:#fff;
     padding:10px 16px;
     border-radius:10px;
@@ -80,27 +80,21 @@
     box-sizing:border-box;
 }
 .back-link{
-
-    color:var(--brand-dark);
+    color:var(--color-primary);
     padding:10px 16px;
     border-radius:10px;
     border:1px solid rgba(0,0,0,0.06);
     display:inline-flex;
     align-items:center;
     justify-content:center;
-    
-    transition: transform .12s ease, box-shadow .12s ease, background-color .12s ease, color .12s ease;
-    /* fixed size and typography to match confirm button */
-    width:180px;
-    height:44px;
-    font-size:16px;
-    line-height:44px;
-    box-sizing:border-box;
 }
 
 /* Hover / focus feedback for action buttons */
 .confirm-btn:hover,
 .confirm-btn:focus{
+    color: var(--color-primary);
+    background-color: var(--color-tertiary);
+    border: 2px solid var(--color-primary);
     opacity:0.95;
     transform: translateY(-2px);
     box-shadow: 0 10px 24px rgba(168, 216, 168, 0.12);
@@ -110,9 +104,9 @@
 
 .back-link:hover,
 .back-link:focus{
-    background: #6fb987;
-    color: #fff;
-    border-color: #6fb987;
+    color: var(--color-primary);
+    background-color: var(--color-tertiary);
+    border: 2px solid var(--color-primary);
     transform: translateY(-2px);
     box-shadow: 0 10px 24px rgba(168, 212, 168, 0.12);
     outline: none;
