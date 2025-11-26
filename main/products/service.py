@@ -212,4 +212,14 @@ class ProductService:
         order = Order.objects.filter(order_identified=order_identified).first()
         if order:
             return order
+        
+    @staticmethod
+    def get_active_cart_for_request(request):
+        if hasattr(request, 'user') and request.user.is_authenticated:
+            return Order.objects.filter(status='EN_CARRITO', registered_user=request.user).first()
+        else:
+            cookie = request.COOKIES.get('anon_user_id')
+            if cookie:
+                return Order.objects.filter(status='EN_CARRITO', anonymous_user_cookie=cookie).first()
+        return None
 

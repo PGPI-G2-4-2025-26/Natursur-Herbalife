@@ -112,6 +112,7 @@ def add_to_cart(request, product_id):
     return resp
 
 def view_cart(request):
+    ## creo puede refactorizar por order = ProductService.get_active_cart_for_request(request)
     order = None
     if hasattr(request, 'user') and request.user.is_authenticated:
         order = Order.objects.filter(status='EN_CARRITO', registered_user=request.user).first()
@@ -119,6 +120,7 @@ def view_cart(request):
         cookie = request.COOKIES.get('anon_user_id')
         if cookie:
             order = Order.objects.filter(status='EN_CARRITO', anonymous_user_cookie=cookie).first()
+    ##
 
     cart_items = []
     total_price = 0
