@@ -78,6 +78,7 @@ body {
     margin-bottom: 28px;
 }
 
+
 .filter-label {
     font-size: 0.95rem;
     color: #555;
@@ -116,7 +117,7 @@ body {
 
 .filter-select:focus {
     outline: none;
-    box-shadow: 0 0 0 3px rgba(0,122,117,0.08);
+    box-shadow: 0 0 0 3px rgba(0, 122, 117, 0.08);
 }
 
 .search-input {
@@ -134,7 +135,7 @@ body {
 
 .search-input:focus {
     outline: none;
-    box-shadow: 0 0 0 3px rgba(0,122,117,0.06);
+    box-shadow: 0 0 0 3px rgba(0, 122, 117, 0.06);
 }
 
 .pedidos-list {
@@ -156,11 +157,31 @@ body {
     gap: 15px;
 }
 
-.pedido-info { flex: 2; min-width: 150px; }
-.pedido-status { flex: 2; min-width: 150px; }
-.pedido-total { flex: 1.5; min-width: 120px; }
-.pedido-entrega { flex: 1.5; min-width: 130px; }
-.pedido-accion { flex: 1; min-width: 120px; text-align: right; }
+.pedido-info {
+    flex: 2;
+    min-width: 150px;
+}
+
+.pedido-status {
+    flex: 2;
+    min-width: 150px;
+}
+
+.pedido-total {
+    flex: 1.5;
+    min-width: 120px;
+}
+
+.pedido-entrega {
+    flex: 1.5;
+    min-width: 130px;
+}
+
+.pedido-accion {
+    flex: 1;
+    min-width: 120px;
+    text-align: right;
+}
 
 .pedido-card h4 {
     font-size: 1.1rem;
@@ -169,7 +190,8 @@ body {
     font-weight: 600;
 }
 
-.pedido-total h4, .pedido-entrega h4 {
+.pedido-total h4,
+.pedido-entrega h4 {
     font-size: 0.9rem;
     color: #555;
     font-weight: 500;
@@ -198,7 +220,31 @@ body {
     font-weight: bold;
     letter-spacing: 0.5px;
     background-color: #e6f7f3;
-    color: #007a75;
+    color: var(--brand-cyan);
+}
+
+.status-tag-solicitado {
+    background-color: #fff3e0;
+    color: #e65100;
+    border-color: #ffe0b2;
+}
+
+.status-tag-encargado {
+    background-color: #e3f2fd;
+    color: #355e8d;
+    border-color: #bbdefb;
+}
+
+.status-tag-recibido_natursur {
+    background-color: #c1f1e7;
+    color: var(--brand-cyan);
+    border-color: #bee7d1;
+}
+
+.status-tag-recogido_cliente {
+    background-color: #c4efc7;
+    color: var(--color-primary);
+    border-color: #c8e6c9;
 }
 
 .status-tag .icon {
@@ -207,7 +253,7 @@ body {
 }
 
 .btn-ver-pedido {
-    background-color: #007a75;
+    background-color: var(--brand-cyan);
     color: #ffffff;
     padding: 10px 18px;
     text-decoration: none;
@@ -342,11 +388,28 @@ body {
 }
 
 @media (max-width: 600px) {
-    .filter-form { flex-direction: column; align-items: stretch; gap: 8px; }
-    .filter-select, .search-input { width: 100%; max-width: none; min-width: 0; }
-    .filter-btn { width: 100%; }
-    
-    .search-input { width: 100%; max-width: none; min-width: 0; }
+    .filter-form {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+
+    .filter-select,
+    .search-input {
+        width: 100%;
+        max-width: none;
+        min-width: 0;
+    }
+
+    .filter-btn {
+        width: 100%;
+    }
+
+    .search-input {
+        width: 100%;
+        max-width: none;
+        min-width: 0;
+    }
 }
 
 .sr-only {
@@ -356,7 +419,7 @@ body {
     padding: 0;
     margin: -1px;
     overflow: hidden;
-    clip: rect(0,0,0,0);
+    clip: rect(0, 0, 0, 0);
     border: 0;
 }
 
@@ -528,13 +591,19 @@ body {
     box-sizing: border-box;
 }
 
-.top-row .left-card  { order: 1; }
-.top-row .right-card { order: 2; }
+.top-row .left-card {
+    order: 1;
+}
+
+.top-row .right-card {
+    order: 2;
+}
 
 @media (max-width: 768px) {
     .top-row {
         flex-direction: column;
     }
+
     .top-row .info-card {
         flex: 1 1 100%;
         min-width: 0;
@@ -561,5 +630,7 @@ body {
 }
 
 @media (min-width: 600px) {
-    .search-wrapper { margin-top: 6px; }
+    .search-wrapper {
+        margin-top: 6px;
+    }
 }
