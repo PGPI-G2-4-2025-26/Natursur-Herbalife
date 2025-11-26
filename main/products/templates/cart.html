@@ -48,12 +48,6 @@
             </div>
           </div>
         {% endfor %}
-
-      {% else %}
-        <div class="cart-empty">
-          <p>Tu carrito está vacío.</p>
-          <a href="{% url 'list_products' %}" class="continue-link">Seguir comprando</a>
-        </div>
       {% endif %}
     </div>
 
@@ -72,6 +66,12 @@
       </aside>
     {% endif %}
   </div>
+
+  <div class="cart-empty-message" style="display: {% if not cart_items %} block {% else %} none {% endif %}; text-align: center; margin-top: 20px;">
+  <p>Tu carrito está vacío. Explora nuestros productos y añade algo a tu carrito.</p>
+  <a href="{% url 'list_products' %}" class="checkout-btn" style="display:inline-block; margin-top:12px; text-decoration:none;">Seguir comprando</a>
+
+
 </div>
 
 {% endblock %}
