@@ -70,7 +70,7 @@
           <span class="material-icons">person</span>
           <span>{{ user.first_name|default:user.username|upper }}</span>
           {% if user.is_staff %}
-            <span class="material-icons admin-star" title="Administrador">verified</span>
+          <span class="material-icons admin-star" title="Administrador">verified</span>
           {% endif %}
         </a>
         <a href="{% url 'logout' %}" class="btn-profile">
@@ -92,17 +92,22 @@
   <section class="main-content-section">
     {% block contenido %}{% endblock contenido %}
     {% if messages %}
-      <div class="site-messages">
-        {% for message in messages %}
-          <div class="message {{ message.tags }}">{{ message }}</div>
-        {% endfor %}
-      </div>
+    <div class="site-messages">
+      {% for message in messages %}
+      <div class="message {{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    </div>
     {% endif %}
+
+    {% with route=request.resolver_match.url_name %}
+    {% if cart_has_items and route in 'home appointments list_products my_orders' %}
     <a href="{% url 'view_cart' %}" class="btn-cesta">
-      <span class="material-icons">shopping_basket</span>
+      <span class="material-icons">shopping_cart</span>
       Carrito
-      <span class="cesta-count">X</span>
+      <span class="cesta-count">{{ cart_item_count }}</span>
     </a>
+    {% endif %}
+    {% endwith %}
   </section>
 
   <footer class="footer">

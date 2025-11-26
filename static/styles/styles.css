@@ -208,7 +208,7 @@ header {
   transition: background-color 0.3s;
   position: fixed;
   right: 20px;
-  bottom: 70px;
+  top: 70px;
   z-index: 99;
 
   font-size: 1.1em;
@@ -219,6 +219,7 @@ header {
 
 .btn-cesta:hover {
   background-color: var(--color-tertiary);
+  color: var(--color-text-dark);
 }
 
 .btn-cesta .material-icons {
