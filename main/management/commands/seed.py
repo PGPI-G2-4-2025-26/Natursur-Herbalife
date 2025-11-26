@@ -13,8 +13,8 @@ DEFAULT_APPOINTMENTS = [
         'duration': 40,
         'description': '',
         'premium': False,
-        'discount': Decimal('0.00'),
-        'endDiscount': None,
+        'discount': Decimal('15.00'),
+        'endDiscount': datetime(2025, 12, 31, 23, 59),
     },
     {
         'name': "Sesión 60'",
