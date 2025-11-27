@@ -35,8 +35,21 @@
                     <div class="label">Fecha realizada</div>
                     <div class="value">{{ order.date|date:"d/m/Y" }}</div>
                     <div class="label">Estado</div>
+
                     <div class="value">
-                        <span class="status-tag">{{ order.status|upper }}</span>
+                    <span class="status-tag status-tag-{{ order.status|lower }}">
+                        {% if order.status == 'SOLICITADO' %}
+                            SOLICITADO
+                        {% elif order.status == 'ENCARGADO' %}
+                            ENCARGADO
+                        {% elif order.status == 'RECIBIDO_NATURSUR' %}
+                            RECOGIDA DISPONIBLE
+                        {% elif order.status == 'RECOGIDO_CLIENTE' %}
+                            RECOGIDO
+                        {% else %}
+                            {{ order.status }}
+                        {% endif %}
+                    </span>
                     </div>
                     <div class="label">Precio total</div>
                     <div class="value">{{ order.total_price }} €</div>
@@ -65,6 +78,7 @@
                             <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="item-image">
                         {% endif %}
                         <div class="item-name"><strong>{{ item.product_name|default:item.product.name }}</strong></div>
+                        <div class="item-qty">Precio/u: {{ item.price_at_order }} €</div>
                         <div class="item-qty">Cantidad: {{ item.quantity }}</div>
                     </div>
                 {% empty %}
