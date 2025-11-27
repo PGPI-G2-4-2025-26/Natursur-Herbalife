@@ -99,6 +99,106 @@ DEFAULT_USERS = [
     },
 ]
 
+
+DEFAULT_ORDERS = [
+    {
+        'id': 1,
+        'is_paid': True,
+        'date': None,
+        'order_identified': 'ORD-662C65938983',
+        'status': 'SOLICITADO',
+        'registered_user_id': 3,
+        'solicitant_contact': 'client@gmail.com',
+        'solicitant_name': 'Client User',
+        'solicitant_address': '',
+
+    },
+    {
+        'id': 2,
+        'is_paid': False,
+        'date': None,
+        'order_identified': 'ORD-662C68351917',
+        'status': 'ENCARGADO',
+        'registered_user_id': 3,
+        'solicitant_contact': 'client@gmail.com',
+        'solicitant_name': 'Client User',
+        'solicitant_address': '',
+    },
+    {
+        'id': 3,
+        'is_paid': True,
+        'date': None,
+        'order_identified': 'ORD-662C68539537',
+        'status': 'RECIBIDO_NATURSUR',
+        'registered_user_id': 3,
+        'solicitant_contact': 'client@gmail.com',
+        'solicitant_name': 'Client User',
+        'solicitant_address': '',
+    },
+    {
+        'id': 4,
+        'is_paid': False,
+        'date': None,
+        'order_identified': 'ORD-662C68712313',
+        'status': 'RECOGIDO_CLIENTE',
+        'registered_user_id': 3,  
+        'solicitant_contact': 'client@gmail.com',
+        'solicitant_name': 'Client User',
+        'solicitant_address': '',
+    },
+    {
+        'id': 5,
+        'is_paid': False,
+        'date': None,
+        'order_identified': 'ORD-662C68251245',
+        'status': 'SOLICITADO',
+        'registered_user_id': 3,
+        'solicitant_contact': 'client@gmail.com',
+        'solicitant_name': 'Client User',
+        'solicitant_address': '',
+    }
+]
+
+DEFAULT_ORDER_PRODUCTS = [
+    {
+        'order_id': 1,
+        'product_id': 1,
+        'quantity': 2,
+        'price_at_order': Decimal('30.00'),
+    },
+    {
+        'order_id': 1,
+        'product_id': 2,
+        'quantity': 1,
+        'price_at_order': Decimal('20.00'),
+    },
+    {
+        'order_id': 2,
+        'product_id': 3,
+        'quantity': 1,
+        'price_at_order': Decimal('15.00'),
+    },
+    {
+        'order_id': 3,
+        'product_id': 1,
+        'quantity': 1,
+        'price_at_order': Decimal('30.00'),
+    },
+    {
+        'order_id': 4,
+        'product_id': 2,
+        'quantity': 3,
+        'price_at_order': Decimal('20.00'),
+    },
+    {
+        'order_id': 5,
+        'product_id': 3,
+        'quantity': 2,
+        'price_at_order': Decimal('15.00'),
+    },
+]
+
+
 class Command(BaseCommand):
     help = 'Seed default appointments into Appointment model'
 
@@ -179,5 +279,59 @@ class Command(BaseCommand):
             else:
                 updated_cnt += 1
                 self.stdout.write(self.style.NOTICE(f"Updated appointment: {obj.name}"))
+        for o in DEFAULT_ORDERS:
+            obj, created = Order.objects.update_or_create(
+                order_identified=o['order_identified'],
+                defaults={
+                    'is_paid': o['is_paid'],
+                    'status': o['status'],
+                    'registered_user_id': o['registered_user_id'],
+                    'solicitant_contact': o['solicitant_contact'],
+                    'solicitant_name': o['solicitant_name'],
+                    'solicitant_address': o['solicitant_address'],
+                }
+            )
+            if created:
+                created_cnt += 1
+                self.stdout.write(self.style.SUCCESS(f"Created order: {obj.order_identified}"))
+            else:
+                updated_cnt += 1
+                self.stdout.write(self.style.NOTICE(f"Updated order: {obj.order_identified}"))
+                
+        for o in DEFAULT_ORDERS:
+            obj, created = Order.objects.update_or_create(
+                id=o['id'],
+                defaults={
+                    'status': o['status'],
+                    'registered_user_id': o['registered_user_id'],
+                    'order_identified': o['order_identified'],
+                    'solicitant_contact': o['solicitant_contact'],
+                    'solicitant_name': o['solicitant_name'],
+                    'solicitant_address': o['solicitant_address'],
+                }
+            )
+            if created:
+                created_cnt += 1
+                self.stdout.write(self.style.SUCCESS(f"Created order: {obj.id}"))
+            else:
+                updated_cnt += 1
+                self.stdout.write(self.style.NOTICE(f"Updated order: {obj.id}"))
+        
+        for op in DEFAULT_ORDER_PRODUCTS:
+            obj, created = OrderProduct.objects.update_or_create(
+                id=op.get('id'),
+                defaults={
+                    'product_id': op['product_id'],
+                    'quantity': op['quantity'],
+                    'order_id': op['order_id'],
+                    'price_at_order': op['price_at_order'],
+                }
+            )
+            if created:
+                created_cnt += 1
+                self.stdout.write(self.style.SUCCESS(f"Created ordered product: {obj.id}"))
+            else:
+                updated_cnt += 1
+                self.stdout.write(self.style.NOTICE(f"Updated ordered product: {obj.id}"))
 
         self.stdout.write(self.style.SUCCESS(f"Seeding finished. Created: {created_cnt}, Updated: {updated_cnt}"))

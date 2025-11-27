@@ -1,7 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator
 
-
 class Appointment(models.Model):
     name = models.CharField(max_length=255, verbose_name="Name")
     price = models.DecimalField(
