@@ -123,8 +123,9 @@ def create_discount(request, appointment_id):
         formatted_date_text = "Sin fecha asignada"
         
         if appointment.endDiscount:
+            local_dt = timezone.localtime(appointment.endDiscount)
             formatted_date_text = formats.date_format(
-                appointment.endDiscount, 
+                local_dt,
                 format='d \d\e F \d\e\l Y \\a \l\\a\s H:i'
             )
         
