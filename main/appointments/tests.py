@@ -5,11 +5,17 @@ from django.contrib.auth.models import User
 from .models import Appointment
 from django.core.exceptions import ValidationError
 from unittest.mock import patch
+from django.test import TestCase
+from django.urls import reverse
+from django.contrib.auth.models import User
+
+from .models import Appointment
+from django.core.exceptions import ValidationError
+from unittest.mock import patch
 
 
 class CreateAppointmentViewTests(TestCase):
 	def setUp(self):
-		# create a staff user
 		self.username = 'staffuser'
 		self.password = 'pass1234'
 		self.user = User.objects.create_user(username=self.username, password=self.password)
@@ -34,7 +40,6 @@ class CreateAppointmentViewTests(TestCase):
 			'premium': 'on',
 		}
 		response = self.client.post(url, data)
-		# should redirect to the appointments list
 		self.assertEqual(response.status_code, 302)
 		self.assertEqual(Appointment.objects.filter(name='Sesión de prueba').count(), 1)
 
@@ -48,7 +53,6 @@ class CreateAppointmentViewTests(TestCase):
 			'description': 'Precio negativo',
 		}
 		response = self.client.post(url, data)
-		# view should re-render the form with errors (status 200)
 		self.assertEqual(response.status_code, 200)
 		form = response.context.get('form')
 		self.assertIsNotNone(form)
@@ -73,11 +77,9 @@ class CreateAppointmentViewTests(TestCase):
 		with patch('main.appointments.views.Appointment.full_clean', side_effect=ValidationError('Error general')):
 			response = self.client.post(url, data)
 
-		# view should re-render the form with non-field error (status 200)
 		self.assertEqual(response.status_code, 200)
 		form = response.context.get('form')
 		self.assertIsNotNone(form)
-		# non-field errors are available via non_field_errors()
 		non_field = list(form.non_field_errors())
 		self.assertTrue(non_field)
 		self.assertIn('Error general', non_field[0])
@@ -85,14 +87,12 @@ class CreateAppointmentViewTests(TestCase):
 
 class UpdateAppointmentViewTests(TestCase):
 	def setUp(self):
-		# create a staff user
 		self.username = 'staffuser'
 		self.password = 'pass1234'
 		self.user = User.objects.create_user(username=self.username, password=self.password)
 		self.user.is_staff = True
 		self.user.save()
 
-		# create an appointment to update
 		self.appointment = Appointment.objects.create(
 			name='Sesión original',
 			price=20.00,
@@ -152,8 +152,6 @@ class UpdateAppointmentViewTests(TestCase):
 			'duration': '30',
 			'description': 'fail',
 		}
-
-		# Simulate full_clean raising ValidationError with message_dict
 		with patch('main.appointments.views.Appointment.full_clean', side_effect=ValidationError({'price': ['Precio inválido']})):
 			response = self.client.post(url, data)
 
@@ -211,14 +209,12 @@ class UpdateAppointmentViewTests(TestCase):
 		
 class DeleteAppointmentViewTests(TestCase):
     def setUp(self):
-        # create a staff user
         self.username = 'staffuser'
         self.password = 'pass1234'
         self.user = User.objects.create_user(username=self.username, password=self.password)
         self.user.is_staff = True
         self.user.save()
 
-        # create an appointment to delete
         self.appointment = Appointment.objects.create(
             name='Sesión a eliminar',
             price=20.00,
@@ -232,8 +228,147 @@ class DeleteAppointmentViewTests(TestCase):
         self.client.login(username=self.username, password=self.password)
         url = reverse('delete_appointment', args=[self.appointment.id])
         response = self.client.post(url)
-        # should redirect to the appointments list
         self.assertEqual(response.status_code, 302)
         self.assertEqual(Appointment.objects.filter(id=self.appointment.id).count(), 0)
 		
-    
+class CreateDiscountViewTests(TestCase):
+	def setUp(self):
+		self.username = 'staffuser'
+		self.password = 'pass1234'
+		self.user = User.objects.create_user(username=self.username, password=self.password)
+		self.user.is_staff = True
+		self.user.save()
+
+		self.appointment = Appointment.objects.create(
+			name='Sesión con descuento',
+			price=30.00,
+			duration=40,
+			description='Para pruebas de descuento',
+			premium=False,
+			discount=0.00,
+			endDiscount=None,
+		)
+
+	def test_get_renders_form_initial_no_enddate(self):
+		self.client.login(username=self.username, password=self.password)
+		url = reverse('create_discount', args=[self.appointment.id])
+		response = self.client.get(url)
+		self.assertEqual(response.status_code, 200)
+		self.assertIn('form', response.context)
+		form = response.context.get('form')
+		self.assertIsNotNone(form)
+		# initial discount debe venir del appointment
+		self.assertEqual(form.initial.get('discount'), self.appointment.discount)
+		# sin endDiscount debería mostrar texto "Sin fecha asignada"
+		self.assertEqual(form.initial.get('current_end_date'), 'Sin fecha asignada')
+
+	def test_get_renders_form_with_enddate(self):
+		from django.utils import timezone
+		# asignar una fecha de fin y comprobar que initial cambia
+		self.appointment.endDiscount = timezone.now()
+		self.appointment.save()
+		self.client.login(username=self.username, password=self.password)
+		url = reverse('create_discount', args=[self.appointment.id])
+		response = self.client.get(url)
+		self.assertEqual(response.status_code, 200)
+		form = response.context.get('form')
+		self.assertIsNotNone(form)
+		self.assertIsNotNone(form.initial.get('current_end_date'))
+		self.assertNotEqual(form.initial.get('current_end_date'), 'Sin fecha asignada')
+
+	def test_post_valid_updates_discount_and_redirects(self):
+		self.client.login(username=self.username, password=self.password)
+		url = reverse('create_discount', args=[self.appointment.id])
+		data = {
+			'discount': '5.00',
+			'endDiscount': '',
+		}
+		response = self.client.post(url, data)
+		self.assertEqual(response.status_code, 302)
+		self.appointment.refresh_from_db()
+		self.assertEqual(str(self.appointment.discount), '5.00')
+
+	def test_post_with_endDiscount_sets_datetime(self):
+		from django.utils import timezone
+		self.client.login(username=self.username, password=self.password)
+		url = reverse('create_discount', args=[self.appointment.id])
+		# formato HTML5 datetime-local: YYYY-MM-DDTHH:MM
+		future = (timezone.now() + timezone.timedelta(days=3)).replace(second=0, microsecond=0)
+		formatted = future.strftime('%Y-%m-%dT%H:%M')
+		data = {
+			'discount': '7.50',
+			'endDiscount': formatted,
+		}
+		response = self.client.post(url, data)
+		self.assertEqual(response.status_code, 302)
+		self.appointment.refresh_from_db()
+		self.assertEqual(str(self.appointment.discount), '7.50')
+		self.assertIsNotNone(self.appointment.endDiscount)
+
+	def test_post_save_raises_validationerror_adds_non_field(self):
+		self.client.login(username=self.username, password=self.password)
+		url = reverse('create_discount', args=[self.appointment.id])
+		data = {
+			'discount': '3.00',
+			'endDiscount': '',
+		}
+		with patch('main.appointments.views.Appointment.save', side_effect=ValidationError('Error general descuento')):
+			response = self.client.post(url, data)
+		self.assertEqual(response.status_code, 200)
+		form = response.context.get('form')
+		self.assertIsNotNone(form)
+		non_field = list(form.non_field_errors())
+		self.assertTrue(non_field)
+		self.assertIn('Error general descuento', non_field[0])
+
+	def test_post_save_validation_message_dict_field_and_non_field(self):
+		self.client.login(username=self.username, password=self.password)
+		url = reverse('create_discount', args=[self.appointment.id])
+		data = {
+			'discount': '2.00',
+			'endDiscount': '',
+		}
+		# si message_dict tiene 'discount' debe añadirse como error de campo
+		with patch('main.appointments.views.Appointment.save', side_effect=ValidationError({'discount': ['Descuento inválido']})):
+			response = self.client.post(url, data)
+		self.assertEqual(response.status_code, 200)
+		form = response.context.get('form')
+		self.assertIsNotNone(form)
+		self.assertTrue(form.errors)
+		self.assertIn('discount', form.errors)
+
+	def test_post_save_message_dict_unknown_field_adds_non_field_errors(self):
+		self.client.login(username=self.username, password=self.password)
+		url = reverse('create_discount', args=[self.appointment.id])
+		data = {
+			'discount': '4.00',
+			'endDiscount': '',
+		}
+		with patch('main.appointments.views.Appointment.save', side_effect=ValidationError({'external': ['Error externo descuento']})):
+			response = self.client.post(url, data)
+		self.assertEqual(response.status_code, 200)
+		form = response.context.get('form')
+		self.assertIsNotNone(form)
+		non_field = list(form.non_field_errors())
+		self.assertTrue(non_field)
+		self.assertIn('Error externo descuento', non_field[0])
+
+
+class AppointmentsViewTests(TestCase):
+	def test_get_shows_appointments_and_now(self):
+		a1 = Appointment.objects.create(
+			name='A1', price=10.00, duration=30, description='', premium=False, discount=0.00, endDiscount=None
+		)
+		a2 = Appointment.objects.create(
+			name='A2', price=20.00, duration=45, description='', premium=False, discount=0.00, endDiscount=None
+		)
+
+		url = reverse('appointments')
+		response = self.client.get(url)
+		self.assertEqual(response.status_code, 200)
+		self.assertIn('appointments', response.context)
+		self.assertIn('now', response.context)
+		qs = response.context['appointments']
+		names = {o.name for o in qs}
+		self.assertIn('A1', names)
+		self.assertIn('A2', names)
