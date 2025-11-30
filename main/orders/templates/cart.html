@@ -2,8 +2,11 @@
 {% load static %}
 
 {% block encabezado %}
-<link rel="stylesheet" href="{% static 'styles/cart.css' %}">
 <h1>Carrito de Compras</h1>
+{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'styles/cart.css' %}">
 {% endblock %}
 
 {% block contenido %}
@@ -30,7 +33,7 @@
             </div>
 
               <div class="item-info">
-              <div class="item-title">{{ item.product_name|default:item.product.name }}</div>
+              <div class="item-title">{% if item.product_name %}{{ item.product_name }}{% elif item.product %}{{ item.product.name }}{% else %}(producto eliminado){% endif %}</div>
               <div class="item-meta">Precio unitario: {{ item.unit_price_display }} €</div>
               <div class="item-meta">Subtotal: {{ item.subtotal_display }} €</div>
 

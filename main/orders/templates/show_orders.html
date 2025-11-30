@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'styles/show_orders.css' %}">
+{% endblock %}
+
 {% block encabezado %}
 {% endblock %}
 
@@ -74,14 +78,14 @@
     </div>
 
     <div class="pagination">
-        {% if pedidos.has_previous %}
-            <a href="?page={{ pedidos.previous_page_number }}&per_page={{ current_per_page }}{% if current_status %}&status={{ current_status }}{% endif %}" class="btn-page">Anterior</a>
+        {% if orders.has_previous %}
+            <a href="?page={{ orders.previous_page_number }}&per_page={{ current_per_page }}{% if current_status %}&status={{ current_status }}{% endif %}" class="btn-page">Anterior</a>
         {% else %}
             <button class="btn-page disabled" disabled>Anterior</button>
         {% endif %}
 
-        {% if pedidos.has_next %}
-            <a href="?page={{ pedidos.next_page_number }}&per_page={{ current_per_page }}{% if current_status %}&status={{ current_status }}{% endif %}" class="btn-page">Siguiente</a>
+        {% if orders.has_next %}
+            <a href="?page={{ orders.next_page_number }}&per_page={{ current_per_page }}{% if current_status %}&status={{ current_status }}{% endif %}" class="btn-page">Siguiente</a>
         {% else %}
             <button class="btn-page disabled" disabled>Siguiente</button>
         {% endif %}
