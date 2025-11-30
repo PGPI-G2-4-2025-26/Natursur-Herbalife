@@ -5,6 +5,10 @@
 {% block encabezado %}
 {% endblock %}
 
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'styles/order_detail.css' %}">
+{% endblock %}
+
 {% block contenido %}
 <form method="post" action="{% url 'edit_order' order.id %}">
     {% csrf_token %}
@@ -71,7 +75,7 @@
                         {% elif item.product and item.product.image %}
                             <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="item-image">
                         {% endif %}
-                        <div class="item-name"><strong>{{ item.product_name|default:item.product.name }}</strong></div>
+                        <div class="item-name"><strong>{% if item.product_name %}{{ item.product_name }}{% elif item.product %}{{ item.product.name }}{% else %}(producto eliminado){% endif %}</strong></div>
                         <div class="item-qty">Cantidad: {{ item.quantity }}</div>
                     </div>
                 {% empty %}
@@ -94,7 +98,8 @@ function confirmDelete() {
     const msg = "ATENCIÓN: Este pedido se borrará de la base de datos y el cambio será visible para el usuario. ¿Desea continuar?";
     if (confirm(msg)) {
         document.getElementById('form-action').value = 'delete';
-        document.querySelector('form[action$="{% url "edit_order" order.id %}"]').submit();
+        document.querySelector('form').action = "{% url 'delete_order' order.id %}";
+        document.querySelector('form').submit();
     }
 }
 </script>

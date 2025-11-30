@@ -207,9 +207,8 @@ class Command(BaseCommand):
 
         Appointment = apps.get_model('appointments', 'Appointment')
         User = apps.get_model('auth', 'User')
-        Product = apps.get_model('products', 'Product')
-        Order = apps.get_model('products', 'Order')
-        OrderProduct = apps.get_model('products', 'OrderProduct')
+        Order = apps.get_model('orders', 'Order')
+        OrderProduct = apps.get_model('orders', 'OrderProduct')
 
         created_cnt = 0
         updated_cnt = 0

@@ -2,6 +2,10 @@
 
 {% load static %}
 
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'styles/show_orders.css' %}">
+{% endblock %}
+
 {% block encabezado %}
 {% endblock %}
 
@@ -71,7 +75,7 @@
                     <a href="{% url 'order_detail' order.id %}" class="btn-ver-pedido">Ver pedido</a>
                 </div>
                 <div class="pedido-accion-inline">
-                    <a href="{% url 'edit_order' order.id %}" class="btn-edit-pedido">Editar pedido</a>
+                    <a href="{% url 'order_detail_edit' order.id %}" class="btn-edit-pedido">Editar pedido</a>
                 </div>
  
                 
@@ -82,14 +86,14 @@
         </div>
 
         <div class="pagination">
-            {% if pedidos.has_previous %}
-                <a href="?page={{ pedidos.previous_page_number }}&per_page={{ current_per_page }}{% if current_status %}&status={{ current_status }}{% endif %}{% if current_query %}&q={{ current_query }}{% endif %}" class="btn-page">Anterior</a>
+            {% if orders.has_previous %}
+                <a href="?page={{ orders.previous_page_number }}&per_page={{ current_per_page }}{% if current_status %}&status={{ current_status }}{% endif %}{% if current_query %}&q={{ current_query }}{% endif %}" class="btn-page">Anterior</a>
             {% else %}
                 <button class="btn-page" disabled>Anterior</button>
             {% endif %}
 
-            {% if pedidos.has_next %}
-                <a href="?page={{ pedidos.next_page_number }}&per_page={{ current_per_page }}{% if current_status %}&status={{ current_status }}{% endif %}{% if current_query %}&q={{ current_query }}{% endif %}" class="btn-page">Siguiente</a>
+            {% if orders.has_next %}
+                <a href="?page={{ orders.next_page_number }}&per_page={{ current_per_page }}{% if current_status %}&status={{ current_status }}{% endif %}{% if current_query %}&q={{ current_query }}{% endif %}" class="btn-page">Siguiente</a>
             {% else %}
                 <button class="btn-page" disabled>Siguiente</button>
             {% endif %}

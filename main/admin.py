@@ -1,7 +1,8 @@
 from django.contrib import admin
 
 from .testimonial.models import Testimonial
-from .products.models import Product, Order, OrderProduct
+from .products.models import Product
+from main.orders.models import Order, OrderProduct
 from .appointments.models import Appointment
 
 

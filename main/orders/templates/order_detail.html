@@ -5,6 +5,10 @@
 {% block encabezado %}
 {% endblock %}
 
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'styles/order_detail.css' %}">
+{% endblock %}
+
 {% block contenido %}
 <div class="pedidos-container">
     <div class="detail-header">
@@ -18,7 +22,7 @@
         </div>
         {% else %}
         <div>
-            <a href="{% url 'my_orders' %}" class="btn-back">← Volver a pedidos</a>
+            <a href="{% url 'show_orders' %}" class="btn-back">← Volver a pedidos</a>
         </div>
         {% endif %}
     </div>
@@ -77,7 +81,7 @@
                         {% elif item.product and item.product.image %}
                             <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="item-image">
                         {% endif %}
-                        <div class="item-name"><strong>{{ item.product_name|default:item.product.name }}</strong></div>
+                        <div class="item-name"><strong>{% if item.product_name %}{{ item.product_name }}{% elif item.product %}{{ item.product.name }}{% else %}(producto eliminado){% endif %}</strong></div>
                         <div class="item-qty">Precio/u: {{ item.price_at_order }} €</div>
                         <div class="item-qty">Cantidad: {{ item.quantity }}</div>
                     </div>

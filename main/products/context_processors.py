@@ -1,6 +1,7 @@
 from django.db.models import Sum
-from .models import OrderProduct
-from .service import ProductService  
+from main.orders.models import OrderProduct
+from main.orders.service import ProductService
+ 
 
 def cart_status(request):
     item_count = 0

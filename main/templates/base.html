@@ -9,15 +9,15 @@
   <title>{% block title %}NaturSur{% endblock title %}</title>
 
   <link rel="stylesheet" href="{% static 'styles/styles.css' %}">
+  <link rel="stylesheet" href="{% static 'styles/components.css' %}">
   <link rel="stylesheet" href="{% static 'styles/footer.css' %}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="{% static 'styles/home.css' %}">
   <link rel="stylesheet" href="{% static 'styles/order.css' %}">
   <link rel="stylesheet" href="{% static 'styles/products.css' %}">
-  <link rel="stylesheet" href="{% static 'styles/cart.css' %}">
   <link rel="stylesheet" href="{% static 'styles/finalize_order.css' %}">
   <link rel="stylesheet" href="{% static 'styles/order_success.css' %}">
-  <link rel="stylesheet" href="{% static 'styles/edit_product.css' %}">
+  <link rel="stylesheet" href="{% static 'styles/edit_products.css' %}">
 
 
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -83,7 +83,7 @@
           </a>
 
           {% else %}
-          <a href="{% url 'my_orders' %}" class="btn-profile {% if route == 'my_orders' %}active{% endif %}">
+          <a href="{% url 'show_orders' %}" class="btn-profile {% if route == 'show_orders' %}active{% endif %}">
             <span class="material-icons">inventory</span><span>MIS PEDIDOS</span>
           </a>
           {% endif %}
@@ -117,7 +117,7 @@
   <section class="main-content-section">
     {% block contenido %}{% endblock contenido %}
     {% with route=request.resolver_match.url_name %}
-    {% if cart_has_items and route in 'home appointments list_products my_orders' %}
+    {% if cart_has_items and route in 'home appointments list_products show_orders' %}
     <a href="{% url 'view_cart' %}" class="btn-cesta">
       <span class="material-icons">shopping_cart</span>
       Carrito

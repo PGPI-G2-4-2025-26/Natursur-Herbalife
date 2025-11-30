@@ -1,4 +1,5 @@
-from .models import Product, Order, OrderProduct
+from ..products.models import Product
+from main.orders.models import Order, OrderProduct
 import datetime
 from django.db import transaction
 import uuid
@@ -85,26 +86,6 @@ class ProductService:
                 line = None
 
         return line, anon_cookie_to_set
-    def get_cart_order(solicitant_name, solicitant_contact):
-        """Devuelve el QuerySet de `Order` en estado 'EN_CARRITO' para solicitante."""
-        return Order.objects.filter(status='EN_CARRITO', solicitant_name=solicitant_name, solicitant_contact=solicitant_contact)
-
-    @transaction.atomic
-    def update_order_status(order_id, new_status):    
-        """Actualiza el `status` de un `Order` o (si se pasa id de línea) del `Order` asociado."""
-        order = Order.objects.filter(id=order_id).first()
-        if order:
-            order.status = new_status
-            order.save()
-            return order
-
-        line = OrderProduct.objects.filter(id=order_id).first()
-        if line:
-            line.order.status = new_status
-            line.order.save()
-            return line.order
-
-        raise Order.DoesNotExist(f"No Order or OrderProduct found with id={order_id}")
 
     @transaction.atomic
     def mark_order_as_paid(order_id):
@@ -207,11 +188,6 @@ class ProductService:
             return True
 
         return False
-
-    def find_order_by_identifier(order_identified):
-        order = Order.objects.filter(order_identified=order_identified).first()
-        if order:
-            return order
         
     @staticmethod
     def get_active_cart_for_request(request):
