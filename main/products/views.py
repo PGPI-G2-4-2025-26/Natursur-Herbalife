@@ -2,11 +2,11 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import user_passes_test
 from django.core.paginator import Paginator
 from main.orders.models import OrderProduct
+from main.orders.views import list_user_cart_order
 from .models import Product
 from django.contrib import messages
 from .forms import ProductForm
 from django.db import transaction
-from main.orders.service import ProductService
 
 def is_admin(user):
     return user.is_active and user.is_staff
@@ -20,7 +20,7 @@ def list_products(request):
         products = Product.objects.exclude(name='(producto eliminado)')
 
     cart_quantities = {}
-    order = ProductService.get_active_cart_for_request(request)
+    order = list_user_cart_order(request)
     if order:
         lines = OrderProduct.objects.filter(order=order).select_related('product')
         for l in lines:

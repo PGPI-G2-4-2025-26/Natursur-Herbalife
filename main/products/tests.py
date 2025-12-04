@@ -1,13 +1,9 @@
 from django.test import TestCase
-from django.urls import reverse
 from django.contrib.auth import get_user_model
-from numpy import prod
-
 from main.orders.models import Order, OrderProduct
 from main.products.models import Product
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
-from main.orders.models import Order
 from decimal import Decimal
 
 

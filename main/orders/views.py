@@ -4,13 +4,15 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models.functions import Coalesce
 from django.db.models import Sum, Q
 from django.core.paginator import Paginator
+from django.db import transaction
 from main.orders.models import Order, OrderProduct
 from main.products.models import Product
 from .forms import OrderForm
-from main.orders.service import ProductService, InsufficientStockError
+from main.orders.service import ProductService
 from decimal import Decimal, ROUND_HALF_UP
 from django.contrib import messages
-from django.core.exceptions import ValidationError
+import datetime
+import uuid
 
 def is_admin(user):
     return user.is_active and user.is_staff
@@ -125,6 +127,57 @@ def remove_from_cart(request, item_id):
     result = ProductService.remove_product_from_cart(item_id)
     return redirect('view_cart')
 
+def _mark_order_as_paid(order):
+    """Marca un orden como pagado y actualiza el stock. Retorna (success, removed_items)."""
+    if order.is_paid:
+        return True, []
+    
+    shortages = []
+    lines = OrderProduct.objects.filter(order=order)
+    
+    for line in lines:
+        prod = line.product
+        qty = int(line.quantity or 0)
+        available = int(prod.stock or 0)
+        if qty > available:
+            shortages.append({
+                'line_id': line.id,
+                'product_id': prod.id,
+                'product_ref': prod.ref,
+                'product_name': prod.name,
+                'quantity_requested': qty,
+                'available': available,
+            })
+    
+    if shortages:
+        return False, shortages
+    
+    # Generar ID único si no existe
+    if not order.order_identified:
+        for _ in range(10):
+            candidate = f"ORD-{uuid.uuid4().hex[:12].upper()}"
+            if not Order.objects.filter(order_identified=candidate).exists():
+                order.order_identified = candidate
+                break
+        else:
+            order.order_identified = f"ORD-{int(datetime.datetime.utcnow().timestamp())}-{uuid.uuid4().hex[:6].upper()}"
+    
+    # Reducir stock de productos
+    with transaction.atomic():
+        for line in lines:
+            prod = line.product
+            qty = int(line.quantity or 0)
+            if qty > 0:
+                new_stock = max((prod.stock or 0) - qty, 0)
+                prod.stock = new_stock
+                prod.save()
+        
+        order.is_paid = True
+        order.save()
+    
+    return True, []
+
+
 def finalize_order(request):
     order = list_user_cart_order(request)
 
@@ -137,55 +190,48 @@ def finalize_order(request):
     if request.method == 'GET':
         form = OrderForm(instance=order)
         total_price_display = _format_price(total_price)
-        return render(request, 'finalize_order.html', {'form': form, 'order': order, 'cart_items': lines, 'total_price': total_price, 'total_price_display': total_price_display})
+        return render(request, 'finalize_order.html', {
+            'form': form, 'order': order, 'cart_items': lines, 
+            'total_price': total_price, 'total_price_display': total_price_display
+        })
 
     form = OrderForm(request.POST, instance=order)
     if not form.is_valid():
         total_price_display = _format_price(total_price)
-        return render(request, 'finalize_order.html', {'form': form, 'order': order, 'cart_items': lines, 'total_price': total_price, 'total_price_display': total_price_display})
+        return render(request, 'finalize_order.html', {
+            'form': form, 'order': order, 'cart_items': lines, 
+            'total_price': total_price, 'total_price_display': total_price_display
+        })
 
     order = form.save(commit=False)
     order.status = 'SOLICITADO'
     order.save()
 
-    try:
-        paid_order = ProductService.mark_order_as_paid(order.id)
-    except (ValidationError, InsufficientStockError) as e:
-        if isinstance(e, InsufficientStockError):
-            removed = getattr(e, 'removed', []) or []
-        else:
-            raw = getattr(e, 'message_dict', {})
-            removed = raw.get('insufficient_stock_removed') or raw.get('insufficient_stock') or []
-            if removed and isinstance(removed, list) and not all(isinstance(x, dict) for x in removed):
-                removed = []
+    success, removed_items = _mark_order_as_paid(order)
+    
+    if not success:
         order.status = 'EN_CARRITO'
         order.save()
-
-        try:
-            removed_ids = [int(r.get('line_id')) for r in removed if r.get('line_id')]
-        except Exception:
-            removed_ids = []
+        
+        removed_ids = [item['line_id'] for item in removed_items]
         if removed_ids:
             OrderProduct.objects.filter(id__in=removed_ids).delete()
-
-        lines, total_price = _prepare_order_lines(order)
-        total_price_display = _format_price(total_price)
-
-        if removed:
-            item_texts = []
-            for r in removed:
-                name = r.get('product_name') or r.get('product_ref') or str(r.get('product_id'))
-                qty = r.get('quantity_requested') or r.get('requested') or ''
-                item_texts.append(f"{name} (cantidad eliminada: {qty})")
-            messages.error(request, 'No se pudo completar el pago. Algunos productos ya no estaban disponibles y fueron eliminados del carrito: ' + ', '.join(item_texts))
-        else:
-            messages.error(request, 'No se pudo completar el pago por falta de stock en algunos productos.')
-
-        form = OrderForm(instance=order)
+        
+        item_texts = []
+        for item in removed_items:
+            name = item.get('product_name') or item.get('product_ref') or str(item.get('product_id'))
+            qty = item.get('quantity_requested', '')
+            item_texts.append(f"{name} (cantidad solicitada: {qty})")
+        
+        messages.error(request, 'No se pudo completar el pago. Algunos productos ya no estaban disponibles y fueron eliminados del carrito: ' + ', '.join(item_texts))
         return redirect('view_cart')
-
+    
+    lines, total_price = _prepare_order_lines(order)
     total_price_display = _format_price(total_price)
-    return render(request, 'order_success.html', {'order': paid_order, 'cart_items': lines, 'total_price': total_price, 'total_price_display': total_price_display})
+    return render(request, 'order_success.html', {
+        'order': order, 'cart_items': lines, 
+        'total_price': total_price, 'total_price_display': total_price_display
+    })
 
 
 @login_required
